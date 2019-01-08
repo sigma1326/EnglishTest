@@ -45,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
         rv = findViewById(R.id.rv_main);
         ((TailLayoutManager) Objects.requireNonNull(rv.getLayoutManager())).setPageTransformer(new HeaderTransformer());
-        rv.setAdapter(new OuterAdapter(outerData));
         new TailSnapHelper().attachToRecyclerView(rv);
 
+        Runnable runnable = () -> rv.setAdapter(new OuterAdapter(testRepository.getYearMajorData()));
+        runnable.run();
 
     }
 

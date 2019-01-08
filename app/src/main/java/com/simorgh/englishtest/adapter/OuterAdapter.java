@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 import com.simorgh.garlandview.TailAdapter;
 
@@ -17,10 +18,10 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     private final int POOL_SIZE = 16;
 
-    private final List<List<InnerData>> mData;
+    private final List<List<YearMajorData>> mData;
     private final RecyclerView.RecycledViewPool mPool;
 
-    public OuterAdapter(List<List<InnerData>> data) {
+    public OuterAdapter(List<List<YearMajorData>> data) {
         this.mData = data;
 
         mPool = new RecyclerView.RecycledViewPool();

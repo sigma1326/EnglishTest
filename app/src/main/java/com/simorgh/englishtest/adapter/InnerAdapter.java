@@ -5,7 +5,9 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import androidx.annotation.NonNull;
 
 public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<InnerItem> {
 
-    private final List<InnerData> mData = new ArrayList<>();
+    private final List<YearMajorData> mData = new ArrayList<>();
 
     @NonNull
     @Override
@@ -30,6 +32,9 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
     @Override
     public void onBindViewHolder(@NonNull InnerItem holder, int position) {
         holder.setContent(mData.get(position));
+        holder.itemView.findViewById(R.id.inner_layout).setOnClickListener(v -> {
+            Toast.makeText(v.getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -47,7 +52,7 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
         return R.layout.inner_item;
     }
 
-    public void addData(@NonNull List<InnerData> innerDataList) {
+    public void addData(@NonNull List<YearMajorData> innerDataList) {
         final int size = mData.size();
         mData.addAll(innerDataList);
         notifyItemRangeInserted(size, innerDataList.size());

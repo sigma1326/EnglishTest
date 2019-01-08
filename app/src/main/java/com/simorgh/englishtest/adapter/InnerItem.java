@@ -1,10 +1,12 @@
 package com.simorgh.englishtest.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 
 public class InnerItem extends com.simorgh.garlandview.inner.InnerItem {
@@ -15,7 +17,7 @@ public class InnerItem extends com.simorgh.garlandview.inner.InnerItem {
     public final TextView tvQuestionCount;
     public final TextView tvTime;
 
-    private InnerData mInnerData;
+    private YearMajorData mInnerData;
 
     public InnerItem(View itemView) {
         super(itemView);
@@ -34,7 +36,7 @@ public class InnerItem extends com.simorgh.garlandview.inner.InnerItem {
         return mInnerLayout;
     }
 
-    public InnerData getItemData() {
+    public YearMajorData getItemData() {
         return mInnerData;
     }
 
@@ -42,12 +44,13 @@ public class InnerItem extends com.simorgh.garlandview.inner.InnerItem {
         mInnerData = null;
     }
 
-    void setContent(InnerData data) {
+    @SuppressLint("SetTextI18n")
+    void setContent(YearMajorData data) {
         mInnerData = data;
 
-        mHeader.setText(data.title);
-        tvQuestionCount.setText(String.format("%s %s", data.questionCount, ""));
-        tvTime.setText(String.format("%s %s", data.time, ""));
+        mHeader.setText(String.format("سوالات زبان گروه %s ", YearMajorData.getMajorType(data.getMajor())));
+        tvQuestionCount.setText(String.format("%s: %s", "تعداد سوالات", String.valueOf(data.getQuestionCount())));
+        tvTime.setText(String.format("%s: %s", "زمان پاسخگویی", String.valueOf(YearMajorData.getMajorTime(data.getMajor()))));
 
     }
 

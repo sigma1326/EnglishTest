@@ -1,10 +1,11 @@
 package com.simorgh.englishtest.adapter;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.View;
 import android.widget.TextView;
 
+import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 import com.simorgh.garlandview.header.HeaderDecorator;
 import com.simorgh.garlandview.header.HeaderItem;
@@ -31,8 +32,6 @@ public class OuterItem extends HeaderItem {
 
     public OuterItem(View itemView, RecyclerView.RecycledViewPool pool) {
         super(itemView);
-
-
 
 
         mHeader = itemView.findViewById(R.id.header);
@@ -92,14 +91,16 @@ public class OuterItem extends HeaderItem {
         return mHeaderAlpha;
     }
 
-    void setContent(@NonNull List<InnerData> innerDataList) {
-        final Context context = itemView.getContext();
+    @SuppressLint("DefaultLocale")
+    void setContent(@NonNull List<YearMajorData> innerDataList) {
+//        final Context context = itemView.getContext();
+//
+//        final YearMajorData header = innerDataList.subList(0, 1).get(0);
+//        final List<YearMajorData> tail = innerDataList.subList(1, innerDataList.size());
 
-        final InnerData header = innerDataList.subList(0, 1).get(0);
-        final List<InnerData> tail = innerDataList.subList(1, innerDataList.size());
-
+        headerTitle.setText(String.format("سوالات زبان کنکورهای سال %d", innerDataList.get(0).getYear()));
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
-        ((InnerAdapter) Objects.requireNonNull(mRecyclerView.getAdapter())).addData(tail);
+        ((InnerAdapter) Objects.requireNonNull(mRecyclerView.getAdapter())).addData(innerDataList);
 
     }
 
