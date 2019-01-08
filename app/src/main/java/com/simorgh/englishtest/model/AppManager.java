@@ -4,6 +4,11 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import com.facebook.stetho.Stetho;
+import com.simorgh.englishtest.R;
+
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
 
 public class AppManager extends Application {
     @Override
@@ -25,7 +30,14 @@ public class AppManager extends Application {
 
         Stetho.initializeWithDefaults(this);
 
-//        RoomAsset.databaseBuilder(this, , "test.db").build();
+
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new CalligraphyInterceptor(
+                        new CalligraphyConfig.Builder()
+                                .setDefaultFontPath("fonts/iransans_medium.ttf")
+                                .setFontAttrId(R.attr.fontPath)
+                                .build()))
+                .build());
     }
 
 }

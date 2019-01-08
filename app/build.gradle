@@ -68,4 +68,5 @@ dependencies {
 
 
     implementation project(':database')
+    implementation project(':garlandview')
 }

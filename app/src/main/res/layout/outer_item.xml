@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <com.simorgh.garlandview.inner.InnerRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:clipChildren="false"
+        tools:layoutManager="com.simorgh.garlandview.inner.InnerLayoutManager"
+        tools:listitem="@layout/inner_item"
+        tools:orientation="vertical" />
+
+    <FrameLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:clipChildren="false">
+
+        <include layout="@layout/outer_header" />
+
+        <View
+            android:id="@+id/header_alpha"
+            android:background="@drawable/white_corners"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/inner_item_header_height"
+            android:alpha="0" />
+    </FrameLayout>
+
+</FrameLayout>
