@@ -5,10 +5,10 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.TestOrPracticeDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,11 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
     public void onBindViewHolder(@NonNull InnerItem holder, int position) {
         holder.setContent(mData.get(position));
         holder.itemView.findViewById(R.id.inner_layout).setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+            String year = String.format("سوالات زبان گروه %s", YearMajorData.getMajorType(mData.get(position).getMajor()));
+            TestOrPracticeDialog.createDialog(v.getContext()
+                    , String.format("%s سال %s", year, String.valueOf(mData.get(position).getYear()))
+                    , mData.get(position).getQuestionCount()
+                    , YearMajorData.getMajorTime(mData.get(position).getMajor()));
         });
     }
 

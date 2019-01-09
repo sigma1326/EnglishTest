@@ -60,9 +60,9 @@ public class YearMajorData {
             case 1:
             case 2:
             case 4:
-                return 25;
+                return 20;
             case 3:
-                return 125;
+                return 105;
             default:
                 return -1;
         }
