@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    tools:layoutDirection="ltr">
+
+    <View
+        android:id="@+id/view_nav_header"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#09bffd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.26"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/img_app_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="131dp"
+        android:layout_marginLeft="131dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="106dp"
+        android:layout_marginRight="106dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_nav_header"
+        app:layout_constraintEnd_toEndOf="@+id/view_nav_header"
+        app:layout_constraintStart_toStartOf="@+id/view_nav_header"
+        app:layout_constraintTop_toTopOf="@+id/view_nav_header"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/shape_850" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="سوالات زبان کنکور"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_nav_header"
+        app:layout_constraintEnd_toEndOf="@+id/img_app_icon"
+        app:layout_constraintStart_toStartOf="@+id/img_app_icon"
+        app:layout_constraintTop_toBottomOf="@+id/img_app_icon"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/img_test_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_nav_header"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_test_log" />
+
+    <ImageView
+        android:id="@+id/img_font_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_test_log"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_test_log" />
+
+    <TextView
+        android:id="@+id/tv_test_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="سوابق آزمونهای گذشته"
+        android:textColor="#535353"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_test_log"
+        app:layout_constraintEnd_toStartOf="@+id/img_test_log"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_test_log" />
+
+    <TextView
+        android:id="@+id/tv_font_size_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="اندازه قلم"
+        android:textColor="#535353"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_font_size"
+        app:layout_constraintEnd_toStartOf="@+id/img_test_log"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_font_size" />
+
+    <TextView
+        android:id="@+id/tv_font_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/black_corners"
+        android:ems="2"
+        android:fontFamily="@font/iransans_medium"
+        android:paddingTop="2dp"
+        android:text="+12"
+        android:textAlignment="center"
+        android:textColor="#535353"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_font_size_label"
+        app:layout_constraintEnd_toStartOf="@+id/tv_font_size_label"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_font_size_label" />
+
+    <ImageView
+        android:id="@+id/img_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_font_size"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_timer" />
+
+    <TextView
+        android:id="@+id/tv_show_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="نمایش زمانسنج در آزمون"
+        android:textColor="#535353"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_timer"
+        app:layout_constraintEnd_toStartOf="@+id/img_test_log"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_timer" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_show_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        style="@style/switch_style"
+        tools:checked="true"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_show_timer"
+        app:layout_constraintEnd_toEndOf="@+id/tv_font_size"
+        app:layout_constraintStart_toStartOf="@+id/tv_font_size"
+        app:layout_constraintTop_toTopOf="@+id/tv_show_timer" />
+
+    <ImageView
+        android:id="@+id/img_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_timer"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_info" />
+
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="درباره تولیدکننده"
+        android:textColor="#535353"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_info"
+        app:layout_constraintEnd_toStartOf="@+id/img_test_log"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_info" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
