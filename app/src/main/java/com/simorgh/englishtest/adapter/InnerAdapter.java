@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.TestOrPracticeDialog;
+import com.simorgh.englishtest.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 
 public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<InnerItem> {
 
@@ -37,7 +39,14 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
             TestOrPracticeDialog.createDialog(v.getContext()
                     , String.format("%s سال %s", year, String.valueOf(mData.get(position).getYear()))
                     , mData.get(position).getQuestionCount()
-                    , YearMajorData.getMajorTime(mData.get(position).getMajor()));
+                    , YearMajorData.getMajorTime(mData.get(position).getMajor())
+                    , v1 -> {
+                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment).navigate(R.id.action_homeFragment_to_testFragment);
+                    }
+                    , v1 -> {
+                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment).navigate(R.id.action_homeFragment_to_testFragment);
+                    }
+            );
         });
     }
 

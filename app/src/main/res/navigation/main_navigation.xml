@@ -9,5 +9,19 @@
         android:id="@+id/homeFragment"
         android:name="com.simorgh.englishtest.view.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_testFragment"
+            app:destination="@id/testFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@+id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.simorgh.englishtest.view.TestFragment"
+        android:label="test_fragment"
+        tools:layout="@layout/test_fragment" />
 </navigation>

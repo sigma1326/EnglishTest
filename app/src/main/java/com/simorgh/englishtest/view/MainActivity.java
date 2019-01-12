@@ -6,27 +6,25 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
-import com.simorgh.database.TestRepository;
 import com.simorgh.englishtest.R;
-import com.simorgh.englishtest.adapter.OuterAdapter;
-import com.simorgh.garlandview.TailLayoutManager;
-import com.simorgh.garlandview.TailRecyclerView;
-import com.simorgh.garlandview.TailSnapHelper;
-import com.simorgh.garlandview.header.HeaderTransformer;
-
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TailRecyclerView rv;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
+
+    private NavController navController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +53,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewCompat.setLayoutDirection(navigationView, ViewCompat.LAYOUT_DIRECTION_LTR);
 
 
-        rv = findViewById(R.id.rv_main);
-        ((TailLayoutManager) Objects.requireNonNull(rv.getLayoutManager())).setPageTransformer(new HeaderTransformer());
-        new TailSnapHelper().attachToRecyclerView(rv);
+        navController = Navigation.findNavController(MainActivity.this, R.id.main_nav_host_fragment);
+        Navigation.findNavController(MainActivity.this, R.id.main_nav_host_fragment).addOnDestinationChangedListener(this);
 
-        Runnable runnable = () -> {
-            TestRepository testRepository = new TestRepository(getApplication());
-            rv.setAdapter(new OuterAdapter(testRepository.getYearMajorData()));
-        };
-        runnable.run();
 
     }
 
@@ -75,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onSupportNavigateUp();
+        return navController.navigateUp();
     }
 
     @Override
@@ -90,5 +88,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    @Override
+    public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+        switch (destination.getId()) {
+            case R.id.homeFragment:
+                break;
+            case R.id.testFragment:
+                break;
+            default:
+
+        }
     }
 }

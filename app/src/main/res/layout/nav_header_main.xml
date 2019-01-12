@@ -44,15 +44,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="8dp"
-        android:fontFamily="@font/iransans_medium"
-        android:text="سوالات زبان کنکور"
+        android:text="@string/drawer_title"
         android:textColor="@color/white"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="@+id/view_nav_header"
         app:layout_constraintEnd_toEndOf="@+id/img_app_icon"
         app:layout_constraintStart_toStartOf="@+id/img_app_icon"
         app:layout_constraintTop_toBottomOf="@+id/img_app_icon"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:fontFamily="@font/iransans_medium" />
 
     <ImageView
         android:id="@+id/img_test_log"
@@ -82,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_test_log"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_test_log" />
+        app:srcCompat="@drawable/ic_font" />
 
     <TextView
         android:id="@+id/tv_test_log"
@@ -90,15 +90,15 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:fontFamily="@font/iransans_medium"
-        android:text="سوابق آزمونهای گذشته"
+        android:text="@string/test_logs"
         android:textColor="#535353"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/img_test_log"
         app:layout_constraintEnd_toStartOf="@+id/img_test_log"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_test_log" />
+        app:layout_constraintTop_toTopOf="@+id/img_test_log"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_font_size_label"
@@ -106,15 +106,15 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:fontFamily="@font/iransans_medium"
-        android:text="اندازه قلم"
+        android:text="@string/font_size"
         android:textColor="#535353"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/img_font_size"
         app:layout_constraintEnd_toStartOf="@+id/img_test_log"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_font_size" />
+        app:layout_constraintTop_toTopOf="@+id/img_font_size"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_font_size"
@@ -124,7 +124,6 @@
         android:layout_marginLeft="40dp"
         android:background="@drawable/black_corners"
         android:ems="2"
-        android:fontFamily="@font/iransans_medium"
         android:paddingTop="2dp"
         android:text="+12"
         android:textAlignment="center"
@@ -134,7 +133,8 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_font_size_label"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_font_size_label" />
+        app:layout_constraintTop_toTopOf="@+id/tv_font_size_label"
+        tools:fontFamily="@font/iransans_medium" />
 
     <ImageView
         android:id="@+id/img_timer"
@@ -157,26 +157,26 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:fontFamily="@font/iransans_medium"
-        android:text="نمایش زمانسنج در آزمون"
+        android:text="@string/show_timer_in_test"
         android:textColor="#535353"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/img_timer"
         app:layout_constraintEnd_toStartOf="@+id/img_test_log"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_timer" />
+        app:layout_constraintTop_toTopOf="@+id/img_timer"
+        tools:fontFamily="@font/iransans_medium" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_show_timer"
+        style="@style/switch_style"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        style="@style/switch_style"
-        tools:checked="true"
         app:layout_constraintBottom_toBottomOf="@+id/tv_show_timer"
         app:layout_constraintEnd_toEndOf="@+id/tv_font_size"
         app:layout_constraintStart_toStartOf="@+id/tv_font_size"
-        app:layout_constraintTop_toTopOf="@+id/tv_show_timer" />
+        app:layout_constraintTop_toTopOf="@+id/tv_show_timer"
+        tools:checked="true" />
 
     <ImageView
         android:id="@+id/img_info"
@@ -199,14 +199,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:fontFamily="@font/iransans_medium"
-        android:text="درباره تولیدکننده"
+        android:text="@string/about_developer"
         android:textColor="#535353"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/img_info"
         app:layout_constraintEnd_toStartOf="@+id/img_test_log"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_info" />
+        app:layout_constraintTop_toTopOf="@+id/img_info"
+        tools:fontFamily="@font/iransans_medium" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

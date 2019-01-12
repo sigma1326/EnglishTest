@@ -1,6 +1,27 @@
 package com.simorgh.englishtest.viewModel;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-public class HomeViewModel extends ViewModel {
+import com.simorgh.database.TestRepository;
+import com.simorgh.database.model.YearMajorData;
+
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+
+public class HomeViewModel extends AndroidViewModel {
+    private TestRepository testRepository;
+
+    private List<List<YearMajorData>> lists;
+
+    public HomeViewModel(@NonNull final Application application) {
+        super(application);
+        testRepository = new TestRepository(application);
+        lists = testRepository.getYearMajorData();
+    }
+
+    public List<List<YearMajorData>> getYearMajorData() {
+        return lists;
+    }
 }

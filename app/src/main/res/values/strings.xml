@@ -9,4 +9,9 @@
     <string name="action_settings">Settings</string>
     <string name="practice">تمرین</string>
     <string name="test">آزمون</string>
+    <string name="test_logs">سوابق آزمونهای گذشته</string>
+    <string name="font_size">اندازه قلم</string>
+    <string name="show_timer_in_test">نمایش زمانسنج در آزمون</string>
+    <string name="about_developer">درباره تولیدکننده</string>
+    <string name="drawer_title">سوالات زبان کنکور</string>
 </resources>
