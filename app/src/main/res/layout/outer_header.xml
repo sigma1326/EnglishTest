@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/inner_item_header_height"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:scaleX="-1">
 
 
     <View
@@ -22,25 +24,24 @@
         android:id="@+id/header_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/iransans_medium"
         android:gravity="center"
-        android:text="سوالات زبان کنکورهای سال 97"
         android:textColor="#ffffff"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view2" />
+        app:layout_constraintTop_toTopOf="@+id/view2"
+        tools:fontFamily="@font/iransans_medium"
+        tools:text="سوالات زبان کنکورهای سال 97" />
 
     <TextView
         android:id="@+id/header_subtitle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/header_subtitle_corners"
-        android:fontFamily="@font/iransans_medium"
         android:gravity="center|end|start"
         android:padding="18dp"
-        android:text="تمامی گروه های تحصیلی"
+        android:text="@string/all_majors"
         android:textAlignment="textStart"
         android:textColor="#003366"
         android:textSize="13sp"
@@ -48,5 +49,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.36"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        tools:fontFamily="@font/iransans_medium" />
 </androidx.constraintlayout.widget.ConstraintLayout>

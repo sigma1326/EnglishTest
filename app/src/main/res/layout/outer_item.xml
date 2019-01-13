@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false">
+    android:clipChildren="false"
+    android:scaleX="1">
 
     <com.simorgh.garlandview.inner.InnerRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleX="-1"
         android:layout_marginTop="50dp"
         android:clipChildren="false"
         tools:layoutManager="com.simorgh.garlandview.inner.InnerLayoutManager"
@@ -26,10 +28,11 @@
 
         <View
             android:id="@+id/header_alpha"
-            android:background="@drawable/white_corners"
             android:layout_width="match_parent"
             android:layout_height="@dimen/inner_item_header_height"
-            android:alpha="0" />
+            android:alpha="0"
+            android:scaleX="-1"
+            android:background="@drawable/white_corners" />
     </FrameLayout>
 
 </FrameLayout>
