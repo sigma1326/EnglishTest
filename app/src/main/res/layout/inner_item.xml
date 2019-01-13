@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/inner_item_height"
     android:layout_gravity="center"
-    android:scaleX="-1"
     android:background="@drawable/white_corners"
     android:clickable="true"
     android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
         android:id="@+id/inner_layout"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="-1"
+        tools:scaleX="1">
 
 
         <TextView
