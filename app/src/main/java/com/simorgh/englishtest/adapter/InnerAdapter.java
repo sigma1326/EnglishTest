@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.TestOrPracticeDialog;
+import com.simorgh.englishtest.view.HomeFragmentDirections;
 import com.simorgh.englishtest.view.MainActivity;
 
 import java.util.ArrayList;
@@ -41,10 +42,17 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
                     , mData.get(position).getQuestionCount()
                     , YearMajorData.getMajorTime(mData.get(position).getMajor())
                     , v1 -> {
-                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment).navigate(R.id.action_homeFragment_to_testFragment);
+                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
+                                .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
+                                        .setYear(mData.get(position).getYear())
+                                        .setMajor(mData.get(position).getMajor()));
                     }
                     , v1 -> {
-                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment).navigate(R.id.action_homeFragment_to_testFragment);
+                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
+                                .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
+                                        .setYear(mData.get(position).getYear())
+                                        .setMajor(mData.get(position).getMajor()));
+
                     }
             );
         });

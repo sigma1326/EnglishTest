@@ -54,4 +54,10 @@ public class Answer {
     public void setFakeID(long fakeID) {
         this.fakeID = fakeID;
     }
+
+    public Answer(int questionId, int answer, Date date) {
+        this.questionId = questionId;
+        this.answer = answer;
+        this.date = date;
+    }
 }

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e6e6e6"
+    android:fillViewport="true"
+    android:overScrollMode="ifContentScrolls">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:scaleX="1"
+        tools:scaleX="1">
+
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="7dp"
+            app:alignContent="flex_start"
+            app:alignItems="flex_start"
+            app:flexWrap="wrap"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <RelativeLayout
+                android:id="@+id/layout_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/question_corners"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_question_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/__1"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    tools:fontFamily="@font/tnr" />
+
+
+                <TextView
+                    android:id="@+id/tv_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_toEndOf="@id/tv_question_num"
+                    android:layout_toRightOf="@id/tv_question_num"
+                    android:background="@drawable/question_corners"
+                    android:ellipsize="marquee"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    tools:fontFamily="@font/tnr"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipisised do eiusmod tempor incididunt ut labore etrt magna aliqua. Ut enim ad minim veniam, quisd exercitation ullamco laboris nisi ut aliquip exado consequat. Duis aute irure dolor?" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/layout_answer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/question_corners"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_answer1_num"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/answer_number_bkg"
+                    android:gravity="center"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/_1"
+                    android:textAlignment="center"
+                    android:textColor="#d96071"
+                    android:textSize="14sp"
+                    tools:fontFamily="@font/tnr" />
+
+                <TextView
+                    android:id="@+id/tv_answer1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toEndOf="@id/tv_answer1_num"
+                    android:layout_toRightOf="@id/tv_answer1_num"
+                    android:ellipsize="marquee"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:fontFamily="@font/tnr"
+                    tools:text=" Ipsum dolor sit amet, consectetur adipisi" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_answer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/question_corners"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_answer2_num"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/answer_number_bkg"
+                    android:gravity="center"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/_2"
+                    android:textAlignment="center"
+                    android:textColor="#d96071"
+                    android:textSize="14sp"
+                    tools:fontFamily="@font/tnr" />
+
+                <TextView
+                    android:id="@+id/tv_answer2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toEndOf="@id/tv_answer2_num"
+                    android:layout_toRightOf="@id/tv_answer2_num"
+                    android:ellipsize="marquee"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:fontFamily="@font/tnr"
+                    tools:text="Bamet, consectetur adipisi sed do eiusmod voluptate velit esse cillum dolore eu fugiat" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_answer3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/question_corners"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_answer3_num"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/answer_number_bkg"
+                    android:gravity="center"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/_3"
+                    android:textAlignment="center"
+                    android:textColor="#d96071"
+                    android:textSize="14sp"
+                    tools:background="@drawable/answer_number_bkg_selected"
+                    tools:fontFamily="@font/tnr"
+                    tools:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/tv_answer3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toEndOf="@id/tv_answer3_num"
+                    android:layout_toRightOf="@id/tv_answer3_num"
+                    android:ellipsize="marquee"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:fontFamily="@font/tnr"
+                    tools:text="Ipsum dolor sit amet, consectetur adipisi sed do eiusmod" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_answer4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/question_corners"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_answer4_num"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/answer_number_bkg"
+                    android:gravity="center"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/_4"
+                    android:textAlignment="center"
+                    android:textColor="#d96071"
+                    android:textSize="14sp"
+                    tools:fontFamily="@font/tnr" />
+
+                <TextView
+                    android:id="@+id/tv_answer4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toEndOf="@id/tv_answer4_num"
+                    android:layout_toRightOf="@id/tv_answer4_num"
+                    android:ellipsize="marquee"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:fontFamily="@font/tnr"
+                    tools:text="Ipsum dolor sit amet, adipisi sed do eiusmod velit esse cillum dolore eu fugiat sint occaecat cupidatat non proident, sunt culpa qui officia deserunt mollit anim id est laborum" />
+            </RelativeLayout>
+        </com.google.android.flexbox.FlexboxLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

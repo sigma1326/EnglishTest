@@ -1,1 +1,1 @@
-include ':app', ':database', ':garlandview'
+include ':app', ':database', ':garlandview', ':fluidslider'

@@ -20,6 +20,7 @@ import java.util.List;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 
 @SuppressWarnings("unchecked")
@@ -52,6 +53,14 @@ public final class TestRepository {
             return true;
         }
         return false;
+    }
+
+    public LiveData<List<Question>> getQuestionsLiveData(final int year, final int major) {
+        return dataBase.questionDAO().getQuestionsLiveData(year, major);
+    }
+
+    public Reading getReading(final int readingID) {
+        return dataBase.readingDAO().getReading(readingID);
     }
 
     @SuppressLint("DefaultLocale")

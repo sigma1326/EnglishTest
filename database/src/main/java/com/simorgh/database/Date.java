@@ -6,6 +6,8 @@ import android.os.Parcelable;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
@@ -26,12 +28,20 @@ public class Date implements Parcelable {
         this.minute = minute;
     }
 
-    public Date(long milli) {
+    public Date(final long milli) {
         year = Integer.parseInt(String.valueOf(milli).substring(0, 4));
         month = Integer.parseInt(String.valueOf(milli).substring(4, 6));
         day = Integer.parseInt(String.valueOf(milli).substring(6, 8));
         hour = Integer.parseInt(String.valueOf(milli).substring(8, 10));
         minute = Integer.parseInt(String.valueOf(milli).substring(10, 12));
+    }
+
+    public Date(final Calendar calendar) {
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        hour = calendar.get(Calendar.HOUR);
+        minute = calendar.get(Calendar.MINUTE);
     }
 
     public static final Creator<Date> CREATOR = new Creator<Date>() {

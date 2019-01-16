@@ -42,7 +42,7 @@ public interface QuestionDAO {
     List<Integer> getYears(SupportSQLiteQuery rawQuery);
 
     @Query("select * from questions where major=:major and year_question =:year order by question_number")
-    LiveData<List<Question>> getQuestionsLiveData(final int major, final int year);
+    LiveData<List<Question>> getQuestionsLiveData(final int year, final int major);
 
     @Query("delete from questions")
     void deleteAll();

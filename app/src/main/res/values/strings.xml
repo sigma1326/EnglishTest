@@ -15,4 +15,13 @@
     <string name="about_developer">درباره تولیدکننده</string>
     <string name="drawer_title">سوالات زبان کنکور</string>
     <string name="all_majors">تمامی گروه های تحصیلی</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_2">2</string>
+    <string name="_1">1</string>
+    <string name="__1">1 -</string>
+    <string name="pause_test">توقف آزمون</string>
+    <string name="stop_test">خاتمه آزمون</string>
+    <string name="reading">Reading</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipisi   sed do eiusmod tempor incididunt ut labore etrt       magna aliqua. Ut enim ad minim veniam, quisd      exercitation ullamco laboris nisi ut aliquip exa      do consequat. Duis aute irure dolor?voluptate       velit esse cillum dolore eu fugiat ??sint occaec      cupidatat non proident, sunt in culpa qui officia derunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</string>
 </resources>

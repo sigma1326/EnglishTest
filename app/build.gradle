@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
     compileSdkVersion 28
@@ -32,7 +33,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha01'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
@@ -65,10 +66,16 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
     implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.andkulikov:transitionseverywhere:1.8.1'
 
-    implementation "com.andkulikov:transitionseverywhere:1.8.1"
+    implementation 'com.google.android:flexbox:1.1.0'
+
+    implementation 'com.github.rubensousa:gravitysnaphelper:2.0'
+
+    implementation 'org.sufficientlysecure:html-textview:3.6'
 
 
     implementation project(':database')
     implementation project(':garlandview')
+    implementation project(':fluidslider')
 }
