@@ -45,13 +45,15 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
                         Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
                                 .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
                                         .setYear(mData.get(position).getYear())
-                                        .setMajor(mData.get(position).getMajor()));
+                                        .setMajor(mData.get(position).getMajor())
+                                        .setIsTestType(true));
                     }
                     , v1 -> {
                         Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
                                 .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
                                         .setYear(mData.get(position).getYear())
-                                        .setMajor(mData.get(position).getMajor()));
+                                        .setMajor(mData.get(position).getMajor())
+                                        .setIsTestType(false));
 
                     }
             );

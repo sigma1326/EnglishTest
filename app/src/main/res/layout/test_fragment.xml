@@ -88,7 +88,7 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_stop_24dp"
+        app:srcCompat="@drawable/ic_stop_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/layout_snackbar"
         app:layout_constraintEnd_toStartOf="@+id/img_pause"
         app:layout_constraintStart_toStartOf="@+id/layout_snackbar"

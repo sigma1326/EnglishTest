@@ -103,6 +103,40 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         //disable scrolling in recyclerView
         rvQuestions.setOnTouchListener((v, event) -> true);
 
+//        rvQuestions.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                mViewModel.setCanTouch(newState != RecyclerView.SCROLL_STATE_SETTLING);
+//            }
+//
+//        });
+//        rvQuestions.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+//            @Override
+//            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+//                if (e.getAction() == MotionEvent.ACTION_DOWN && rv.getScrollState() == RecyclerView.SCROLL_STATE_SETTLING) {
+//                    Log.d("debug13", "onInterceptTouchEvent: click performed");
+//                    if (mViewModel.isCanTouch()) {
+//                        rv.stopScroll();
+//                        Objects.requireNonNull(rv.findChildViewUnder(e.getX(), e.getY())).performClick();
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//
+//            @Override
+//            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+//                Log.d("debug13", "onTouchEvent: ");
+//
+//            }
+//
+//            @Override
+//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+//
+//            }
+//        });
+
         //add snap helper to rv
 //        new LinearSnapHelper().attachToRecyclerView(rvQuestions);
 
@@ -181,7 +215,8 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
                     .navigate(TestFragmentDirections.actionTestFragmentToTestResultFragment()
                             .setDate(date.getMilli())
                             .setYear(mViewModel.getYear())
-                            .setMajor(mViewModel.getMajor()));
+                            .setMajor(mViewModel.getMajor())
+                            .setIsTestType(mViewModel.isTestType()));
         }
     }
 
@@ -199,10 +234,12 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
             int year, major;
+            boolean isTestType;
             year = TestFragmentArgs.fromBundle(getArguments()).getYear();
             major = TestFragmentArgs.fromBundle(getArguments()).getMajor();
+            isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
             mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-            mViewModel.init(new TestRepository(Objects.requireNonNull(getActivity()).getApplication()), year, major);
+            mViewModel.init(new TestRepository(Objects.requireNonNull(getActivity()).getApplication()), year, major, isTestType);
             if (onAppTitleChangedListener != null && mViewModel != null) {
                 onAppTitleChangedListener.onAppTitleChanged(mViewModel.getFragmentTitle());
             }

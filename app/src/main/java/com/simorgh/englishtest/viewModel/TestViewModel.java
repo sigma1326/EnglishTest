@@ -13,13 +13,15 @@ public class TestViewModel extends ViewModel {
     private LiveData<List<Question>> questionLiveData;
     private boolean isClosed = true;
     private int year, major;
+    private boolean isTestType;
     private TestRepository testRepository;
 
-    public void init(final TestRepository testRepository, final int year, final int major) {
+    public void init(final TestRepository testRepository, final int year, final int major, final boolean isTestType) {
         this.testRepository = testRepository;
         questionLiveData = testRepository.getQuestionsLiveData(year, major);
         this.year = year;
         this.major = major;
+        this.isTestType = isTestType;
     }
 
     public LiveData<List<Question>> getQuestionLiveData() {
@@ -28,6 +30,10 @@ public class TestViewModel extends ViewModel {
 
     public boolean isClosed() {
         return isClosed;
+    }
+
+    public boolean isTestType() {
+        return isTestType;
     }
 
     public TestRepository getTestRepository() {

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/motion_scene_test_result"
     tools:context=".view.TestResultFragment">
 
     <View
@@ -134,4 +135,129 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_correct_answer" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/fab_test_result"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/fab_bkg"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/layer_1213"
+        app:layout_constraintBottom_toTopOf="@+id/layout_snackbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/layout_snackbar"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="#04c3fb" />
+
+    <ImageButton
+        android:id="@+id/img_compare"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_comapre"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_snackbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_retake_test"
+        app:layout_constraintTop_toTopOf="@+id/layout_snackbar"
+        app:layout_constraintVertical_bias="0.3" />
+
+
+    <ImageButton
+        android:id="@+id/img_retake_test"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_reset"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_snackbar"
+        app:layout_constraintEnd_toStartOf="@id/img_compare"
+        app:layout_constraintStart_toEndOf="@+id/img_home"
+        app:layout_constraintTop_toTopOf="@+id/layout_snackbar"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <ImageButton
+        android:id="@+id/img_home"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_snackbar"
+        app:layout_constraintEnd_toStartOf="@+id/img_retake_test"
+        app:layout_constraintStart_toStartOf="@+id/layout_snackbar"
+        app:layout_constraintTop_toTopOf="@+id/layout_snackbar"
+        app:layout_constraintVertical_bias="0.3"
+        app:srcCompat="@drawable/ic_home" />
+
+    <TextView
+        android:id="@+id/tv_compare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/compare_with_prev_tests"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/layout_snackbar"
+        app:layout_constraintEnd_toEndOf="@+id/img_compare"
+        app:layout_constraintStart_toStartOf="@+id/img_compare"
+        app:layout_constraintTop_toBottomOf="@+id/img_compare"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <TextView
+        android:id="@+id/tv_retake_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retake_test"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/layout_snackbar"
+        app:layout_constraintEnd_toEndOf="@+id/img_retake_test"
+        app:layout_constraintStart_toStartOf="@+id/img_retake_test"
+        app:layout_constraintTop_toBottomOf="@+id/img_retake_test"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <TextView
+        android:id="@+id/tv_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/return_home"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/layout_snackbar"
+        app:layout_constraintEnd_toEndOf="@+id/img_home"
+        app:layout_constraintStart_toStartOf="@+id/img_home"
+        app:layout_constraintTop_toBottomOf="@+id/img_home"
+        tools:fontFamily="@font/iransans_medium" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

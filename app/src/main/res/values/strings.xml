@@ -33,4 +33,7 @@
     <string name="question_ended">سوالات شما به پایان رسید</string>
     <string name="return_and_continue_test">بازگشت و ادامه آزمون</string>
     <string name="show_result">مشاهده کارنامه</string>
+    <string name="compare_with_prev_tests">مقایسه با آزمون‌های قبلی</string>
+    <string name="return_home">بازگشت به صفحه اصلی</string>
+    <string name="retake_test">آزمون مجدد</string>
 </resources>
