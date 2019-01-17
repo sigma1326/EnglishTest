@@ -3,6 +3,8 @@ package com.simorgh.englishtest.view;
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +37,7 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.inflationx.calligraphy3.CalligraphyUtils;
 
-public class TestFragment extends Fragment implements QuestionAdapter.OnReadingShownListener {
+public class TestFragment extends Fragment implements QuestionAdapter.OnReadingShownListener, QuestionAdapter.OnAnswerListener {
 
     private TestViewModel mViewModel;
     private RecyclerView rvQuestions;
@@ -98,14 +100,17 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, true);
         rvQuestions.setLayoutManager(linearLayoutManager);
         rvQuestions.setNestedScrollingEnabled(false);
-        rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack(), this));
+        rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack(), this, this));
         rvQuestions.setHasFixedSize(true);
+
+        //disable scrolling in recyclerView
         rvQuestions.setOnTouchListener((v, event) -> true);
+
+        //add snap helper to rv
         new LinearSnapHelper().attachToRecyclerView(rvQuestions);
 
 
         fab.setOnClickListener(v -> {
-//            rvQuestions.smoothScrollToPosition(++i);
             switch (motionLayout.getCurrentState()) {
                 case R.id.show_reading_show_snackbar:
                     motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
@@ -140,8 +145,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
 
         motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
-//            boolean snackbar_state = false;
-
             @Override
             public void onTransitionStarted(MotionLayout motionLayout, int state, int i1) {
 
@@ -149,16 +152,13 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
             @Override
             public void onTransitionChange(MotionLayout motionLayout, int state, int i1, float v) {
-//                if (state == R.id.hide_reading_show_snackbar || state == R.id.show_reading_show_snackbar) {
-//                    snackbar_state = true;
-//                }
             }
 
             @Override
             public void onTransitionCompleted(MotionLayout motionLayout, final int state) {
                 if (state == R.id.hide_reading_show_snackbar || state == R.id.show_reading_show_snackbar) {
                     mViewModel.toggleClosed(true);
-                } else{
+                } else {
                     mViewModel.toggleClosed(false);
                 }
                 if (mViewModel.isClosed()) {
@@ -166,9 +166,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
                 } else {
                     fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
                 }
-
-//                Log.d("debug13", "onTransitionCompleted: " + snackbar_state + ":" + new_state);
-
 
             }
 
@@ -220,6 +217,15 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
                 motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
                 motionLayout.transitionToEnd();
             }
+        }
+    }
+
+    @Override
+    public void onQuestionAnswered(final Question question, final int position) {
+        if (rvQuestions != null) {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                rvQuestions.smoothScrollToPosition(position + 1);
+            }, 200);
         }
     }
 }

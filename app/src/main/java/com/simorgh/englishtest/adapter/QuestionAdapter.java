@@ -33,6 +33,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private List<Answer> answers = new LinkedList<>();
     private Date date = null;
     private OnReadingShownListener onReadingShownListener;
+    private OnAnswerListener onAnswerListener;
 
     public List<Answer> getAnswers() {
         return answers;
@@ -42,9 +43,10 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         super(diffCallback);
     }
 
-    public QuestionAdapter(@NonNull DiffUtil.ItemCallback<Question> diffCallback, OnReadingShownListener onReadingShownListener) {
+    public QuestionAdapter(@NonNull DiffUtil.ItemCallback<Question> diffCallback, OnReadingShownListener onReadingShownListener, OnAnswerListener onAnswerListener) {
         super(diffCallback);
         this.onReadingShownListener = onReadingShownListener;
+        this.onAnswerListener = onAnswerListener;
     }
 
     protected QuestionAdapter(@NonNull AsyncDifferConfig<Question> config) {
@@ -219,6 +221,9 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         if (!exists) {
             answers.add(answer);
         }
+        if (onAnswerListener != null) {
+            onAnswerListener.onQuestionAnswered(q, position);
+        }
     }
 
     private void clearSelectedAnswer(@NonNull ViewHolder holder, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
@@ -253,6 +258,10 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
 
     public interface OnReadingShownListener {
         void onReadingShown(final Question question);
+    }
+
+    public interface OnAnswerListener {
+        void onQuestionAnswered(final Question question, final int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
