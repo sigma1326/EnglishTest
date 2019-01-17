@@ -28,7 +28,15 @@ public class TestViewModel extends ViewModel {
         isClosed = closed;
     }
 
-    public void toggleClosed() {
-        isClosed = !isClosed;
+    public void toggleClosed(boolean shown) {
+        if (shown) {
+            if (!isClosed) {
+                isClosed = true;
+            }
+        } else {
+            if (isClosed) {
+                isClosed = false;
+            }
+        }
     }
 }

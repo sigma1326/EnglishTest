@@ -105,20 +105,30 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
 
         fab.setOnClickListener(v -> {
-            rvQuestions.smoothScrollToPosition(++i);
-
-//            if (closed) {
-//                motionLayout.transitionToState(R.id.end);
-//            } else {
-//                motionLayout.transitionToState(R.id.start);
-//            }
-//            closed = !closed;
-
+//            rvQuestions.smoothScrollToPosition(++i);
+            switch (motionLayout.getCurrentState()) {
+                case R.id.show_reading_show_snackbar:
+                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
+                    motionLayout.transitionToEnd();
+                    break;
+                case R.id.show_reading_hide_snackbar:
+                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_show_snackbar);
+                    motionLayout.transitionToEnd();
+                    break;
+                case R.id.hide_reading_show_snackbar:
+                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
+                    motionLayout.transitionToEnd();
+                    break;
+                case R.id.hide_reading_hide_snackbar:
+                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_show_snackbar);
+                    motionLayout.transitionToEnd();
+                    break;
+            }
         });
 
 
         pauseTestButton.setOnClickListener(v -> {
-            rvQuestions.smoothScrollToPosition(i++);
+            rvQuestions.smoothScrollToPosition(++i);
 
 
         });
@@ -130,24 +140,34 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
 
         motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
+//            boolean snackbar_state = false;
+
             @Override
             public void onTransitionStarted(MotionLayout motionLayout, int state, int i1) {
+
             }
 
             @Override
             public void onTransitionChange(MotionLayout motionLayout, int state, int i1, float v) {
+//                if (state == R.id.hide_reading_show_snackbar || state == R.id.show_reading_show_snackbar) {
+//                    snackbar_state = true;
+//                }
             }
 
             @Override
             public void onTransitionCompleted(MotionLayout motionLayout, final int state) {
-                if (state == R.id.start || state == R.id.end) {
-                    mViewModel.toggleClosed();
-                    if (!mViewModel.isClosed()) {
-                        fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_cross));
-                    } else {
-                        fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
-                    }
+                if (state == R.id.hide_reading_show_snackbar || state == R.id.show_reading_show_snackbar) {
+                    mViewModel.toggleClosed(true);
+                } else{
+                    mViewModel.toggleClosed(false);
                 }
+                if (mViewModel.isClosed()) {
+                    fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_cross));
+                } else {
+                    fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
+                }
+
+//                Log.d("debug13", "onTransitionCompleted: " + snackbar_state + ":" + new_state);
 
 
             }
@@ -185,23 +205,21 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         }
     }
 
-    int p = 0;
 
     @Override
     public void onReadingShown(final Question question) {
         if (question.getReadingID() != -1) {
             Reading reading = testRepository.getReading(question.getReadingID());
             tvReadingContent.setHtml(reading.getPassage());
-            if (motionLayout.getCurrentState() != R.id.showReading) {
-                motionLayout.setTransition(R.id.hideReading, R.id.showCustom);
-                motionLayout.transitionToState(R.id.showReading);
+            if (motionLayout.getCurrentState() != R.id.show_reading_hide_snackbar && motionLayout.getCurrentState() != R.id.show_reading_show_snackbar) {
+                motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
+                motionLayout.transitionToEnd();
             }
         } else {
-            if (motionLayout.getCurrentState() != R.id.hideReading) {
-                motionLayout.setTransition(R.id.showReading, R.id.hideReading);
-                motionLayout.transitionToState(R.id.hideReading);
+            if (motionLayout.getCurrentState() != R.id.hide_reading_hide_snackbar && motionLayout.getCurrentState() != R.id.hide_reading_show_snackbar) {
+                motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
+                motionLayout.transitionToEnd();
             }
         }
-        p++;
     }
 }

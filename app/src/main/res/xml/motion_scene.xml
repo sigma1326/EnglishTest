@@ -2,63 +2,64 @@
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-    <!--<Transition-->
-        <!--motion:constraintSetEnd="@id/end"-->
-        <!--motion:constraintSetStart="@id/start"-->
-        <!--motion:duration="200">-->
 
-        <!--&lt;!&ndash;<OnClick&ndash;&gt;-->
-        <!--&lt;!&ndash;motion:clickAction="toggle"&ndash;&gt;-->
-        <!--&lt;!&ndash;motion:target="@id/fab_test" />&ndash;&gt;-->
-
-
-    <!--</Transition>-->
+    <Transition
+        motion:constraintSetEnd="@id/show_reading_hide_snackbar"
+        motion:constraintSetStart="@id/hide_reading_hide_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/hide_reading_show_snackbar"
+        motion:constraintSetStart="@id/hide_reading_hide_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/show_reading_show_snackbar"
+        motion:constraintSetStart="@id/hide_reading_hide_snackbar"
+        motion:duration="200" />
 
 
     <Transition
-        motion:constraintSetEnd="@id/showReading"
-        motion:constraintSetStart="@id/hideReading"
-        motion:duration="500">
-
-        <!--<OnClick-->
-        <!--motion:clickAction="toggle"-->
-        <!--motion:target="@id/fab_test" />-->
-
-
-    </Transition>
-    <!--<Transition-->
-        <!--motion:constraintSetEnd="@id/hideReading"-->
-        <!--motion:constraintSetStart="@id/showReading"-->
-        <!--motion:duration="2000">-->
-
-        <!--&lt;!&ndash;<OnClick&ndash;&gt;-->
-        <!--&lt;!&ndash;motion:clickAction="toggle"&ndash;&gt;-->
-        <!--&lt;!&ndash;motion:target="@id/fab_test" />&ndash;&gt;-->
+        motion:constraintSetEnd="@id/show_reading_show_snackbar"
+        motion:constraintSetStart="@id/show_reading_hide_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/hide_reading_hide_snackbar"
+        motion:constraintSetStart="@id/show_reading_hide_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/hide_reading_show_snackbar"
+        motion:constraintSetStart="@id/show_reading_hide_snackbar"
+        motion:duration="200" />
 
 
-    <!--</Transition>-->
+    <Transition
+        motion:constraintSetEnd="@id/hide_reading_show_snackbar"
+        motion:constraintSetStart="@id/show_reading_show_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/hide_reading_hide_snackbar"
+        motion:constraintSetStart="@id/show_reading_show_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/show_reading_hide_snackbar"
+        motion:constraintSetStart="@id/show_reading_show_snackbar"
+        motion:duration="200" />
 
 
-    <ConstraintSet android:id="@+id/start">
-        <Constraint
-            android:id="@+id/layout_snackbar"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toBottomOf="parent" />
-
-        <!--<Constraint-->
-        <!--android:id="@+id/layout_reading_title"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="150dp"-->
-        <!--android:layout_marginTop="12dp"-->
-        <!--motion:layout_constraintStart_toStartOf="parent"-->
-        <!--motion:layout_constraintTop_toTopOf="parent" />-->
-    </ConstraintSet>
+    <Transition
+        motion:constraintSetEnd="@id/hide_reading_show_snackbar"
+        motion:constraintSetStart="@id/hide_reading_show_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/hide_reading_hide_snackbar"
+        motion:constraintSetStart="@id/hide_reading_show_snackbar"
+        motion:duration="200" />
+    <Transition
+        motion:constraintSetEnd="@id/show_reading_hide_snackbar"
+        motion:constraintSetStart="@id/hide_reading_show_snackbar"
+        motion:duration="200" />
 
 
-    <ConstraintSet android:id="@+id/end">
+    <ConstraintSet android:id="@+id/show_reading_show_snackbar">
         <Constraint
             android:id="@+id/layout_snackbar"
             android:layout_width="match_parent"
@@ -66,18 +67,17 @@
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
-        <!--<Constraint-->
-        <!--android:id="@+id/layout_reading_title"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="150dp"-->
-        <!--android:layout_marginTop="12dp"-->
-        <!--motion:layout_constraintStart_toStartOf="parent"-->
-        <!--motion:layout_constraintTop_toTopOf="parent" />-->
-
+        <Constraint
+            android:id="@+id/layout_reading_title"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_marginTop="12dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
 
-    <ConstraintSet android:id="@+id/showReading">
+    <ConstraintSet android:id="@+id/show_reading_hide_snackbar">
         <Constraint
             android:id="@+id/layout_snackbar"
             android:layout_width="match_parent"
@@ -94,7 +94,7 @@
             motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/hideReading">
+    <ConstraintSet android:id="@+id/hide_reading_hide_snackbar">
         <Constraint
             android:id="@+id/layout_snackbar"
             android:layout_width="match_parent"
@@ -102,6 +102,24 @@
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toBottomOf="parent" />
+        <Constraint
+            android:id="@+id/layout_reading_title"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_marginBottom="5dp"
+            motion:layout_constraintBottom_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/hide_reading_show_snackbar">
+        <Constraint
+            android:id="@+id/layout_snackbar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:id="@+id/layout_reading_title"
             android:layout_width="wrap_content"
