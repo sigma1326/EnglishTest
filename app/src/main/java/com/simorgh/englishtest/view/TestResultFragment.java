@@ -2,13 +2,11 @@ package com.simorgh.englishtest.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.simorgh.database.model.Answer;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.AnswerAdapter;
 import com.simorgh.englishtest.viewModel.TestResultViewModel;

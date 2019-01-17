@@ -2,6 +2,7 @@ package com.simorgh.englishtest.viewModel;
 
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Question;
+import com.simorgh.database.model.YearMajorData;
 
 import java.util.List;
 
@@ -43,6 +44,10 @@ public class TestViewModel extends ViewModel {
 
     public int getMajor() {
         return major;
+    }
+
+    public String getFragmentTitle() {
+        return YearMajorData.getMajorType(major) + " " + year;
     }
 
     public void toggleClosed(boolean shown) {

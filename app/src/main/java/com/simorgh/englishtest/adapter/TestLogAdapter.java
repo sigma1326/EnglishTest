@@ -1,6 +1,7 @@
 package com.simorgh.englishtest.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +10,20 @@ import android.widget.TextView;
 import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.view.TestLogFragmentDirections;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogHolder> {
+    private NavController navController;
+
     public TestLogAdapter(@NonNull DiffUtil.ItemCallback<TestLog> diffCallback) {
         super(diffCallback);
     }
@@ -52,9 +58,20 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
             testLogTitle.setText(title);
             testDate.setText("تاریخ آزمون: 97/6/21");
             testHour.setText("ساعت آزمون: 11:25");
-            testPercent.setText(String.format("%s: %d", "درصد کسب شده", (int) testLog.getPercent()));
+            String percent = "درصد کسب شده: " + "% " + (int) testLog.getPercent();
+            testPercent.setText(percent);
             testCorrectCount.setText(String.format("%s: %d", "تعداد گزینه صحیح", testLog.getCorrectCount()));
             testBlankCount.setText(String.format("%s: %d", "تعداد گزینه نزده", testLog.getBlankCount()));
+
+            holder.itemView.setOnClickListener(v -> {
+                if (navController == null) {
+                    navController = Navigation.findNavController((Activity) v.getContext(), R.id.main_nav_host_fragment);
+                }
+                navController.navigate(TestLogFragmentDirections.actionTestLogFragmentToTestResultFragment()
+                        .setDate(testLog.getDate().getMilli())
+                        .setMajor(testLog.getMajor())
+                        .setYear(testLog.getYear()));
+            });
 
         }
     }

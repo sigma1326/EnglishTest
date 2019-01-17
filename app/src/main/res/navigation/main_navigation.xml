@@ -96,5 +96,14 @@
         android:id="@+id/testLogFragment"
         android:name="com.simorgh.englishtest.view.TestLogFragment"
         android:label="test_log_fragment"
-        tools:layout="@layout/test_log_fragment" />
+        tools:layout="@layout/test_log_fragment">
+        <action
+            android:id="@+id/action_testLogFragment_to_testResultFragment"
+            app:destination="@id/testResultFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@+id/testLogFragment" />
+    </fragment>
 </navigation>

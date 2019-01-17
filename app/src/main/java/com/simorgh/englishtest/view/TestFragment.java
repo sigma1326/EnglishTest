@@ -1,11 +1,11 @@
 package com.simorgh.englishtest.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +35,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.inflationx.calligraphy3.CalligraphyUtils;
 
@@ -51,6 +50,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     private Typeface typeface;
     private MotionLayout motionLayout;
     private TestRepository testRepository;
+    private OnAppTitleChangedListener onAppTitleChangedListener;
 
 
     @Override
@@ -103,7 +103,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         rvQuestions.setOnTouchListener((v, event) -> true);
 
         //add snap helper to rv
-        new LinearSnapHelper().attachToRecyclerView(rvQuestions);
+//        new LinearSnapHelper().attachToRecyclerView(rvQuestions);
 
 
         fab.setOnClickListener(v -> {
@@ -174,7 +174,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         List<Answer> answers = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getAnswers();
         Date date = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getDate();
         if (date != null && mViewModel != null) {
-            Log.d("debug", "onViewCreated: " + answers.size());
             mViewModel.getTestRepository().updateAnswers(answers);
 
             Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment)
@@ -203,6 +202,9 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             major = TestFragmentArgs.fromBundle(getArguments()).getMajor();
             mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
             mViewModel.init(new TestRepository(Objects.requireNonNull(getActivity()).getApplication()), year, major);
+            if (onAppTitleChangedListener != null && mViewModel != null) {
+                onAppTitleChangedListener.onAppTitleChanged(mViewModel.getFragmentTitle());
+            }
             mViewModel.getQuestionLiveData().observe(this, questions -> {
                 if (questions != null && rvQuestions != null && rvQuestions.getAdapter() != null) {
                     ((QuestionAdapter) rvQuestions.getAdapter()).submitList(questions);
@@ -211,6 +213,21 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         }
     }
 
+    public interface OnAppTitleChangedListener {
+        void onAppTitleChanged(final String titleText);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        onAppTitleChangedListener = (OnAppTitleChangedListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        onAppTitleChangedListener = null;
+        super.onDetach();
+    }
 
     @Override
     public void onReadingShown(final Question question) {
