@@ -2,6 +2,7 @@ package com.simorgh.database.dao;
 
 import com.simorgh.database.Date;
 import com.simorgh.database.model.Answer;
+import com.simorgh.database.model.Question;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 @Dao
 @Keep
@@ -37,4 +40,11 @@ public interface AnswerDAO {
 
     @Query("delete from answers")
     void deleteAll();
+
+    @Query("select * from answers where date =:testDate order by fakeID")
+    List<Answer> getAnswers(final Date testDate);
+
+
+    @RawQuery(observedEntities = Answer.class)
+    List<Long> getAnswerDates(SupportSQLiteQuery rawQuery);
 }

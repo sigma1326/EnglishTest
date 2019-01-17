@@ -2,11 +2,13 @@ package com.simorgh.database;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.widget.ListAdapter;
 
 import com.huma.room_for_asset.RoomAsset;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.Reading;
+import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.User;
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.database.task.insertAnswerAsyncTask;
@@ -15,6 +17,7 @@ import com.simorgh.database.task.insertReadingAsyncTask;
 import com.simorgh.database.task.insertUserAsyncTask;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.Keep;
@@ -57,8 +60,13 @@ public final class TestRepository {
     public LiveData<List<Question>> getQuestionsLiveData(final int year, final int major) {
         return dataBase.questionDAO().getQuestionsLiveData(year, major);
     }
+
     public List<Question> getQuestions(final int year, final int major) {
         return dataBase.questionDAO().getQuestions(major, year);
+    }
+
+    public Question getQuestion(final int questionID) {
+        return dataBase.questionDAO().getQuestion(questionID);
     }
 
     public Reading getReading(final int readingID) {
@@ -88,9 +96,51 @@ public final class TestRepository {
         return dataBase.answerDAO().getAnswers(major, year, date);
     }
 
+    public List<Answer> getAnswers(final Date date) {
+        return dataBase.answerDAO().getAnswers(date);
+    }
+
     public List<Integer> getQuestionYears() {
         return dataBase.questionDAO().getYears(new SimpleSQLiteQuery("select distinct year_question from questions order by year_question desc"));
     }
+
+    public List<Long> getAnswerDates() {
+        return dataBase.answerDAO().getAnswerDates(new SimpleSQLiteQuery("select distinct date from answers order by date desc"));
+    }
+
+    private int getQuestionCount(final int year, final int major) {
+        return dataBase.questionDAO().getQuestionsCount(major, year);
+    }
+
+    public List<TestLog> getTestLogs() {
+        List<TestLog> testLogs = new LinkedList<>();
+        List<Long> dates = getAnswerDates();
+        List<Answer> answerList;
+        for (Long date : dates) {
+            answerList = getAnswers(new Date(date));
+            TestLog testLog = null;
+            int wrongCount = 0;
+            int count = 0;
+            for (Answer answer : answerList) {
+                if (testLog == null) {
+                    Question q = getQuestion(answer.getQuestionId());
+                    count = getQuestionCount(q.getYearQuestion(), q.getMajor());
+                    testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
+                }
+                if (!answer.isCorrect()) {
+                    wrongCount++;
+                }
+            }
+            if (testLog != null) {
+                testLog.setWrongCount(wrongCount);
+                testLog.setBlankCount(count - answerList.size());
+            }
+            testLogs.add(testLog);
+        }
+
+        return testLogs;
+    }
+
 
     public void updateUser(@Nullable User user) {
         new insertUserAsyncTask(dataBase.userDAO()).execute(user);

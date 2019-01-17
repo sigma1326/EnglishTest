@@ -32,6 +32,9 @@ public interface QuestionDAO {
     @Query("select * from questions where major=:major and year_question =:year order by question_number")
     List<Question> getQuestions(final int major, final int year);
 
+    @Query("select count(*) from questions where major=:major and year_question =:year")
+    int getQuestionsCount(final int major, final int year);
+
     @Query("select * from questions order by question_number")
     List<Question> getQuestions();
 

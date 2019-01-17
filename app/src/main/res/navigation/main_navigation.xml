@@ -28,6 +28,14 @@
                 android:name="is_test_type"
                 android:defaultValue="true" />
         </action>
+        <action
+            android:id="@+id/action_homeFragment_to_testLogFragment"
+            app:destination="@id/testLogFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@+id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -84,4 +92,9 @@
             app:argType="long"
             android:defaultValue="0L" />
     </fragment>
+    <fragment
+        android:id="@+id/testLogFragment"
+        android:name="com.simorgh.englishtest.view.TestLogFragment"
+        android:label="test_log_fragment"
+        tools:layout="@layout/test_log_fragment" />
 </navigation>

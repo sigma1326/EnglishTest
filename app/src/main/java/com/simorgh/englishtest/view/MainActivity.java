@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.simorgh.englishtest.R;
@@ -24,6 +25,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
 
     private NavController navController;
+    private TextView tvTestLogs;
 
 
     @Override
@@ -56,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navController = Navigation.findNavController(MainActivity.this, R.id.main_nav_host_fragment);
         Navigation.findNavController(MainActivity.this, R.id.main_nav_host_fragment).addOnDestinationChangedListener(this);
 
+        tvTestLogs = findViewById(R.id.tv_test_log);
+        tvTestLogs.setOnClickListener(v -> {
+            navController.navigate(R.id.action_homeFragment_to_testLogFragment);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
 
     }
 
