@@ -8,9 +8,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-public class TestOrPracticeDialog {
+public class DialogMaker {
     public static void createDialog(@NonNull final Context context, @NonNull final String title, final int questionCount, final int time
-    , final View.OnClickListener onTestClickListener,final View.OnClickListener onPracticeClickListener) {
+            , final View.OnClickListener onTestClickListener, final View.OnClickListener onPracticeClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.test_or_practice_dialog, null);
@@ -33,6 +33,28 @@ public class TestOrPracticeDialog {
         view.findViewById(R.id.view_practice).setOnClickListener(v -> {
             alertDialog.dismiss();
             onPracticeClickListener.onClick(v);
+        });
+    }
+
+    public static void createTestEndDialog(@NonNull final Context context
+            , final View.OnClickListener onReturnAndContinueListener, final View.OnClickListener onShowResultListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.test_ended_dialog, null);
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+        view.findViewById(R.id.view_return).setOnClickListener(v -> {
+            alertDialog.dismiss();
+            onReturnAndContinueListener.onClick(v);
+        });
+
+        view.findViewById(R.id.view_show_result).setOnClickListener(v -> {
+            alertDialog.dismiss();
+            onShowResultListener.onClick(v);
         });
     }
 }

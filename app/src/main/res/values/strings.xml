@@ -30,4 +30,7 @@
     <string name="question_num">شماره سوال</string>
     <string name="correct_answer">جواب صحیح</string>
     <string name="your_answer">پاسخ شما</string>
+    <string name="question_ended">سوالات شما به پایان رسید</string>
+    <string name="return_and_continue_test">بازگشت و ادامه آزمون</string>
+    <string name="show_result">مشاهده کارنامه</string>
 </resources>

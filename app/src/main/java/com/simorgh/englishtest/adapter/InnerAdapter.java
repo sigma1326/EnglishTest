@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.database.model.YearMajorData;
+import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
-import com.simorgh.englishtest.TestOrPracticeDialog;
 import com.simorgh.englishtest.view.HomeFragmentDirections;
 import com.simorgh.englishtest.view.MainActivity;
 
@@ -37,7 +37,7 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
         holder.setContent(mData.get(position));
         holder.itemView.findViewById(R.id.inner_layout).setOnClickListener(v -> {
             String year = String.format("سوالات زبان گروه %s", YearMajorData.getMajorType(mData.get(position).getMajor()));
-            TestOrPracticeDialog.createDialog(v.getContext()
+            DialogMaker.createDialog(v.getContext()
                     , String.format("%s سال %s", year, String.valueOf(mData.get(position).getYear()))
                     , mData.get(position).getQuestionCount()
                     , YearMajorData.getMajorTime(mData.get(position).getMajor())

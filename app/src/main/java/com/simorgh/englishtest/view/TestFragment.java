@@ -17,6 +17,7 @@ import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.Reading;
+import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.QuestionAdapter;
 import com.simorgh.englishtest.viewModel.TestViewModel;
@@ -250,7 +251,9 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     public void onQuestionAnswered(final Question question, final int position) {
         if (rvQuestions != null) {
             if (Objects.requireNonNull(rvQuestions.getAdapter()).getItemCount() == position + 1) {
-                showTestResult();
+                DialogMaker.createTestEndDialog(Objects.requireNonNull(getActivity()), v -> {
+                    //todo check this
+                }, v -> showTestResult());
             } else {
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     rvQuestions.smoothScrollToPosition(position + 1);
