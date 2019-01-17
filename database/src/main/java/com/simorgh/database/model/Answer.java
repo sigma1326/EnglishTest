@@ -19,6 +19,12 @@ public class Answer {
     @ColumnInfo(name = "answer")
     private int answer;
 
+    @ColumnInfo(name = "true_answer")
+    private int trueAnswer;
+
+    @ColumnInfo(name = "question_number")
+    private int questionNumber;
+
     @ColumnInfo(name = "date")
     private Date date;
 
@@ -55,9 +61,31 @@ public class Answer {
         this.fakeID = fakeID;
     }
 
-    public Answer(int questionId, int answer, Date date) {
+    public int getTrueAnswer() {
+        return trueAnswer;
+    }
+
+    public void setTrueAnswer(int trueAnswer) {
+        this.trueAnswer = trueAnswer;
+    }
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public Answer(int questionId, int answer, int trueAnswer, int questionNumber, Date date) {
         this.questionId = questionId;
         this.answer = answer;
+        this.trueAnswer = trueAnswer;
+        this.questionNumber = questionNumber;
         this.date = date;
+    }
+
+    public boolean isCorrect() {
+        return answer == trueAnswer;
     }
 }

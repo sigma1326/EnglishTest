@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tv_your_answer"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:background="@drawable/answer_number_bkg_corect"
+        android:gravity="center"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:text="@string/_2"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_correct_answer"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <TextView
+        android:id="@+id/tv_correct_answer"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:background="@drawable/answer_number_bkg_black"
+        android:gravity="center"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:text="@string/_2"
+        android:textAlignment="center"
+        android:textColor="#3d3d3d"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_question_num"
+        app:layout_constraintStart_toEndOf="@id/tv_your_answer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <TextView
+        android:id="@+id/tv_question_num"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:text="@string/_2"
+        android:textAlignment="center"
+        android:textColor="#3d3d3d"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_correct_answer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,7 +33,7 @@ public interface AnswerDAO {
     List<Answer> getAnswers(final int major, final int year, final Date testDate);
 
     @Query("select * from answers where date =:testDate and question_id in (select id from questions where major=:major and year_question =:year order by question_number)")
-    LiveData<List<Answer>> getQuestionsLiveData(final int major, final int year, final Date testDate);
+    LiveData<List<Answer>> getAnswersLiveData(final int major, final int year, final Date testDate);
 
     @Query("delete from answers")
     void deleteAll();

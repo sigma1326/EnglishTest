@@ -64,7 +64,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         return new ViewHolder(v);
     }
 
-    private Date getDate() {
+    public Date getDate() {
         if (date == null) {
             date = new Date(Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()));
         }
@@ -199,7 +199,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
 
     private void removeAnswer(@NonNull ViewHolder holder, int position) {
         Question q = getItem(position);
-        Answer answer = new Answer(q.getId(), holder.answer, getDate());
+        Answer answer = new Answer(q.getId(), holder.answer, q.getTrueAnswer(), q.getQuestionNumber(), getDate());
         for (Answer ans : answers) {
             if (answer.getQuestionId() == ans.getQuestionId()) {
                 answers.remove(ans);
@@ -210,7 +210,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
 
     private void addAnswer(@NonNull ViewHolder holder, int position) {
         Question q = getItem(position);
-        Answer answer = new Answer(q.getId(), holder.answer, getDate());
+        Answer answer = new Answer(q.getId(), holder.answer, q.getTrueAnswer(), q.getQuestionNumber(), getDate());
         boolean exists = false;
         for (Answer ans : answers) {
             if (answer.getQuestionId() == ans.getQuestionId()) {

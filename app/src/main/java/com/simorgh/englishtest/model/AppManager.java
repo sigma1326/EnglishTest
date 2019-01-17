@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import com.facebook.stetho.Stetho;
+import com.simorgh.database.TestRepository;
 import com.simorgh.englishtest.R;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
@@ -38,6 +39,8 @@ public class AppManager extends Application {
                                 .setFontAttrId(R.attr.fontPath)
                                 .build()))
                 .build());
+
+        new TestRepository(this);
     }
 
 }

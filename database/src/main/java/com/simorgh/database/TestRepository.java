@@ -27,7 +27,6 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 @Keep
 public final class TestRepository {
     private TestDataBase dataBase;
-    private ImportDataBase importDataBase;
 
     public TestRepository(@NonNull Application application) {
         dataBase = TestDataBase.getDatabase(application);
@@ -46,7 +45,7 @@ public final class TestRepository {
      */
     private boolean initTestDataBase(@NonNull Application application) {
         if (dataBase.userDAO().getUser() == null) {
-            importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").allowMainThreadQueries().build();
+            ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").allowMainThreadQueries().build();
             updateQuestions(importDataBase.questionDAO().getQuestions());
             updateReadings(importDataBase.readingDAO().getReadings());
             importDataBase.close();
@@ -57,6 +56,9 @@ public final class TestRepository {
 
     public LiveData<List<Question>> getQuestionsLiveData(final int year, final int major) {
         return dataBase.questionDAO().getQuestionsLiveData(year, major);
+    }
+    public List<Question> getQuestions(final int year, final int major) {
+        return dataBase.questionDAO().getQuestions(major, year);
     }
 
     public Reading getReading(final int readingID) {
@@ -76,6 +78,14 @@ public final class TestRepository {
             lists.add(yearMajorDataList);
         }
         return lists;
+    }
+
+    public LiveData<List<Answer>> getAnswersLiveData(final int year, final int major, final Date date) {
+        return dataBase.answerDAO().getAnswersLiveData(major, year, date);
+    }
+
+    public List<Answer> getAnswers(final int year, final int major, final Date date) {
+        return dataBase.answerDAO().getAnswers(major, year, date);
     }
 
     public List<Integer> getQuestionYears() {

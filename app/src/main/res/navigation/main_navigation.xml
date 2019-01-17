@@ -24,6 +24,9 @@
             <argument
                 android:name="major"
                 android:defaultValue="0" />
+            <argument
+                android:name="is_test_type"
+                android:defaultValue="true" />
         </action>
     </fragment>
     <fragment
@@ -39,5 +42,46 @@
             android:name="major"
             android:defaultValue="0"
             app:argType="integer" />
+        <argument
+            android:name="is_test_type"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_testFragment_to_testResultFragment"
+            app:destination="@id/testResultFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@+id/homeFragment" >
+            <argument
+                android:name="year"
+                android:defaultValue="0" />
+            <argument
+                android:name="major"
+                android:defaultValue="0" />
+            <argument
+                android:name="date"
+                android:defaultValue="0L" />
+        </action>
+
+    </fragment>
+    <fragment
+        android:id="@+id/testResultFragment"
+        android:name="com.simorgh.englishtest.view.TestResultFragment"
+        android:label="test_result_fragment"
+        tools:layout="@layout/test_result_fragment">
+        <argument
+            android:name="year"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="major"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="date"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 </navigation>

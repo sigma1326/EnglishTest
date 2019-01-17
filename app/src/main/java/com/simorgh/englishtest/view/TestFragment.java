@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.simorgh.database.Date;
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
@@ -32,6 +33,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,11 +53,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     private TestRepository testRepository;
 
 
-    public static TestFragment newInstance() {
-        return new TestFragment();
-    }
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +67,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         return inflater.inflate(R.layout.test_fragment, container, false);
     }
 
-    int i = 0;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -133,14 +129,12 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
 
         pauseTestButton.setOnClickListener(v -> {
-            rvQuestions.smoothScrollToPosition(++i);
 
 
         });
 
         stopTestButton.setOnClickListener(v -> {
-            List<Answer> answers = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getAnswers();
-            Log.d("debug", "onViewCreated: " + answers.size());
+            showTestResult();
         });
 
 
@@ -174,6 +168,21 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
             }
         });
+    }
+
+    private void showTestResult() {
+        List<Answer> answers = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getAnswers();
+        Date date = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getDate();
+        if (date != null && mViewModel != null) {
+            Log.d("debug", "onViewCreated: " + answers.size());
+            mViewModel.getTestRepository().updateAnswers(answers);
+
+            Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment)
+                    .navigate(TestFragmentDirections.actionTestFragmentToTestResultFragment()
+                            .setDate(date.getMilli())
+                            .setYear(mViewModel.getYear())
+                            .setMajor(mViewModel.getMajor()));
+        }
     }
 
     @Override
@@ -223,9 +232,13 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     @Override
     public void onQuestionAnswered(final Question question, final int position) {
         if (rvQuestions != null) {
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                rvQuestions.smoothScrollToPosition(position + 1);
-            }, 200);
+            if (Objects.requireNonNull(rvQuestions.getAdapter()).getItemCount() == position + 1) {
+                showTestResult();
+            } else {
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    rvQuestions.smoothScrollToPosition(position + 1);
+                }, 200);
+            }
         }
     }
 }
