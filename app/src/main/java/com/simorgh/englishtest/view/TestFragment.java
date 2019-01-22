@@ -52,6 +52,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     private MotionLayout motionLayout;
     private TestRepository testRepository;
     private OnAppTitleChangedListener onAppTitleChangedListener;
+    private int lastViewPosition = 0;
 
 
     @Override
@@ -61,11 +62,36 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         if (testRepository == null) {
             testRepository = new TestRepository(Objects.requireNonNull(getActivity()).getApplication());
         }
+
+        if (getArguments() != null) {
+            int year, major;
+            boolean isTestType;
+            year = TestFragmentArgs.fromBundle(getArguments()).getYear();
+            major = TestFragmentArgs.fromBundle(getArguments()).getMajor();
+            isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
+            mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
+            mViewModel.init(new TestRepository(Objects.requireNonNull(getActivity()).getApplication()), year, major, isTestType);
+            if (onAppTitleChangedListener != null && mViewModel != null) {
+                onAppTitleChangedListener.onAppTitleChanged(mViewModel.getFragmentTitle());
+            }
+            mViewModel.getQuestionLiveData().observe(this, questions -> {
+                if (questions != null && rvQuestions != null && rvQuestions.getAdapter() != null) {
+                    ((QuestionAdapter) rvQuestions.getAdapter()).submitList(questions);
+                }
+            });
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.test_fragment, container, false);
+        if (getArguments() != null) {
+            if (TestFragmentArgs.fromBundle(getArguments()).getIsTestType()) {
+                return inflater.inflate(R.layout.test_fragment, container, false);
+            } else {
+                return inflater.inflate(R.layout.practice_fragment, container, false);
+            }
+        }
+        return null;
     }
 
 
@@ -81,8 +107,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
         rvQuestions = view.findViewById(R.id.rv_questions);
         fab = view.findViewById(R.id.fab_test);
-        pauseTestButton = view.findViewById(R.id.img_pause);
-        stopTestButton = view.findViewById(R.id.img_stop);
+
         motionLayout = (MotionLayout) view;
         tvReadingTitle = view.findViewById(R.id.tv_reading_title);
         tvReadingContent = view.findViewById(R.id.tv_reading_content);
@@ -90,14 +115,16 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         CalligraphyUtils.applyFontToTextView(tvReadingTitle, typeface);
         CalligraphyUtils.applyFontToTextView(tvReadingContent, typeface);
 
-        tvReadingContent.setHtml(getString(R.string.lorem));
-
+        boolean isTestType = false;
+        if (getArguments() != null) {
+            isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
+        }
 
         rvQuestions.setNestedScrollingEnabled(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, true);
         rvQuestions.setLayoutManager(linearLayoutManager);
         rvQuestions.setNestedScrollingEnabled(false);
-        rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack(), this, this));
+        rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack(), this, this, isTestType));
         rvQuestions.setHasFixedSize(true);
 
         //disable scrolling in recyclerView
@@ -142,67 +169,74 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
 
         fab.setOnClickListener(v -> {
-            switch (motionLayout.getCurrentState()) {
-                case R.id.show_reading_show_snackbar:
-                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
-                    motionLayout.transitionToEnd();
-                    break;
-                case R.id.show_reading_hide_snackbar:
-                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_show_snackbar);
-                    motionLayout.transitionToEnd();
-                    break;
-                case R.id.hide_reading_show_snackbar:
-                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
-                    motionLayout.transitionToEnd();
-                    break;
-                case R.id.hide_reading_hide_snackbar:
-                    motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_show_snackbar);
-                    motionLayout.transitionToEnd();
-                    break;
-            }
-        });
-
-
-        pauseTestButton.setOnClickListener(v -> {
-
-
-        });
-
-        stopTestButton.setOnClickListener(v -> {
-            showTestResult();
-        });
-
-
-        motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
-            @Override
-            public void onTransitionStarted(MotionLayout motionLayout, int state, int i1) {
-
-            }
-
-            @Override
-            public void onTransitionChange(MotionLayout motionLayout, int state, int i1, float v) {
-            }
-
-            @Override
-            public void onTransitionCompleted(MotionLayout motionLayout, final int state) {
-                if (state == R.id.hide_reading_show_snackbar || state == R.id.show_reading_show_snackbar) {
-                    mViewModel.toggleClosed(true);
-                } else {
-                    mViewModel.toggleClosed(false);
+            if (mViewModel != null && mViewModel.isTestType()) {
+                switch (motionLayout.getCurrentState()) {
+                    case R.id.show_reading_show_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
+                    case R.id.show_reading_hide_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_show_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
+                    case R.id.hide_reading_show_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
+                    case R.id.hide_reading_hide_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_show_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
                 }
-                if (mViewModel.isClosed()) {
-                    fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_cross));
-                } else {
-                    fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
+            } else {
+                ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).toggleShowAnswer(lastViewPosition);
+            }
+        });
+
+
+        if (mViewModel != null && mViewModel.isTestType()) {
+            pauseTestButton = view.findViewById(R.id.img_pause);
+            stopTestButton = view.findViewById(R.id.img_stop);
+
+            pauseTestButton.setOnClickListener(v -> {
+
+            });
+
+            stopTestButton.setOnClickListener(v -> {
+                showTestResult();
+            });
+
+            motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
+                @Override
+                public void onTransitionStarted(MotionLayout motionLayout, int state, int i1) {
+
                 }
 
-            }
+                @Override
+                public void onTransitionChange(MotionLayout motionLayout, int state, int i1, float v) {
+                }
 
-            @Override
-            public void onTransitionTrigger(MotionLayout motionLayout, int state, boolean b, float v) {
+                @Override
+                public void onTransitionCompleted(MotionLayout motionLayout, final int state) {
+                    if (state == R.id.hide_reading_show_snackbar || state == R.id.show_reading_show_snackbar) {
+                        mViewModel.toggleClosed(true);
+                    } else {
+                        mViewModel.toggleClosed(false);
+                    }
+                    if (mViewModel.isClosed()) {
+                        fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_cross));
+                    } else {
+                        fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
+                    }
 
-            }
-        });
+                }
+
+                @Override
+                public void onTransitionTrigger(MotionLayout motionLayout, int state, boolean b, float v) {
+
+                }
+            });
+        }
     }
 
     private void showTestResult() {
@@ -232,23 +266,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null) {
-            int year, major;
-            boolean isTestType;
-            year = TestFragmentArgs.fromBundle(getArguments()).getYear();
-            major = TestFragmentArgs.fromBundle(getArguments()).getMajor();
-            isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
-            mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-            mViewModel.init(new TestRepository(Objects.requireNonNull(getActivity()).getApplication()), year, major, isTestType);
-            if (onAppTitleChangedListener != null && mViewModel != null) {
-                onAppTitleChangedListener.onAppTitleChanged(mViewModel.getFragmentTitle());
-            }
-            mViewModel.getQuestionLiveData().observe(this, questions -> {
-                if (questions != null && rvQuestions != null && rvQuestions.getAdapter() != null) {
-                    ((QuestionAdapter) rvQuestions.getAdapter()).submitList(questions);
-                }
-            });
-        }
     }
 
     public interface OnAppTitleChangedListener {
@@ -287,10 +304,13 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     @Override
     public void onQuestionAnswered(final Question question, final int position) {
         if (rvQuestions != null) {
+            lastViewPosition = position;
             if (Objects.requireNonNull(rvQuestions.getAdapter()).getItemCount() == position + 1) {
-                DialogMaker.createTestEndDialog(Objects.requireNonNull(getActivity()), v -> {
-                    //todo check this
-                }, v -> showTestResult());
+                if (mViewModel.isTestType()) {
+                    DialogMaker.createTestEndDialog(Objects.requireNonNull(getActivity()), v -> {
+                        //todo check this
+                    }, v -> showTestResult());
+                }
             } else {
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     rvQuestions.smoothScrollToPosition(position + 1);

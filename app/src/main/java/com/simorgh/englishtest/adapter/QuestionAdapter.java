@@ -34,6 +34,9 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private Date date = null;
     private OnReadingShownListener onReadingShownListener;
     private OnAnswerListener onAnswerListener;
+    private boolean isTestType = false;
+    private boolean showAnswer = false;
+
 
     public List<Answer> getAnswers() {
         return answers;
@@ -43,10 +46,11 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         super(diffCallback);
     }
 
-    public QuestionAdapter(@NonNull DiffUtil.ItemCallback<Question> diffCallback, OnReadingShownListener onReadingShownListener, OnAnswerListener onAnswerListener) {
+    public QuestionAdapter(@NonNull DiffUtil.ItemCallback<Question> diffCallback, OnReadingShownListener onReadingShownListener, OnAnswerListener onAnswerListener, boolean isTestType) {
         super(diffCallback);
         this.onReadingShownListener = onReadingShownListener;
         this.onAnswerListener = onAnswerListener;
+        this.isTestType = isTestType;
     }
 
     protected QuestionAdapter(@NonNull AsyncDifferConfig<Question> config) {
@@ -102,98 +106,230 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
             tv_answer3.setText(questionItem.getAnswer3());
             tv_answer4.setText(questionItem.getAnswer4());
 
-            CalligraphyUtils.applyFontToTextView(tv_question, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_questionNum, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_answer1, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_answer2, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_answer3, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_answer4, typeface);
-
-
-            CalligraphyUtils.applyFontToTextView(tv_answer1Num, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_answer2Num, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_answer3Num, typeface);
-            CalligraphyUtils.applyFontToTextView(tv_answer4Num, typeface);
+            setTypeFace(tv_question, tv_questionNum, tv_answer1, tv_answer2, tv_answer3
+                    , tv_answer4, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
 
             clearSelectedAnswers(tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
+            if (!isTestType) {
+                toggleShowTrueAnswer(holder, questionItem, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+            }
 
-            holder.itemView.findViewById(R.id.layout_answer1).setOnClickListener(v -> {
-                if (holder.answer == 1) {
-                    holder.answer = 0;
-                    tv_answer1Num.setTextColor(Color.parseColor("#d96071"));
-                    tv_answer1Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
+            initClickListeners(holder, position, tv_answer1, tv_answer2, tv_answer3, tv_answer4
+                    , tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+        }
+    }
 
-                    removeAnswer(holder, position);
-                } else {
-                    clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+    private void setTypeFace(TextView tv_question, TextView tv_questionNum, TextView tv_answer1, TextView tv_answer2, TextView tv_answer3, TextView tv_answer4, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
+        CalligraphyUtils.applyFontToTextView(tv_question, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_questionNum, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_answer1, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_answer2, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_answer3, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_answer4, typeface);
 
-                    holder.answer = 1;
-                    tv_answer1Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-                    tv_answer1Num.setTextColor(Color.parseColor("#000000"));
 
-                    addAnswer(holder, position);
+        CalligraphyUtils.applyFontToTextView(tv_answer1Num, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_answer2Num, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_answer3Num, typeface);
+        CalligraphyUtils.applyFontToTextView(tv_answer4Num, typeface);
+    }
 
+    private void initClickListeners(@NonNull ViewHolder holder, int position, TextView tv_answer1, TextView tv_answer2, TextView tv_answer3, TextView tv_answer4, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
+        holder.itemView.findViewById(R.id.layout_answer1).setOnClickListener(v -> {
+            clickAnswer1(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer1.setOnClickListener(v -> {
+            clickAnswer1(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer1Num.setOnClickListener(v -> {
+            clickAnswer1(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+
+        holder.itemView.findViewById(R.id.layout_answer2).setOnClickListener(v -> {
+            clickAnswer2(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer2.setOnClickListener(v -> {
+            clickAnswer2(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer2Num.setOnClickListener(v -> {
+            clickAnswer2(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+
+        holder.itemView.findViewById(R.id.layout_answer3).setOnClickListener(v -> {
+            clickAnswer3(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer3.setOnClickListener(v -> {
+            clickAnswer3(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer3Num.setOnClickListener(v -> {
+            clickAnswer3(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        holder.itemView.findViewById(R.id.layout_answer4).setOnClickListener(v -> {
+            clickAnswer4(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer4.setOnClickListener(v -> {
+            clickAnswer4(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+
+        tv_answer4Num.setOnClickListener(v -> {
+            clickAnswer4(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+        });
+    }
+
+    private void clickAnswer4(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
+        if (holder.answer == 4) {
+            holder.answer = 0;
+            tv_answer4Num.setTextColor(Color.parseColor("#d96071"));
+            tv_answer4Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
+
+            removeAnswer(holder, position);
+
+        } else {
+            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+
+            holder.answer = 4;
+            tv_answer4Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
+            tv_answer4Num.setTextColor(Color.parseColor("#000000"));
+
+            addAnswer(holder, position);
+        }
+    }
+
+    private void clickAnswer3(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
+        if (holder.answer == 3) {
+            holder.answer = 0;
+            tv_answer3Num.setTextColor(Color.parseColor("#d96071"));
+            tv_answer3Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
+
+            removeAnswer(holder, position);
+        } else {
+            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+
+            holder.answer = 3;
+            tv_answer3Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
+            tv_answer3Num.setTextColor(Color.parseColor("#000000"));
+
+            addAnswer(holder, position);
+        }
+    }
+
+    private void clickAnswer2(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
+        if (holder.answer == 2) {
+            holder.answer = 0;
+            tv_answer2Num.setTextColor(Color.parseColor("#d96071"));
+            tv_answer2Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
+
+            removeAnswer(holder, position);
+
+        } else {
+            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+
+            holder.answer = 2;
+            tv_answer2Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
+            tv_answer2Num.setTextColor(Color.parseColor("#000000"));
+
+            addAnswer(holder, position);
+        }
+    }
+
+    private void clickAnswer1(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
+        if (holder.answer == 1) {
+            holder.answer = 0;
+            tv_answer1Num.setTextColor(Color.parseColor("#d96071"));
+            tv_answer1Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
+
+            removeAnswer(holder, position);
+        } else {
+            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+
+            holder.answer = 1;
+            tv_answer1Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
+            tv_answer1Num.setTextColor(Color.parseColor("#000000"));
+
+            addAnswer(holder, position);
+
+        }
+    }
+
+    private void toggleShowTrueAnswer(@NonNull ViewHolder holder, Question questionItem, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
+        if (showAnswer) {
+            if (holder.answer == questionItem.getTrueAnswer()) {
+                switch (holder.answer) {
+                    case 1:
+                        trueAnswer(tv_answer1Num);
+                        break;
+                    case 2:
+                        trueAnswer(tv_answer2Num);
+                        break;
+                    case 3:
+                        trueAnswer(tv_answer3Num);
+                        break;
+                    case 4:
+                        trueAnswer(tv_answer4Num);
+                        break;
+                }
+            } else {
+                switch (holder.answer) {
+                    case 1:
+                        falseAnswer(tv_answer1Num);
+                        break;
+                    case 2:
+                        falseAnswer(tv_answer2Num);
+                        break;
+                    case 3:
+                        falseAnswer(tv_answer3Num);
+                        break;
+                    case 4:
+                        falseAnswer(tv_answer4Num);
+                        break;
                 }
 
-            });
-
-            holder.itemView.findViewById(R.id.layout_answer2).setOnClickListener(v -> {
-                if (holder.answer == 2) {
-                    holder.answer = 0;
-                    tv_answer2Num.setTextColor(Color.parseColor("#d96071"));
-                    tv_answer2Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
-
-                    removeAnswer(holder, position);
-
-                } else {
-                    clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
-
-                    holder.answer = 2;
-                    tv_answer2Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-                    tv_answer2Num.setTextColor(Color.parseColor("#000000"));
-
-                    addAnswer(holder, position);
+                switch (questionItem.getTrueAnswer()) {
+                    case 1:
+                        trueAnswer(tv_answer1Num);
+                        break;
+                    case 2:
+                        trueAnswer(tv_answer2Num);
+                        break;
+                    case 3:
+                        trueAnswer(tv_answer3Num);
+                        break;
+                    case 4:
+                        trueAnswer(tv_answer4Num);
+                        break;
                 }
-            });
 
-            holder.itemView.findViewById(R.id.layout_answer3).setOnClickListener(v -> {
-                if (holder.answer == 3) {
-                    holder.answer = 0;
-                    tv_answer3Num.setTextColor(Color.parseColor("#d96071"));
-                    tv_answer3Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
-
-                    removeAnswer(holder, position);
-                } else {
-                    clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
-
-                    holder.answer = 3;
-                    tv_answer3Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-                    tv_answer3Num.setTextColor(Color.parseColor("#000000"));
-
-                    addAnswer(holder, position);
+            }
+        } else {
+            clearSelectedAnswers(tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+            if (holder.answer != 0) {
+                switch (holder.answer) {
+                    case 1:
+                        selectAnswer(tv_answer1Num);
+                        break;
+                    case 2:
+                        selectAnswer(tv_answer2Num);
+                        break;
+                    case 3:
+                        selectAnswer(tv_answer3Num);
+                        break;
+                    case 4:
+                        selectAnswer(tv_answer4Num);
+                        break;
                 }
-            });
-
-            holder.itemView.findViewById(R.id.layout_answer4).setOnClickListener(v -> {
-                if (holder.answer == 4) {
-                    holder.answer = 0;
-                    tv_answer4Num.setTextColor(Color.parseColor("#d96071"));
-                    tv_answer4Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
-
-                    removeAnswer(holder, position);
-
-                } else {
-                    clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
-
-                    holder.answer = 4;
-                    tv_answer4Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-                    tv_answer4Num.setTextColor(Color.parseColor("#000000"));
-
-                    addAnswer(holder, position);
-                }
-            });
+            }
         }
     }
 
@@ -206,6 +342,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
                 break;
             }
         }
+        showAnswer = false;
     }
 
     private void addAnswer(@NonNull ViewHolder holder, int position) {
@@ -221,9 +358,10 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         if (!exists) {
             answers.add(answer);
         }
-        if (onAnswerListener != null) {
+        if (onAnswerListener != null && isTestType) {
             onAnswerListener.onQuestionAnswered(q, position);
         }
+        showAnswer = false;
     }
 
     private void clearSelectedAnswer(@NonNull ViewHolder holder, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
@@ -253,6 +391,28 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private void clearSelection(final TextView textView) {
         textView.setTextColor(Color.parseColor("#d96071"));
         textView.setBackgroundDrawable(ContextCompat.getDrawable(textView.getContext(), R.drawable.answer_number_bkg));
+    }
+
+    private void selectAnswer(final TextView textView) {
+        textView.setTextColor(Color.parseColor("#000000"));
+        textView.setBackgroundDrawable(ContextCompat.getDrawable(textView.getContext(), R.drawable.answer_number_bkg_selected));
+    }
+
+    private void trueAnswer(final TextView textView) {
+        textView.setTextColor(Color.parseColor("#ffffff"));
+        textView.setBackgroundDrawable(ContextCompat.getDrawable(textView.getContext(), R.drawable.answer_number_bkg_corect));
+    }
+
+    private void falseAnswer(final TextView textView) {
+        textView.setTextColor(Color.parseColor("#ffffff"));
+        textView.setBackgroundDrawable(ContextCompat.getDrawable(textView.getContext(), R.drawable.answer_number_bkg_wrong));
+    }
+
+    public void toggleShowAnswer(final int lastPosition) {
+        if (lastPosition != -1 && lastPosition < getItemCount()) {
+            showAnswer = !showAnswer;
+            notifyDataSetChanged();
+        }
     }
 
 

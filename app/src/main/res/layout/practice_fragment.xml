@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/testFragmentRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e6e6e6"
+    app:layoutDescription="@xml/motion_scene"
+    tools:context=".view.TestFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_questions"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_reading_title"
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/question_item" />
+
+    <ImageButton
+        android:id="@+id/fab_test"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/fab_bkg"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_eye"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="ContentDescription" />
+
+    <!--<com.simorgh.fluidslider.FluidSlider-->
+    <!--android:id="@+id/fluidSlider"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+
+    <FrameLayout
+        android:id="@+id/layout_reading_title"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/reading_tv_title_background">
+
+        <TextView
+            android:id="@+id/tv_reading_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:rotation="90"
+            android:text="@string/reading"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:fontFamily="@font/tnr" />
+    </FrameLayout>
+
+    <org.sufficientlysecure.htmltextview.HtmlTextView
+        android:id="@+id/tv_reading_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/question_corners_2"
+        android:ellipsize="marquee"
+        android:gravity="start"
+        android:paddingStart="15dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="15dp"
+        android:scrollbars="vertical"
+        android:text="@string/lorem"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_reading_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/layout_reading_title"
+        app:layout_constraintTop_toTopOf="@+id/layout_reading_title"
+        tools:fontFamily="@font/tnr" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
