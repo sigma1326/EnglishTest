@@ -46,6 +46,8 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     private ImageButton fab;
     private ImageButton pauseTestButton;
     private ImageButton stopTestButton;
+    private ImageButton btnRight;
+    private ImageButton btnLeft;
     private TextView tvReadingTitle;
     private HtmlTextView tvReadingContent;
     private Typeface typeface;
@@ -112,6 +114,9 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         tvReadingTitle = view.findViewById(R.id.tv_reading_title);
         tvReadingContent = view.findViewById(R.id.tv_reading_content);
 
+        btnRight = view.findViewById(R.id.btnRight);
+        btnLeft = view.findViewById(R.id.btnLeft);
+
         CalligraphyUtils.applyFontToTextView(tvReadingTitle, typeface);
         CalligraphyUtils.applyFontToTextView(tvReadingContent, typeface);
 
@@ -168,28 +173,18 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 //        new LinearSnapHelper().attachToRecyclerView(rvQuestions);
 
 
-        fab.setOnClickListener(v -> {
-            if (mViewModel != null && mViewModel.isTestType()) {
-                switch (motionLayout.getCurrentState()) {
-                    case R.id.show_reading_show_snackbar:
-                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
-                        motionLayout.transitionToEnd();
-                        break;
-                    case R.id.show_reading_hide_snackbar:
-                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_show_snackbar);
-                        motionLayout.transitionToEnd();
-                        break;
-                    case R.id.hide_reading_show_snackbar:
-                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
-                        motionLayout.transitionToEnd();
-                        break;
-                    case R.id.hide_reading_hide_snackbar:
-                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_show_snackbar);
-                        motionLayout.transitionToEnd();
-                        break;
-                }
-            } else {
-                ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).toggleShowAnswer(lastViewPosition);
+        initFAB();
+
+
+        btnLeft.setOnClickListener(v -> {
+            if (lastViewPosition + 1 < Objects.requireNonNull(rvQuestions.getAdapter()).getItemCount()) {
+                rvQuestions.smoothScrollToPosition(++lastViewPosition);
+            }
+        });
+
+        btnRight.setOnClickListener(v -> {
+            if (lastViewPosition - 1 >= 0) {
+                rvQuestions.smoothScrollToPosition(--lastViewPosition);
             }
         });
 
@@ -237,6 +232,33 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
                 }
             });
         }
+    }
+
+    private void initFAB() {
+        fab.setOnClickListener(v -> {
+            if (mViewModel != null && mViewModel.isTestType()) {
+                switch (motionLayout.getCurrentState()) {
+                    case R.id.show_reading_show_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
+                    case R.id.show_reading_hide_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_show_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
+                    case R.id.hide_reading_show_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
+                    case R.id.hide_reading_hide_snackbar:
+                        motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_show_snackbar);
+                        motionLayout.transitionToEnd();
+                        break;
+                }
+            } else {
+                ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).toggleShowAnswer(lastViewPosition);
+            }
+        });
     }
 
     private void showTestResult() {

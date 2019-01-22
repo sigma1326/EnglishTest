@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="7dp"
+            android:paddingBottom="100dp"
             app:alignContent="flex_start"
             app:alignItems="flex_start"
             app:flexWrap="wrap">

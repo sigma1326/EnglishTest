@@ -54,7 +54,7 @@ public class FluidSlider extends View {
     public static final String TEXT_START = "0";
     public static final String TEXT_END = "100";
 
-    public static final int COLOR_BAR = Color.parseColor("#ff6168e7");
+    public static final int COLOR_BAR = Color.parseColor("#ff00c6fa");
     public static final int COLOR_LABEL = Color.WHITE;
     public static final int COLOR_LABEL_TEXT = Color.BLACK;
     public static final int COLOR_BAR_TEXT = Color.WHITE;

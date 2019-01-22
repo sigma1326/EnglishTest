@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private OnAnswerListener onAnswerListener;
     private boolean isTestType = false;
     private boolean showAnswer = false;
+    private boolean state = false;
 
 
     public List<Answer> getAnswers() {
@@ -64,6 +66,8 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         if (typeface == null) {
             typeface = Typeface.createFromAsset(parent.getContext().getAssets(), "fonts/tnr.ttf");
         }
+        showAnswer = false;
+        state = false;
         ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_LTR);
         return new ViewHolder(v);
     }
@@ -80,6 +84,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Question questionItem = getItem(position);
         if (questionItem != null) {
+            holder.question = questionItem;
             if (onReadingShownListener != null) {
                 onReadingShownListener.onReadingShown(questionItem);
             }
@@ -112,12 +117,37 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
 
             clearSelectedAnswers(tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
-            if (!isTestType) {
+
+            restoreSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+
+            if (!isTestType && state) {
                 toggleShowTrueAnswer(holder, questionItem, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
             }
 
             initClickListeners(holder, position, tv_answer1, tv_answer2, tv_answer3, tv_answer4
                     , tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+        }
+    }
+
+    private void restoreSelectedAnswer(@NonNull ViewHolder holder, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
+        if (holder.question != null) {
+            if (isAnswerForQuestionExists(holder.question)) {
+                holder.answer = Objects.requireNonNull(getAnswer(holder.question)).getAnswer();
+                switch (holder.answer) {
+                    case 1:
+                        selectAnswer(tv_answer1Num);
+                        break;
+                    case 2:
+                        selectAnswer(tv_answer2Num);
+                        break;
+                    case 3:
+                        selectAnswer(tv_answer3Num);
+                        break;
+                    case 4:
+                        selectAnswer(tv_answer4Num);
+                        break;
+                }
+            }
         }
     }
 
@@ -331,6 +361,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
                 }
             }
         }
+        state = false;
     }
 
     private void removeAnswer(@NonNull ViewHolder holder, int position) {
@@ -348,13 +379,8 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private void addAnswer(@NonNull ViewHolder holder, int position) {
         Question q = getItem(position);
         Answer answer = new Answer(q.getId(), holder.answer, q.getTrueAnswer(), q.getQuestionNumber(), getDate());
-        boolean exists = false;
-        for (Answer ans : answers) {
-            if (answer.getQuestionId() == ans.getQuestionId()) {
-                exists = true;
-                break;
-            }
-        }
+        boolean exists;
+        exists = isAnswerExists(answer);
         if (!exists) {
             answers.add(answer);
         }
@@ -362,6 +388,37 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
             onAnswerListener.onQuestionAnswered(q, position);
         }
         showAnswer = false;
+    }
+
+    private boolean isAnswerExists(Answer answer) {
+        boolean exists = false;
+        for (Answer ans : answers) {
+            if (answer.getQuestionId() == ans.getQuestionId()) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
+    }
+
+    private boolean isAnswerForQuestionExists(final Question question) {
+        boolean exists = false;
+        for (Answer ans : answers) {
+            if (question.getId() == ans.getQuestionId()) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
+    }
+
+    private Answer getAnswer(final Question question) {
+        for (Answer ans : answers) {
+            if (question.getId() == ans.getQuestionId()) {
+                return ans;
+            }
+        }
+        return null;
     }
 
     private void clearSelectedAnswer(@NonNull ViewHolder holder, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
@@ -411,6 +468,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     public void toggleShowAnswer(final int lastPosition) {
         if (lastPosition != -1 && lastPosition < getItemCount()) {
             showAnswer = !showAnswer;
+            state = true;
             notifyDataSetChanged();
         }
     }
@@ -425,7 +483,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
+        private Question question;
         private int answer = 0;
 
         public ViewHolder(@NonNull View itemView) {
