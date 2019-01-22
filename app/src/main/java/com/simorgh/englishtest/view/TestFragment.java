@@ -21,6 +21,7 @@ import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.QuestionAdapter;
 import com.simorgh.englishtest.viewModel.TestViewModel;
+import com.simorgh.fluidslider.FluidSlider;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -31,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -55,6 +57,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     private TestRepository testRepository;
     private OnAppTitleChangedListener onAppTitleChangedListener;
     private int lastViewPosition = 0;
+    private FluidSlider fluidSlider;
 
 
     @Override
@@ -79,6 +82,8 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             mViewModel.getQuestionLiveData().observe(this, questions -> {
                 if (questions != null && rvQuestions != null && rvQuestions.getAdapter() != null) {
                     ((QuestionAdapter) rvQuestions.getAdapter()).submitList(questions);
+                    fluidSlider.setCurrentPosition(0);
+                    fluidSlider.setMinMax(new Pair<>(1, questions.size()));
                 }
             });
         }
@@ -116,6 +121,9 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
 
         btnRight = view.findViewById(R.id.btnRight);
         btnLeft = view.findViewById(R.id.btnLeft);
+        fluidSlider = view.findViewById(R.id.fluidSlider);
+        fluidSlider.setCurrentPosition(0);
+        fluidSlider.setMinMax(new Pair<>(1, 25));
 
         CalligraphyUtils.applyFontToTextView(tvReadingTitle, typeface);
         CalligraphyUtils.applyFontToTextView(tvReadingContent, typeface);
@@ -179,15 +187,39 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         btnLeft.setOnClickListener(v -> {
             if (lastViewPosition + 1 < Objects.requireNonNull(rvQuestions.getAdapter()).getItemCount()) {
                 rvQuestions.smoothScrollToPosition(++lastViewPosition);
+                fluidSlider.setCurrentPosition(lastViewPosition);
             }
         });
 
         btnRight.setOnClickListener(v -> {
             if (lastViewPosition - 1 >= 0) {
                 rvQuestions.smoothScrollToPosition(--lastViewPosition);
+                fluidSlider.setCurrentPosition(lastViewPosition);
             }
         });
 
+
+        fluidSlider.setFluidSliderListener(new FluidSlider.FluidSliderListener() {
+            @Override
+            public void invokePosition(final int position, boolean fromUser) {
+                if (rvQuestions != null) {
+                    if (fromUser) {
+                        rvQuestions.smoothScrollToPosition(position - 1);
+                        lastViewPosition = position - 1;
+                    }
+                }
+            }
+
+            @Override
+            public void invokeBeginTracking() {
+
+            }
+
+            @Override
+            public void invokeEndTracking() {
+
+            }
+        });
 
         if (mViewModel != null && mViewModel.isTestType()) {
             pauseTestButton = view.findViewById(R.id.img_pause);
@@ -283,6 +315,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         pauseTestButton = null;
         stopTestButton = null;
         fab = null;
+        fluidSlider = null;
     }
 
     @Override
@@ -330,12 +363,13 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             if (Objects.requireNonNull(rvQuestions.getAdapter()).getItemCount() == position + 1) {
                 if (mViewModel.isTestType()) {
                     DialogMaker.createTestEndDialog(Objects.requireNonNull(getActivity()), v -> {
-                        //todo check this
                     }, v -> showTestResult());
                 }
             } else {
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     rvQuestions.smoothScrollToPosition(position + 1);
+                    fluidSlider.setCurrentPosition(position + 1);
+                    lastViewPosition = position + 1;
                 }, 200);
             }
         }

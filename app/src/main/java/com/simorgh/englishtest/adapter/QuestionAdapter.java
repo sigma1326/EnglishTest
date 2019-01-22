@@ -3,6 +3,7 @@ package com.simorgh.englishtest.adapter;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,8 @@ import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.englishtest.R;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -31,7 +32,7 @@ import io.github.inflationx.calligraphy3.CalligraphyUtils;
 
 public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewHolder> {
     private Typeface typeface;
-    private List<Answer> answers = new LinkedList<>();
+    private List<Answer> answers = new ArrayList<>();
     private Date date = null;
     private OnReadingShownListener onReadingShownListener;
     private OnAnswerListener onAnswerListener;
@@ -85,7 +86,8 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         Question questionItem = getItem(position);
         if (questionItem != null) {
             holder.question = questionItem;
-            if (onReadingShownListener != null) {
+            holder.position = position;
+            if (onReadingShownListener != null && !state) {
                 onReadingShownListener.onReadingShown(questionItem);
             }
 
@@ -124,15 +126,19 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
                 toggleShowTrueAnswer(holder, questionItem, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
             }
 
-            initClickListeners(holder, position, tv_answer1, tv_answer2, tv_answer3, tv_answer4
+            initClickListeners(holder, tv_answer1, tv_answer2, tv_answer3, tv_answer4
                     , tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+
+//            Log.d("debug13", "onBindViewHolder: " + holder.answer);
         }
     }
 
     private void restoreSelectedAnswer(@NonNull ViewHolder holder, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
         if (holder.question != null) {
             if (isAnswerForQuestionExists(holder.question)) {
+                Log.d("debug13", "\nbefore: " + holder.answer);
                 holder.answer = Objects.requireNonNull(getAnswer(holder.question)).getAnswer();
+                Log.d("debug13", "after: " + holder.answer);
                 switch (holder.answer) {
                     case 1:
                         selectAnswer(tv_answer1Num);
@@ -166,130 +172,107 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         CalligraphyUtils.applyFontToTextView(tv_answer4Num, typeface);
     }
 
-    private void initClickListeners(@NonNull ViewHolder holder, int position, TextView tv_answer1, TextView tv_answer2, TextView tv_answer3, TextView tv_answer4, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
+    private void initClickListeners(@NonNull ViewHolder holder, TextView tv_answer1, TextView tv_answer2, TextView tv_answer3, TextView tv_answer4, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
         holder.itemView.findViewById(R.id.layout_answer1).setOnClickListener(v -> {
-            clickAnswer1(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer1(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer1.setOnClickListener(v -> {
-            clickAnswer1(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer1(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer1Num.setOnClickListener(v -> {
-            clickAnswer1(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer1(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
 
         holder.itemView.findViewById(R.id.layout_answer2).setOnClickListener(v -> {
-            clickAnswer2(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer2(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer2.setOnClickListener(v -> {
-            clickAnswer2(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer2(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer2Num.setOnClickListener(v -> {
-            clickAnswer2(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer2(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
 
         holder.itemView.findViewById(R.id.layout_answer3).setOnClickListener(v -> {
-            clickAnswer3(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer3(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer3.setOnClickListener(v -> {
-            clickAnswer3(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer3(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer3Num.setOnClickListener(v -> {
-            clickAnswer3(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer3(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         holder.itemView.findViewById(R.id.layout_answer4).setOnClickListener(v -> {
-            clickAnswer4(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer4(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer4.setOnClickListener(v -> {
-            clickAnswer4(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer4(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
 
         tv_answer4Num.setOnClickListener(v -> {
-            clickAnswer4(holder, position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            clickAnswer4(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
         });
     }
 
     private void clickAnswer4(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
         if (holder.answer == 4) {
-            holder.answer = 0;
-            tv_answer4Num.setTextColor(Color.parseColor("#d96071"));
-            tv_answer4Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
-
+            clearSelection(tv_answer4Num);
             removeAnswer(holder, position);
-
         } else {
             clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
             holder.answer = 4;
-            tv_answer4Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-            tv_answer4Num.setTextColor(Color.parseColor("#000000"));
-
+            selectAnswer(tv_answer4Num);
             addAnswer(holder, position);
         }
     }
 
     private void clickAnswer3(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
         if (holder.answer == 3) {
-            holder.answer = 0;
-            tv_answer3Num.setTextColor(Color.parseColor("#d96071"));
-            tv_answer3Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
-
+            clearSelection(tv_answer3Num);
             removeAnswer(holder, position);
         } else {
             clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
             holder.answer = 3;
-            tv_answer3Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-            tv_answer3Num.setTextColor(Color.parseColor("#000000"));
-
+            selectAnswer(tv_answer3Num);
             addAnswer(holder, position);
         }
     }
 
     private void clickAnswer2(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
         if (holder.answer == 2) {
-            holder.answer = 0;
-            tv_answer2Num.setTextColor(Color.parseColor("#d96071"));
-            tv_answer2Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
-
+            clearSelection(tv_answer2Num);
             removeAnswer(holder, position);
-
         } else {
             clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
             holder.answer = 2;
-            tv_answer2Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-            tv_answer2Num.setTextColor(Color.parseColor("#000000"));
-
+            selectAnswer(tv_answer2Num);
             addAnswer(holder, position);
         }
     }
 
     private void clickAnswer1(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
         if (holder.answer == 1) {
-            holder.answer = 0;
-            tv_answer1Num.setTextColor(Color.parseColor("#d96071"));
-            tv_answer1Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg));
-
+            clearSelection(tv_answer1Num);
             removeAnswer(holder, position);
         } else {
             clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
             holder.answer = 1;
-            tv_answer1Num.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.answer_number_bkg_selected));
-            tv_answer1Num.setTextColor(Color.parseColor("#000000"));
-
+            selectAnswer(tv_answer1Num);
             addAnswer(holder, position);
-
         }
     }
 
@@ -365,40 +348,40 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     }
 
     private void removeAnswer(@NonNull ViewHolder holder, int position) {
+        holder.answer = 0;
         Question q = getItem(position);
-        Answer answer = new Answer(q.getId(), holder.answer, q.getTrueAnswer(), q.getQuestionNumber(), getDate());
         for (Answer ans : answers) {
-            if (answer.getQuestionId() == ans.getQuestionId()) {
+            if (ans.getQuestionId() == q.getId()) {
                 answers.remove(ans);
                 break;
             }
         }
-        showAnswer = false;
+        state = false;
     }
 
     private void addAnswer(@NonNull ViewHolder holder, int position) {
         Question q = getItem(position);
         Answer answer = new Answer(q.getId(), holder.answer, q.getTrueAnswer(), q.getQuestionNumber(), getDate());
         boolean exists;
-        exists = isAnswerExists(answer);
-        if (!exists) {
-            answers.add(answer);
-        }
+        checkAndAddAnswer(answer);
         if (onAnswerListener != null && isTestType) {
             onAnswerListener.onQuestionAnswered(q, position);
         }
         showAnswer = false;
     }
 
-    private boolean isAnswerExists(Answer answer) {
+    private void checkAndAddAnswer(Answer answer) {
         boolean exists = false;
         for (Answer ans : answers) {
             if (answer.getQuestionId() == ans.getQuestionId()) {
                 exists = true;
+                ans.setAnswer(answer.getAnswer());
                 break;
             }
         }
-        return exists;
+        if (!exists) {
+            answers.add(answer);
+        }
     }
 
     private boolean isAnswerForQuestionExists(final Question question) {
@@ -485,6 +468,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     public class ViewHolder extends RecyclerView.ViewHolder {
         private Question question;
         private int answer = 0;
+        private int position = 0;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
