@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
@@ -40,7 +42,7 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
         return new TestLogHolder(v);
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull TestLogHolder holder, final int position) {
         TestLog testLog = getItem(position);
@@ -52,12 +54,14 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
             TextView testCorrectCount = holder.itemView.findViewById(R.id.tv_test_correct_count);
             TextView testBlankCount = holder.itemView.findViewById(R.id.tv_test_blank_count);
 
-            String s1 = String.format("سوالات زبان گروه %s", YearMajorData.getMajorType(testLog.getMajor()));
+            String s1 = String.format("سوالات زبان کنکور گروه %s", YearMajorData.getMajorType(testLog.getMajor()));
             String title = String.format("%s سال %s", s1, String.valueOf(testLog.getYear()));
 
             testLogTitle.setText(title);
-            testDate.setText("تاریخ آزمون: 97/6/21");
-            testHour.setText("ساعت آزمون: 11:25");
+            PersianCalendar p = CalendarTool.GregorianToPersian(testLog.getCalendar());
+            String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth(), p.getPersianDay());
+            testDate.setText("تاریخ آزمون: " + date);
+            testHour.setText("ساعت آزمون: "+String.format("%02d:%02d",testLog.getDate().getHour(),testLog.getDate().getMinute()));
             String percent = "درصد کسب شده: " + "% " + (int) testLog.getPercent();
             testPercent.setText(percent);
             testCorrectCount.setText(String.format("%s: %d", "تعداد گزینه صحیح", testLog.getCorrectCount()));

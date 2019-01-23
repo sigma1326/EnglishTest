@@ -41,10 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View rootView = findViewById(android.R.id.content);
         rootView.setBackgroundDrawable(getResources().getDrawable(R.drawable.background));
 
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        getSupportActionBar().setTitle("نام برنامه");
 
         imgBack = findViewById(R.id.img_back);
         title = findViewById(R.id.tv_app_title);

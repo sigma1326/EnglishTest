@@ -80,4 +80,5 @@ dependencies {
     implementation project(':garlandview')
     implementation project(':fluidslider')
     implementation project(':circularbarpercentview')
+    implementation project(':calendarutil')
 }

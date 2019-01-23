@@ -184,6 +184,10 @@ public class TestResultFragment extends Fragment {
         blankCount = null;
         rvResult = null;
         fab = null;
+        returnHome = null;
+        compareTests = null;
+        retakeTest = null;
+        mCircularBar = null;
 
         super.onDestroyView();
     }

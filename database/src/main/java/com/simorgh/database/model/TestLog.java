@@ -2,6 +2,8 @@ package com.simorgh.database.model;
 
 import com.simorgh.database.Date;
 
+import java.util.Calendar;
+
 import androidx.annotation.Keep;
 
 @Keep
@@ -74,6 +76,17 @@ public class TestLog {
 
     public Date getDate() {
         return date;
+    }
+
+    public Calendar getCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, date.getYear());
+        calendar.set(Calendar.MONTH, date.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, date.getDay());
+        calendar.set(Calendar.HOUR_OF_DAY, date.getHour());
+        calendar.set(Calendar.MINUTE, date.getMinute());
+        calendar.set(Calendar.SECOND, 0);
+        return calendar;
     }
 
     public int getCorrectCount() {

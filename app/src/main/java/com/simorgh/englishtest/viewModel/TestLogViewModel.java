@@ -1,4 +1,4 @@
-package com.simorgh.englishtest.view;
+package com.simorgh.englishtest.viewModel;
 
 import android.app.Application;
 

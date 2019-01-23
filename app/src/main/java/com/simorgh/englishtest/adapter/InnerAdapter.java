@@ -36,7 +36,7 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
     public void onBindViewHolder(@NonNull InnerItem holder, int position) {
         holder.setContent(mData.get(position));
         holder.itemView.findViewById(R.id.inner_layout).setOnClickListener(v -> {
-            String year = String.format("سوالات زبان گروه %s", YearMajorData.getMajorType(mData.get(position).getMajor()));
+            String year = String.format("سوالات زبان کنکور گروه %s", YearMajorData.getMajorType(mData.get(position).getMajor()));
             DialogMaker.createDialog(v.getContext()
                     , String.format("%s سال %s", year, String.valueOf(mData.get(position).getYear()))
                     , mData.get(position).getQuestionCount()
