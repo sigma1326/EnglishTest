@@ -22,7 +22,7 @@ public class User {
     public User() {
         id = 1;
         showTimer = true;
-        fontSize = 12;
+        fontSize = 14;
     }
 
     public int getId() {

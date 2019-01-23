@@ -8,7 +8,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.simorgh.database.model.User;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.viewModel.MainViewModel;
 
 import java.util.Objects;
 
@@ -16,9 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -31,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageButton imgBack;
     private TextView title;
     private DrawerLayout drawer;
+    private SwitchCompat showTimer;
+    private MainViewModel mainViewModel;
+    private TextView fontSize;
 
 
     @Override
@@ -44,7 +51,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         imgBack = findViewById(R.id.img_back);
         title = findViewById(R.id.tv_app_title);
+        showTimer = findViewById(R.id.switch_show_timer);
+        fontSize = findViewById(R.id.tv_font_size);
 
+
+        showTimer.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            try {
+                User user = mainViewModel.getTestRepository().getUser();
+                user.setShowTimer(isChecked);
+                mainViewModel.getTestRepository().updateUser(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -89,6 +108,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        mainViewModel.getUserLiveData().observe(this, user -> {
+            if (user != null && showTimer != null) {
+                showTimer.setChecked(user.isShowTimer());
+                fontSize.setText(String.valueOf(user.getFontSize()));
+            }
+        });
     }
 
     @Override
@@ -111,6 +139,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         tvTestLogs = null;
         navController = null;
+        showTimer = null;
+        fontSize = null;
 
         super.onDestroy();
     }

@@ -72,6 +72,14 @@ public final class TestRepository {
         return dataBase.readingDAO().getReading(readingID);
     }
 
+    public User getUser() {
+        return dataBase.userDAO().getUser();
+    }
+
+    public LiveData<User> getUserLiveData() {
+        return dataBase.userDAO().getUserLiveData();
+    }
+
     @SuppressLint("DefaultLocale")
     public List<List<YearMajorData>> getYearMajorData() {
         List<List<YearMajorData>> lists = new ArrayList<>();
