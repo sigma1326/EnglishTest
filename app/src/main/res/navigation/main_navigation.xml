@@ -92,12 +92,12 @@
             app:argType="integer" />
         <argument
             android:name="date"
-            app:argType="long"
-            android:defaultValue="0L" />
+            android:defaultValue="0L"
+            app:argType="long" />
         <argument
             android:name="show_fab"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_testResultFragment_to_testFragment"
             app:destination="@id/testFragment"
@@ -108,8 +108,35 @@
             app:popUpTo="@+id/homeFragment" />
         <argument
             android:name="is_test_type"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_testResultFragment_to_compareTestsResultFragment"
+            app:destination="@+id/compareTestsResultFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@+id/homeFragment">
+            <argument
+                android:name="currentYear"
+                android:defaultValue="0" />
+            <argument
+                android:name="currentMajor"
+                android:defaultValue="0" />
+            <argument
+                android:name="currentDate"
+                android:defaultValue="0L" />
+            <argument
+                android:name="prevYear"
+                android:defaultValue="0" />
+            <argument
+                android:name="prevMajor"
+                android:defaultValue="0" />
+            <argument
+                android:name="prevDate"
+                android:defaultValue="0L" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/testLogFragment"
@@ -128,5 +155,36 @@
                 android:name="show_fab"
                 android:defaultValue="false" />
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/compareTestsResultFragment"
+        android:name="com.simorgh.englishtest.view.CompareTestsResultFragment"
+        android:label="compare_tests_result_fragment"
+        tools:layout="@layout/compare_tests_result_fragment">
+        <argument
+            android:name="currentYear"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="currentMajor"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="currentDate"
+            android:defaultValue="0L"
+            app:argType="long" />
+
+        <argument
+            android:name="prevYear"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="prevMajor"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="prevDate"
+            android:defaultValue="0L"
+            app:argType="long" />
     </fragment>
 </navigation>

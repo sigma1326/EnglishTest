@@ -1,6 +1,5 @@
 package com.simorgh.englishtest.view;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.simorgh.circularbarpercentview.CircularBar;
+import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.AnswerAdapter;
 import com.simorgh.englishtest.viewModel.TestResultViewModel;
@@ -85,7 +85,8 @@ public class TestResultFragment extends Fragment {
         });
 
         compareTests.setOnClickListener(v -> {
-
+//            Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment).navigate(TestResultFragmentDirections.actionTestResultFragmentToCompareTestsResultFragment());
+            DialogMaker.createCompareTestsDialog(Objects.requireNonNull(getContext()), mViewModel.getDate().getMilli(), mViewModel.getYear(), mViewModel.getMajor(),Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
         });
 
         ((MotionLayout) view).setTransitionListener(new MotionLayout.TransitionListener() {
@@ -116,32 +117,6 @@ public class TestResultFragment extends Fragment {
 
 
         mCircularBar = view.findViewById(R.id.circularBar);
-
-        if (mCircularBar != null) {
-//            mCircularBar.animateProgress(0, -75, BAR_ANIMATION_TIME);
-
-            mCircularBar.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    //TODO do stuff
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -170,7 +145,7 @@ public class TestResultFragment extends Fragment {
                     mCircularBar.animateProgress(0, (int) mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
 
                     if (!mViewModel.showFab()) {
-                        fab.setVisibility(View.GONE);
+//                        fab.setVisibility(View.GONE);
                     }
                 }
             });

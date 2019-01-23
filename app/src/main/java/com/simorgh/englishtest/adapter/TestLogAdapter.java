@@ -2,6 +2,8 @@ package com.simorgh.englishtest.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.view.TestLogFragmentDirections;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.navigation.NavController;
@@ -25,9 +29,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogHolder> {
     private NavController navController;
+    private boolean isDialogMode = false;
+    private Long milli;
+    private int year;
+    private int major;
+    private OnItemClickListener onItemClickListener;
 
-    public TestLogAdapter(@NonNull DiffUtil.ItemCallback<TestLog> diffCallback) {
+    public interface OnItemClickListener{
+        void onItemClicked(int year, int major, long currentDate, long prevDate);
+    }
+    public TestLogAdapter(@NonNull DiffUtil.ItemCallback<TestLog> diffCallback, final boolean isDialogMode, long milli, int year, int major, NavController navController) {
         super(diffCallback);
+        this.isDialogMode = isDialogMode;
+        this.year = year;
+        this.major = major;
+        this.milli = milli;
+        this.navController = navController;
     }
 
     protected TestLogAdapter(@NonNull AsyncDifferConfig<TestLog> config) {
@@ -37,8 +54,17 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
     @NonNull
     @Override
     public TestLogHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_log_item, parent, false);
+        View v;
+
+        if (!isDialogMode) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_log_item, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_log_item_compare, parent, false);
+        }
         ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_LTR);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            v.setElevation(5);
+        }
         return new TestLogHolder(v);
     }
 
@@ -61,7 +87,7 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
             PersianCalendar p = CalendarTool.GregorianToPersian(testLog.getCalendar());
             String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth(), p.getPersianDay());
             testDate.setText("تاریخ آزمون: " + date);
-            testHour.setText("ساعت آزمون: "+String.format("%02d:%02d",testLog.getDate().getHour(),testLog.getDate().getMinute()));
+            testHour.setText("ساعت آزمون: " + String.format("%02d:%02d", testLog.getDate().getHour(), testLog.getDate().getMinute()));
             String percent = "درصد کسب شده: " + "% " + (int) testLog.getPercent();
             testPercent.setText(percent);
             testCorrectCount.setText(String.format("%s: %d", "تعداد گزینه صحیح", testLog.getCorrectCount()));
@@ -71,13 +97,28 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
                 if (navController == null) {
                     navController = Navigation.findNavController((Activity) v.getContext(), R.id.main_nav_host_fragment);
                 }
-                navController.navigate(TestLogFragmentDirections.actionTestLogFragmentToTestResultFragment()
-                        .setDate(testLog.getDate().getMilli())
-                        .setMajor(testLog.getMajor())
-                        .setYear(testLog.getYear()));
+                if (!isDialogMode) {
+                    navController.navigate(TestLogFragmentDirections.actionTestLogFragmentToTestResultFragment()
+                            .setDate(testLog.getDate().getMilli())
+                            .setMajor(testLog.getMajor())
+                            .setYear(testLog.getYear()));
+                } else {
+                    Log.d("debug13", "onBindViewHolder: " + Objects.requireNonNull(navController.getCurrentDestination()).getLabel());
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClicked(year, major, milli, testLog.getDate().getMilli());
+                    }
+                }
             });
 
         }
+    }
+
+    public OnItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public class TestLogHolder extends RecyclerView.ViewHolder {

@@ -107,6 +107,10 @@ public final class TestRepository {
         return dataBase.answerDAO().getAnswerDates(new SimpleSQLiteQuery("select distinct date from answers order by date desc"));
     }
 
+    public List<Long> getAnswerDates(int year, int major) {
+        return dataBase.answerDAO().getAnswerDates(year, major);
+    }
+
     private int getQuestionCount(final int year, final int major) {
         return dataBase.questionDAO().getQuestionsCount(major, year);
     }
@@ -134,9 +138,39 @@ public final class TestRepository {
         }
         return testLog;
     }
+
     public List<TestLog> getTestLogs() {
         List<TestLog> testLogs = new LinkedList<>();
         List<Long> dates = getAnswerDates();
+        List<Answer> answerList;
+        for (Long date : dates) {
+            answerList = getAnswers(new Date(date));
+            TestLog testLog = null;
+            int wrongCount = 0;
+            int count = 0;
+            for (Answer answer : answerList) {
+                if (testLog == null) {
+                    Question q = getQuestion(answer.getQuestionId());
+                    count = getQuestionCount(q.getYearQuestion(), q.getMajor());
+                    testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
+                }
+                if (!answer.isCorrect()) {
+                    wrongCount++;
+                }
+            }
+            if (testLog != null) {
+                testLog.setWrongCount(wrongCount);
+                testLog.setBlankCount(count - answerList.size());
+            }
+            testLogs.add(testLog);
+        }
+
+        return testLogs;
+    }
+
+    public List<TestLog> getTestLogs(int year, int major) {
+        List<TestLog> testLogs = new LinkedList<>();
+        List<Long> dates = getAnswerDates(year, major);
         List<Answer> answerList;
         for (Long date : dates) {
             answerList = getAnswers(new Date(date));

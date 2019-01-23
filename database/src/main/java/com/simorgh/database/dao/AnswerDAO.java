@@ -2,7 +2,6 @@ package com.simorgh.database.dao;
 
 import com.simorgh.database.Date;
 import com.simorgh.database.model.Answer;
-import com.simorgh.database.model.Question;
 
 import java.util.List;
 
@@ -47,4 +46,8 @@ public interface AnswerDAO {
 
     @RawQuery(observedEntities = Answer.class)
     List<Long> getAnswerDates(SupportSQLiteQuery rawQuery);
+
+    @Query("select distinct date from answers where question_id in (select id from questions where year_question=:year and  major=:major) order by date desc")
+    List<Long> getAnswerDates(int year, int major);
+
 }

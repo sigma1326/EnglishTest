@@ -48,7 +48,7 @@ public class InnerItem extends com.simorgh.garlandview.inner.InnerItem {
     void setContent(YearMajorData data) {
         mInnerData = data;
 
-        mHeader.setText(String.format("سوالات زبان گروه %s ", YearMajorData.getMajorType(data.getMajor())));
+        mHeader.setText(String.format("سوالات زبان کنکور گروه %s ", YearMajorData.getMajorType(data.getMajor())));
         tvQuestionCount.setText(String.format("%s: %s", "تعداد سوالات", String.valueOf(data.getQuestionCount())));
         tvTime.setText(String.format("%s: %s", "زمان پاسخگویی", String.valueOf(YearMajorData.getMajorTime(data.getMajor()))));
 

@@ -36,4 +36,9 @@
     <string name="compare_with_prev_tests">مقایسه با آزمون‌های قبلی</string>
     <string name="return_home">بازگشت به صفحه اصلی</string>
     <string name="retake_test">آزمون مجدد</string>
+    <string name="comapre_test_title">مقایسه با آزمون‌های قبلی</string>
+    <string name="prev_test">آزمون قبلی:</string>
+    <string name="current_test">آزمون فعلی:</string>
+    <string name="prev_test1">آزمون قبلی</string>
+    <string name="current_test1">آزمون فعلی</string>
 </resources>

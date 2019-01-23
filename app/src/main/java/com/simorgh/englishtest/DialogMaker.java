@@ -1,12 +1,24 @@
 package com.simorgh.englishtest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.simorgh.database.TestRepository;
+import com.simorgh.database.model.TestLog;
+import com.simorgh.englishtest.adapter.TestLogAdapter;
+import com.simorgh.englishtest.view.TestResultFragmentDirections;
+
+import java.util.List;
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.navigation.NavController;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class DialogMaker {
     public static void createDialog(@NonNull final Context context, @NonNull final String title, final int questionCount, final int time
@@ -56,5 +68,48 @@ public class DialogMaker {
             alertDialog.dismiss();
             onShowResultListener.onClick(v);
         });
+    }
+
+    public static void createCompareTestsDialog(@NonNull final Context context, final long milli, final int year, final int major, NavController navController) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.compare_tests_dialog, null);
+        builder.setView(view);
+
+        TestRepository testRepository = new TestRepository(((Activity) context).getApplication());
+        List<TestLog> testLogs = testRepository.getTestLogs(year, major);
+
+        RecyclerView rvLogs;
+        rvLogs = view.findViewById(R.id.rv_test_log);
+        rvLogs.setNestedScrollingEnabled(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+        rvLogs.setLayoutManager(linearLayoutManager);
+        rvLogs.setNestedScrollingEnabled(false);
+        TestLogAdapter adapter = new TestLogAdapter(new TestLogAdapter.ItemDiffCallBack(), true, milli, year, major, navController);
+        rvLogs.setAdapter(adapter);
+        rvLogs.setHasFixedSize(true);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(testLogs);
+
+
+        adapter.setOnItemClickListener((year1, major1, currentDate, prevDate) -> {
+            try {
+                navController.navigate(TestResultFragmentDirections.actionTestResultFragmentToCompareTestsResultFragment()
+                        .setCurrentDate(milli)
+                        .setCurrentMajor(major)
+                        .setCurrentYear(year)
+                        .setPrevDate(prevDate)
+                        .setPrevMajor(major1)
+                        .setPrevYear(year1));
+                alertDialog.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+
     }
 }

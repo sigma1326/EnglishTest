@@ -39,7 +39,7 @@ public class TestLogFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvLogs.setLayoutManager(linearLayoutManager);
         rvLogs.setNestedScrollingEnabled(false);
-        rvLogs.setAdapter(new TestLogAdapter(new TestLogAdapter.ItemDiffCallBack()));
+        rvLogs.setAdapter(new TestLogAdapter(new TestLogAdapter.ItemDiffCallBack(), false, 0, 0, 0, null));
         rvLogs.setHasFixedSize(true);
     }
 

@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.testFragment:
                 case R.id.testResultFragment:
                 case R.id.testLogFragment:
+                case R.id.compareTestsResultFragment:
                     navController.navigateUp();
                     break;
             }
@@ -144,6 +145,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.testResultFragment:
                 imgBack.setImageResource(R.drawable.ic_arrow_forward);
                 title.setText("نتیجه آزمون");
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                break;
+            case R.id.compareTestsResultFragment:
+                imgBack.setImageResource(R.drawable.ic_arrow_forward);
+                title.setText("مقایسه آزمون‌‌ها");
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 break;
             case R.id.testLogFragment:

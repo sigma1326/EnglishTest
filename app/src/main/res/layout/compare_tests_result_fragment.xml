@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.CompareTestsResultFragment">
+
+    <View
+        android:id="@+id/view_results_summary"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="#003366"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_prev_test_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_results_summary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view_results_summary"
+        tools:fontFamily="@font/iransans_medium"
+        tools:text="زمان آزمون گذشته:    21:03     97/12/11" />
+
+
+    <com.simorgh.circularbarpercentview.CircularBar
+        android:id="@+id/circularBarCurrent"
+        style="@style/CircularBarPager_Default"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/circularBarPrev"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/circularBarPrev"
+        app:progress_pager_fill_circle_color="@android:color/transparent" />
+
+    <com.simorgh.circularbarpercentview.CircularBar
+        android:id="@+id/circularBarPrev"
+        style="@style/CircularBarPager_Default"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/circularBarCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_prev_test"
+        app:progress_pager_fill_circle_color="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/tv_question_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:text="@string/question_num"
+        android:textAlignment="center"
+        android:textColor="#003366"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/view_divider"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/tv_correct_answer"
+        app:layout_constraintTop_toBottomOf="@+id/circularBarCurrent"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <TextView
+        android:id="@+id/tv_correct_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:text="@string/correct_answer"
+        android:textAlignment="center"
+        android:textColor="#003366"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_question_num"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/tv_prev_answer"
+        app:layout_constraintTop_toBottomOf="@+id/circularBarCurrent"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <TextView
+        android:id="@+id/tv_prev_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:text="@string/prev_test1"
+        android:textAlignment="center"
+        android:textColor="#003366"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_correct_answer"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/tv_your_answer"
+        app:layout_constraintTop_toBottomOf="@+id/circularBarCurrent"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <TextView
+        android:id="@+id/tv_your_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:text="@string/current_test1"
+        android:textAlignment="center"
+        android:textColor="#003366"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_prev_answer"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="@id/view_divider"
+        app:layout_constraintTop_toBottomOf="@+id/circularBarCurrent"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/view_divider"
+        app:layout_constraintStart_toStartOf="@+id/view_divider"
+        app:layout_constraintTop_toBottomOf="@+id/view_divider"
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/compare_result_item" />
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:background="#003366"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_correct_answer" />
+
+    <TextView
+        android:id="@+id/tv_prev_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/prev_test"
+        android:textColor="#003366"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/circularBarPrev"
+        app:layout_constraintStart_toEndOf="@+id/circularBarPrev"
+        app:layout_constraintTop_toBottomOf="@+id/view_results_summary"
+        tools:fontFamily="@font/iransans_medium" />
+
+
+    <TextView
+        android:id="@+id/tv_current_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/current_test"
+        android:textColor="#003366"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/circularBarCurrent"
+        app:layout_constraintStart_toEndOf="@+id/circularBarCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/view_results_summary"
+        tools:fontFamily="@font/iransans_medium" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
