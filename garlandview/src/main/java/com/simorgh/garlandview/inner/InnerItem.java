@@ -3,12 +3,14 @@ package com.simorgh.garlandview.inner;
 
 import android.view.View;
 
+import androidx.annotation.Keep;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * ViewHolder class for {@link InnerRecyclerView}.
  */
+@Keep
 public abstract class InnerItem extends RecyclerView.ViewHolder {
 
     private int prevHeight;

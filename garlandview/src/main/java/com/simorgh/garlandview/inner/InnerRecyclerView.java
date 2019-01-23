@@ -4,6 +4,7 @@ package com.simorgh.garlandview.inner;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Extended {@link RecyclerView}
  * that works <b>only</b> with {@link InnerLayoutManager} and {@link InnerAdapter}.
  */
+@Keep
 public class InnerRecyclerView extends RecyclerView {
 
     public InnerRecyclerView(Context context) {

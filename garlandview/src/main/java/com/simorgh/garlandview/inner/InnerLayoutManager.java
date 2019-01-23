@@ -9,12 +9,14 @@ import android.view.View;
 
 import java.util.Objects;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A {@link RecyclerView.LayoutManager} implementation.
  */
+@Keep
 public class InnerLayoutManager extends RecyclerView.LayoutManager
         implements RecyclerView.SmoothScroller.ScrollVectorProvider {
 

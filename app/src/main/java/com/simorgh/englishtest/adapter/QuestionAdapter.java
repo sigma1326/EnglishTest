@@ -3,7 +3,6 @@ package com.simorgh.englishtest.adapter;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,16 +128,13 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
             initClickListeners(holder, tv_answer1, tv_answer2, tv_answer3, tv_answer4
                     , tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
-//            Log.d("debug13", "onBindViewHolder: " + holder.answer);
         }
     }
 
     private void restoreSelectedAnswer(@NonNull ViewHolder holder, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
         if (holder.question != null) {
             if (isAnswerForQuestionExists(holder.question)) {
-                Log.d("debug13", "\nbefore: " + holder.answer);
                 holder.answer = Objects.requireNonNull(getAnswer(holder.question)).getAnswer();
-                Log.d("debug13", "after: " + holder.answer);
                 switch (holder.answer) {
                     case 1:
                         selectAnswer(tv_answer1Num);
@@ -362,7 +358,6 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private void addAnswer(@NonNull ViewHolder holder, int position) {
         Question q = getItem(position);
         Answer answer = new Answer(q.getId(), holder.answer, q.getTrueAnswer(), q.getQuestionNumber(), getDate());
-        boolean exists;
         checkAndAddAnswer(answer);
         if (onAnswerListener != null && isTestType) {
             onAnswerListener.onQuestionAnswered(q, position);

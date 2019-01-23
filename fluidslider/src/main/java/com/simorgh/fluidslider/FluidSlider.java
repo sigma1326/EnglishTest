@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -39,14 +40,12 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.sin;
 
+@Keep
 public class FluidSlider extends View {
 
     //default view height and width
-    private static final int DEFAULT_HEIGHT = 66;
     public static final int ANIMATION_DURATION = 400;
 
-    private static final int DEFAULT_SIZE = 56;
-    private int size = DEFAULT_SIZE;
 
     public static final float BAR_CORNER_RADIUS = 2;
     public static final float BAR_VERTICAL_OFFSET = 1.5f;

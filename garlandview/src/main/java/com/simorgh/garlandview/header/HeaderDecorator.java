@@ -6,9 +6,11 @@ import android.view.View;
 
 import java.util.Objects;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+@Keep
 public class HeaderDecorator extends RecyclerView.ItemDecoration {
 
     private final int mHeaderHeight;

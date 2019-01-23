@@ -6,6 +6,7 @@ import android.view.View;
 
 import java.util.Objects;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.SnapHelper;
 /**
  * Extended {@link SnapHelper} that works <b>only</b> with {@link TailLayoutManager}.
  */
+@Keep
 public class TailSnapHelper extends SnapHelper {
 
     private static final int MAX_SCROLL_ON_FLING_DURATION = 300; // ms

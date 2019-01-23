@@ -79,4 +79,5 @@ dependencies {
     implementation project(':database')
     implementation project(':garlandview')
     implementation project(':fluidslider')
+    implementation project(':circularbarpercentview')
 }

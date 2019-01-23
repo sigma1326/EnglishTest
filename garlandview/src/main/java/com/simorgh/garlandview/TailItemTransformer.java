@@ -4,12 +4,14 @@ package com.simorgh.garlandview;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 
 /**
  * Implementation of {@link TailLayoutManager.PageTransformer}
  */
+@Keep
 public class TailItemTransformer implements TailLayoutManager.PageTransformer {
 
     private static final float INACTIVE_SCALE = 0.7f;

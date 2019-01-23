@@ -6,6 +6,7 @@ import com.simorgh.database.Date;
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
+import com.simorgh.database.model.TestLog;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +19,7 @@ public class TestResultViewModel extends ViewModel {
     private Date date;
     private LiveData<List<Answer>> answers;
     private List<Question> questions;
+    private TestLog testLog;
     private int correctCount = 0;
     private int allCount = 0;
     private int blankCount = 0;
@@ -35,8 +37,12 @@ public class TestResultViewModel extends ViewModel {
         this.isTestType = isTestType;
         answers = testRepository.getAnswersLiveData(year, major, date);
         questions = testRepository.getQuestions(year, major);
-
+        testLog = testRepository.getTestLog(date);
         calculateResults();
+    }
+
+    public TestLog getTestLog() {
+        return testLog;
     }
 
     public boolean isTestType() {

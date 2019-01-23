@@ -2,7 +2,6 @@ package com.simorgh.database;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.widget.ListAdapter;
 
 import com.huma.room_for_asset.RoomAsset;
 import com.simorgh.database.model.Answer;
@@ -112,6 +111,29 @@ public final class TestRepository {
         return dataBase.questionDAO().getQuestionsCount(major, year);
     }
 
+
+    public TestLog getTestLog(@NonNull final Date date) {
+        List<Answer> answerList;
+        answerList = getAnswers(date);
+        TestLog testLog = null;
+        int wrongCount = 0;
+        int count = 0;
+        for (Answer answer : answerList) {
+            if (testLog == null) {
+                Question q = getQuestion(answer.getQuestionId());
+                count = getQuestionCount(q.getYearQuestion(), q.getMajor());
+                testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
+            }
+            if (!answer.isCorrect()) {
+                wrongCount++;
+            }
+        }
+        if (testLog != null) {
+            testLog.setWrongCount(wrongCount);
+            testLog.setBlankCount(count - answerList.size());
+        }
+        return testLog;
+    }
     public List<TestLog> getTestLogs() {
         List<TestLog> testLogs = new LinkedList<>();
         List<Long> dates = getAnswerDates();

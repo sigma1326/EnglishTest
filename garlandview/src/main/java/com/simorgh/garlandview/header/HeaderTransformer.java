@@ -6,12 +6,14 @@ import android.view.View;
 import com.simorgh.garlandview.TailItemTransformer;
 import com.simorgh.garlandview.TailLayoutManager;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 
 /**
  * Implementation of {@link TailLayoutManager.PageTransformer}.
  */
+@Keep
 public class HeaderTransformer implements TailLayoutManager.PageTransformer<HeaderItem> {
 
     private final TailItemTransformer mTransformer;

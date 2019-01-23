@@ -4,12 +4,14 @@ package com.simorgh.garlandview;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Keep;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * ViewHolder class for {@link TailRecyclerView}.
  * @param <T> inner item ViewGroup subclass.
  */
+@Keep
 public abstract class TailItem<T extends ViewGroup> extends RecyclerView.ViewHolder {
 
     public TailItem(View itemView) {

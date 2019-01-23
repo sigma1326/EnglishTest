@@ -63,11 +63,23 @@
         app:layout_constraintTop_toTopOf="@+id/view_results_summary"
         tools:fontFamily="@font/iransans_medium" />
 
+    <com.simorgh.circularbarpercentview.CircularBar
+        android:id="@+id/circularBar"
+        style="@style/CircularBarPager_Default"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="34dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_results_summary"
+        app:progress_pager_fill_circle_color="@android:color/transparent"
+        app:progress_pager_fill_mode="pie_mode" />
+
     <TextView
         android:id="@+id/tv_question_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="51dp"
         android:text="@string/question_num"
         android:textAlignment="center"
         android:textColor="#003366"
@@ -76,14 +88,14 @@
         app:layout_constraintEnd_toEndOf="@+id/view_divider"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@id/tv_correct_answer"
-        app:layout_constraintTop_toBottomOf="@+id/view_results_summary"
+        app:layout_constraintTop_toBottomOf="@+id/circularBar"
         tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_correct_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="51dp"
         android:text="@string/correct_answer"
         android:textAlignment="center"
         android:textColor="#003366"
@@ -92,14 +104,14 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_question_num"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@id/tv_your_answer"
-        app:layout_constraintTop_toBottomOf="@+id/view_results_summary"
+        app:layout_constraintTop_toBottomOf="@+id/circularBar"
         tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_your_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="51dp"
         android:text="@string/your_answer"
         android:textAlignment="center"
         android:textColor="#003366"
@@ -108,7 +120,7 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_correct_answer"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="@id/view_divider"
-        app:layout_constraintTop_toBottomOf="@+id/view_results_summary"
+        app:layout_constraintTop_toBottomOf="@+id/circularBar"
         tools:fontFamily="@font/iransans_medium" />
 
     <androidx.recyclerview.widget.RecyclerView

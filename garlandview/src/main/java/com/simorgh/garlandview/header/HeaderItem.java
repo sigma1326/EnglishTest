@@ -5,10 +5,13 @@ import android.view.View;
 import com.simorgh.garlandview.TailItem;
 import com.simorgh.garlandview.inner.InnerRecyclerView;
 
+import androidx.annotation.Keep;
+
 
 /**
  * Implementation of {@link TailItem}
  */
+@Keep
 public abstract class HeaderItem extends TailItem<InnerRecyclerView> {
 
     public HeaderItem(View itemView) {

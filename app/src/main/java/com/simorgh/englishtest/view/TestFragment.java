@@ -316,6 +316,11 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         stopTestButton = null;
         fab = null;
         fluidSlider = null;
+        btnRight = null;
+        btnLeft = null;
+        tvReadingTitle = null;
+        motionLayout = null;
+        tvReadingContent = null;
     }
 
     @Override

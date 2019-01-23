@@ -1,5 +1,6 @@
 package com.simorgh.englishtest.view;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.simorgh.circularbarpercentview.CircularBar;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.AnswerAdapter;
 import com.simorgh.englishtest.viewModel.TestResultViewModel;
@@ -36,6 +38,9 @@ public class TestResultFragment extends Fragment {
     private ImageButton returnHome;
     private ImageButton retakeTest;
     private ImageButton compareTests;
+    private static final int BAR_ANIMATION_TIME = 1000;
+    private CircularBar mCircularBar;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,6 +113,35 @@ public class TestResultFragment extends Fragment {
 
             }
         });
+
+
+        mCircularBar = view.findViewById(R.id.circularBar);
+
+        if (mCircularBar != null) {
+//            mCircularBar.animateProgress(0, -75, BAR_ANIMATION_TIME);
+
+            mCircularBar.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //TODO do stuff
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -132,6 +166,8 @@ public class TestResultFragment extends Fragment {
                     allCount.setText(String.format("%s %d", getString(R.string.question_count), mViewModel.getAllCount()));
                     blankCount.setText(String.format("%s %d", getString(R.string.blank_count), mViewModel.getBlankCount()));
                     ((AnswerAdapter) Objects.requireNonNull(rvResult.getAdapter())).submitList(answers);
+
+                    mCircularBar.animateProgress(0, (int) mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
 
                     if (!mViewModel.showFab()) {
                         fab.setVisibility(View.GONE);
