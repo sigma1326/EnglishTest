@@ -59,39 +59,20 @@ public class CompareTestsResultViewModel extends ViewModel {
         List<Answer2> answers = new ArrayList<>();
         List<Integer> ids = new ArrayList<>();
 
-        List<Answer> biggerList;
-        List<Answer> smallerList;
-        boolean currentIsBigger = false;
-        if (currentAnswers.size() > prevAnswers.size()) {
-            biggerList = currentAnswers;
-            smallerList = prevAnswers;
-            currentIsBigger = true;
-        } else {
-            smallerList = currentAnswers;
-            biggerList = prevAnswers;
-            currentIsBigger = false;
-        }
-        for (Answer answer1 : biggerList) {
+        List<Answer> p = new ArrayList<>(prevAnswers);
+        List<Answer> c = new ArrayList<>(currentAnswers);
+        for (Answer answer1 : c) {
             Answer2 ans = new Answer2();
-            if (currentIsBigger) {
-                ans.setCurrentAnswer(answer1.getAnswer());
-                ans.setPrevAnswer(0);
-            } else {
-                ans.setPrevAnswer(answer1.getAnswer());
-                ans.setCurrentAnswer(0);
-            }
+            ans.setCurrentAnswer(answer1.getAnswer());
+            ans.setPrevAnswer(0);
             ans.setDate(answer1.getDate());
             ans.setQuestionId(answer1.getQuestionId());
             ans.setTrueAnswer(answer1.getTrueAnswer());
             ans.setQuestionNumber(answer1.getQuestionNumber());
 
-            for (Answer answer2 : smallerList) {
+            for (Answer answer2 : p) {
                 if (answer2.getQuestionId() == ans.getQuestionId()) {
-                    if (currentIsBigger) {
-                        ans.setPrevAnswer(answer2.getAnswer());
-                    } else {
-                        ans.setCurrentAnswer(answer2.getAnswer());
-                    }
+                    ans.setPrevAnswer(answer2.getAnswer());
                     break;
                 }
             }
@@ -100,36 +81,20 @@ public class CompareTestsResultViewModel extends ViewModel {
 
         }
 
-        for (Integer id : ids) {
-            boolean exists = false;
-            Answer answer = null;
-            for (Answer answer1 : smallerList) {
-                if (id == answer1.getQuestionId()) {
-                    exists = true;
-                    answer = answer1;
-                    break;
-                }
+        for (Answer answer : p) {
+            if (!ids.contains(answer.getQuestionId())) {
+                Answer2 ans = new Answer2();
+                ans.setPrevAnswer(answer.getAnswer());
+                ans.setCurrentAnswer(0);
+                ans.setDate(answer.getDate());
+                ans.setQuestionId(answer.getQuestionId());
+                ans.setTrueAnswer(answer.getTrueAnswer());
+                ans.setQuestionNumber(answer.getQuestionNumber());
+                answers.add(ans);
             }
-            if (!exists) {
-                if (answer != null) {
-                    Answer2 ans = new Answer2();
-                    if (currentIsBigger) {
-                        ans.setPrevAnswer(answer.getAnswer());
-                    } else {
-                        ans.setCurrentAnswer(answer.getAnswer());
-                    }
-                    ans.setCurrentAnswer(0);
-                    ans.setDate(answer.getDate());
-                    ans.setQuestionId(answer.getQuestionId());
-                    ans.setTrueAnswer(answer.getTrueAnswer());
-                    ans.setQuestionNumber(answer.getQuestionNumber());
-                }
-            }
-
-            Collections.sort(answers, (o1, o2) -> Integer.compare(o1.getQuestionNumber(), o2.getQuestionNumber()));
-
         }
 
+        Collections.sort(answers, (o1, o2) -> Integer.compare(o1.getQuestionNumber(), o2.getQuestionNumber()));
 
         return answers;
     }
