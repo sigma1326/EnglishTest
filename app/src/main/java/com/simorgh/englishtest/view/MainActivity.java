@@ -178,11 +178,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.testFragment:
                 imgBack.setImageResource(R.drawable.ic_arrow_forward);
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                if (circularTimer != null && mainViewModel.getTestRepository().getUser().isShowTimer()) {
-                    circularTimer.setVisibility(View.VISIBLE);
-                } else {
-                    circularTimer.setVisibility(View.INVISIBLE);
-                }
                 break;
             case R.id.testResultFragment:
                 imgBack.setImageResource(R.drawable.ic_arrow_forward);
@@ -213,28 +208,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void initTimer(long time, TestFragment.FinishedListener listener) {
-        circularTimer.setSeconds(time / 1000);
-        circularTimer.setProgress(100);
-        mainViewModel.setTotalTime(time);
-        mainViewModel.reset();
-        mainViewModel.setTimerListener(new MainViewModel.TimerListener() {
-            @Override
-            public void onFinished() {
-                listener.finished();
-            }
+        if (circularTimer != null) {
+            if (mainViewModel.getTestRepository().getUser().isShowTimer()) {
+                circularTimer.setVisibility(View.VISIBLE);
+                circularTimer.setSeconds(time / 1000);
+                circularTimer.setProgress(100);
+                mainViewModel.setTotalTime(time);
+                mainViewModel.reset();
+                mainViewModel.setTimerListener(new MainViewModel.TimerListener() {
+                    @Override
+                    public void onFinished() {
+                        listener.finished();
+                    }
 
-            @Override
-            public void onTick(long time, long total) {
-                try {
-                    circularTimer.setProgress((int) (time / total));
-                    float a = (time / (float) total) * 100;
-                    circularTimer.setCurrentTime(time);
-                    circularTimer.animateProgress((int) a, (int) a, 100);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void onTick(long time, long total) {
+                        try {
+                            circularTimer.setProgress((int) (time / total));
+                            float a = (time / (float) total) * 100;
+                            circularTimer.setCurrentTime(time);
+                            circularTimer.animateProgress((int) a, (int) a, 100);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            } else {
+                circularTimer.setVisibility(View.INVISIBLE);
             }
-        });
+        }
     }
 
     @Override
