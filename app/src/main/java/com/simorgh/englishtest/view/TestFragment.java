@@ -146,7 +146,8 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, true);
         rvQuestions.setLayoutManager(linearLayoutManager);
         rvQuestions.setNestedScrollingEnabled(false);
-        rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack(), this, this, isTestType));
+        rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack()
+                , this, this, isTestType, () -> !mViewModel.isPaused()));
         rvQuestions.setHasFixedSize(true);
 
         //disable scrolling in recyclerView

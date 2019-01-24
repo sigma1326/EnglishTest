@@ -38,7 +38,12 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private boolean isTestType = false;
     private boolean showAnswer = false;
     private boolean state = false;
+    private AnswerControllerListener answerControllerListener;
 
+
+    public interface AnswerControllerListener {
+        boolean canAnswer();
+    }
 
     public List<Answer> getAnswers() {
         return answers;
@@ -48,11 +53,13 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         super(diffCallback);
     }
 
-    public QuestionAdapter(@NonNull DiffUtil.ItemCallback<Question> diffCallback, OnReadingShownListener onReadingShownListener, OnAnswerListener onAnswerListener, boolean isTestType) {
+    public QuestionAdapter(@NonNull DiffUtil.ItemCallback<Question> diffCallback, OnReadingShownListener onReadingShownListener
+            , OnAnswerListener onAnswerListener, boolean isTestType, @NonNull AnswerControllerListener answerControllerListener) {
         super(diffCallback);
         this.onReadingShownListener = onReadingShownListener;
         this.onAnswerListener = onAnswerListener;
         this.isTestType = isTestType;
+        this.answerControllerListener = answerControllerListener;
     }
 
     protected QuestionAdapter(@NonNull AsyncDifferConfig<Question> config) {
@@ -221,54 +228,62 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     }
 
     private void clickAnswer4(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
-        if (holder.answer == 4) {
-            clearSelection(tv_answer4Num);
-            removeAnswer(holder, position);
-        } else {
-            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+        if (answerControllerListener != null && answerControllerListener.canAnswer()) {
+            if (holder.answer == 4) {
+                clearSelection(tv_answer4Num);
+                removeAnswer(holder, position);
+            } else {
+                clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
-            holder.answer = 4;
-            selectAnswer(tv_answer4Num);
-            addAnswer(holder, position);
+                holder.answer = 4;
+                selectAnswer(tv_answer4Num);
+                addAnswer(holder, position);
+            }
         }
     }
 
     private void clickAnswer3(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
-        if (holder.answer == 3) {
-            clearSelection(tv_answer3Num);
-            removeAnswer(holder, position);
-        } else {
-            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+        if (answerControllerListener != null && answerControllerListener.canAnswer()) {
+            if (holder.answer == 3) {
+                clearSelection(tv_answer3Num);
+                removeAnswer(holder, position);
+            } else {
+                clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
-            holder.answer = 3;
-            selectAnswer(tv_answer3Num);
-            addAnswer(holder, position);
+                holder.answer = 3;
+                selectAnswer(tv_answer3Num);
+                addAnswer(holder, position);
+            }
         }
     }
 
     private void clickAnswer2(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
-        if (holder.answer == 2) {
-            clearSelection(tv_answer2Num);
-            removeAnswer(holder, position);
-        } else {
-            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+        if (answerControllerListener != null && answerControllerListener.canAnswer()) {
+            if (holder.answer == 2) {
+                clearSelection(tv_answer2Num);
+                removeAnswer(holder, position);
+            } else {
+                clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
-            holder.answer = 2;
-            selectAnswer(tv_answer2Num);
-            addAnswer(holder, position);
+                holder.answer = 2;
+                selectAnswer(tv_answer2Num);
+                addAnswer(holder, position);
+            }
         }
     }
 
     private void clickAnswer1(@NonNull ViewHolder holder, int position, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num, View v) {
-        if (holder.answer == 1) {
-            clearSelection(tv_answer1Num);
-            removeAnswer(holder, position);
-        } else {
-            clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
+        if (answerControllerListener != null && answerControllerListener.canAnswer()) {
+            if (holder.answer == 1) {
+                clearSelection(tv_answer1Num);
+                removeAnswer(holder, position);
+            } else {
+                clearSelectedAnswer(holder, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);
 
-            holder.answer = 1;
-            selectAnswer(tv_answer1Num);
-            addAnswer(holder, position);
+                holder.answer = 1;
+                selectAnswer(tv_answer1Num);
+                addAnswer(holder, position);
+            }
         }
     }
 
