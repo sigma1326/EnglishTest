@@ -1,1 +1,1 @@
-include ':app', ':database', ':garlandview', ':fluidslider', ':circularbarpercentview', ':calendarutil'
+include ':app', ':database', ':garlandview', ':fluidslider', ':circularbarpercentview', ':calendarutil', ':circulartimer'

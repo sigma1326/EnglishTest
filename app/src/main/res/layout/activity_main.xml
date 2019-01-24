@@ -61,6 +61,19 @@
                     app:layout_constraintStart_toEndOf="@+id/img_back"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:fontFamily="@font/iransans_medium" />
+
+                <com.simorgh.circulartimer.CircularTimer
+                    android:id="@+id/circularTimer"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="16dp"
+                    android:visibility="invisible"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

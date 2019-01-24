@@ -76,9 +76,12 @@ dependencies {
     implementation 'org.sufficientlysecure:html-textview:3.6'
 
 
+    implementation 'com.ankushgrover:Hourglass:2.0.0'
+
     implementation project(':database')
     implementation project(':garlandview')
     implementation project(':fluidslider')
     implementation project(':circularbarpercentview')
     implementation project(':calendarutil')
+    implementation project(':circulartimer')
 }

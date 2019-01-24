@@ -17,6 +17,7 @@ import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.Reading;
+import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.QuestionAdapter;
@@ -58,6 +59,8 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     private OnAppTitleChangedListener onAppTitleChangedListener;
     private int lastViewPosition = 0;
     private FluidSlider fluidSlider;
+    private TimerListener timerListener;
+    private TextView pauseText;
 
 
     @Override
@@ -107,6 +110,12 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewCompat.setLayoutDirection(view, ViewCompat.LAYOUT_DIRECTION_LTR);
+
+        if (timerListener != null && mViewModel.isTestType()) {
+            timerListener.initTimer(YearMajorData.getMajorTime(mViewModel.getMajor()) * 60 * 1000, this::showTestResult);
+            timerListener.reset();
+            timerListener.resume();
+        }
 
         if (typeface == null) {
             typeface = Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/tnr.ttf");
@@ -224,9 +233,22 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         if (mViewModel != null && mViewModel.isTestType()) {
             pauseTestButton = view.findViewById(R.id.img_pause);
             stopTestButton = view.findViewById(R.id.img_stop);
+            pauseText = view.findViewById(R.id.tv_pause);
 
             pauseTestButton.setOnClickListener(v -> {
-
+                if (!mViewModel.isPaused()) {
+                    timerListener.pause();
+                    mViewModel.setPaused(true);
+                    pauseTestButton.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_play_arrow_black_24dp));
+                    fab.performClick();
+                    pauseText.setText("ادامه آزمون");
+                } else {
+                    timerListener.resume();
+                    mViewModel.setPaused(false);
+                    pauseTestButton.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
+                    fab.performClick();
+                    pauseText.setText("توقف آزمون");
+                }
             });
 
             stopTestButton.setOnClickListener(v -> {
@@ -253,7 +275,11 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
                     if (mViewModel.isClosed()) {
                         fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_cross));
                     } else {
-                        fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
+                        if (mViewModel.isPaused()) {
+                            fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_play_arrow_black_24dp));
+                        } else {
+                            fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.pause_two_lines));
+                        }
                     }
 
                 }
@@ -297,20 +323,35 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         List<Answer> answers = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getAnswers();
         Date date = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getDate();
         if (date != null && mViewModel != null) {
-            mViewModel.getTestRepository().updateAnswers(answers);
+            if (!answers.isEmpty()) {
+                mViewModel.getTestRepository().updateAnswers(answers);
 
-            Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment)
-                    .navigate(TestFragmentDirections.actionTestFragmentToTestResultFragment()
-                            .setDate(date.getMilli())
-                            .setYear(mViewModel.getYear())
-                            .setMajor(mViewModel.getMajor())
-                            .setIsTestType(mViewModel.isTestType()));
+                try {
+                    Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment)
+                            .navigate(TestFragmentDirections.actionTestFragmentToTestResultFragment()
+                                    .setDate(date.getMilli())
+                                    .setYear(mViewModel.getYear())
+                                    .setMajor(mViewModel.getMajor())
+                                    .setIsTestType(mViewModel.isTestType()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment).navigateUp();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        if (timerListener != null) {
+            timerListener.reset();
+            timerListener.stop();
+        }
         rvQuestions = null;
         pauseTestButton = null;
         stopTestButton = null;
@@ -321,6 +362,8 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         tvReadingTitle = null;
         motionLayout = null;
         tvReadingContent = null;
+        pauseText = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -336,11 +379,14 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         onAppTitleChangedListener = (OnAppTitleChangedListener) context;
+        timerListener = (TimerListener) context;
     }
 
     @Override
     public void onDetach() {
         onAppTitleChangedListener = null;
+        timerListener.stop();
+        timerListener = null;
         super.onDetach();
     }
 
@@ -378,5 +424,22 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
                 }, 200);
             }
         }
+    }
+
+    public interface TimerListener {
+        void initTimer(long time, FinishedListener finishedListener);
+
+        void reset();
+
+        void pause();
+
+        void stop();
+
+        void resume();
+
+    }
+
+    public interface FinishedListener {
+        void finished();
     }
 }

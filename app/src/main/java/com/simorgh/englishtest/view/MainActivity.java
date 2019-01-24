@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.simorgh.circulartimer.CircularTimer;
 import com.simorgh.database.model.User;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.viewModel.MainViewModel;
@@ -28,7 +29,8 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener, TestFragment.OnAppTitleChangedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+        , NavController.OnDestinationChangedListener, TestFragment.OnAppTitleChangedListener, TestFragment.TimerListener {
 
     private NavController navController;
     private TextView tvTestLogs;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SwitchCompat showTimer;
     private MainViewModel mainViewModel;
     private TextView fontSize;
+    private CircularTimer circularTimer;
 
 
     @Override
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         title = findViewById(R.id.tv_app_title);
         showTimer = findViewById(R.id.switch_show_timer);
         fontSize = findViewById(R.id.tv_font_size);
-
+        circularTimer = findViewById(R.id.circularTimer);
 
         showTimer.setOnCheckedChangeListener((buttonView, isChecked) -> {
             try {
@@ -141,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navController = null;
         showTimer = null;
         fontSize = null;
+        circularTimer = null;
 
         super.onDestroy();
     }
@@ -162,6 +166,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+        if (circularTimer != null) {
+            circularTimer.setVisibility(View.INVISIBLE);
+        }
         switch (destination.getId()) {
             case R.id.homeFragment:
                 imgBack.setImageResource(R.drawable.ic_menu_);
@@ -171,6 +178,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.testFragment:
                 imgBack.setImageResource(R.drawable.ic_arrow_forward);
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                if (circularTimer != null && mainViewModel.getTestRepository().getUser().isShowTimer()) {
+                    circularTimer.setVisibility(View.VISIBLE);
+                } else {
+                    circularTimer.setVisibility(View.INVISIBLE);
+                }
                 break;
             case R.id.testResultFragment:
                 imgBack.setImageResource(R.drawable.ic_arrow_forward);
@@ -196,6 +208,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onAppTitleChanged(final String titleText) {
         if (title != null) {
             title.setText(titleText);
+        }
+    }
+
+    @Override
+    public void initTimer(long time, TestFragment.FinishedListener listener) {
+        circularTimer.setSeconds(time / 1000);
+        circularTimer.setProgress(100);
+        mainViewModel.setTotalTime(time);
+        mainViewModel.reset();
+        mainViewModel.setTimerListener(new MainViewModel.TimerListener() {
+            @Override
+            public void onFinished() {
+                listener.finished();
+            }
+
+            @Override
+            public void onTick(long time, long total) {
+                try {
+                    circularTimer.setProgress((int) (time / total));
+                    float a = (time / (float) total) * 100;
+                    circularTimer.setCurrentTime(time);
+                    circularTimer.animateProgress((int) a, (int) a, 100);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void reset() {
+        if (circularTimer != null) {
+            circularTimer.setProgress(100);
+            mainViewModel.reset();
+        }
+    }
+
+    @Override
+    public void pause() {
+        if (mainViewModel != null) {
+            mainViewModel.pause();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (mainViewModel != null) {
+            mainViewModel.pause();
+        }
+    }
+
+    @Override
+    public void resume() {
+        if (circularTimer != null) {
+            mainViewModel.resume();
         }
     }
 }

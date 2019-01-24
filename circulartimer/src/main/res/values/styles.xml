@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CircularTimer_Default">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+
+        <item name="timer_progress_arc_max">100</item>
+        <item name="timer_arc_progress">20</item>
+
+        <item name="timer_progress_arc_clockwise_outline_color">#003366</item>
+        <item name="timer_progress_arc_clockwise_color">#008000</item>
+        <item name="timer_progress_arc_counter_clockwise_outline_color">#003366</item>
+        <item name="timer_progress_arc_counter_clockwise_color">#ff0000</item>
+
+        <item name="timer_progress_arc_clockwise_outline_width">0.75dp</item>
+        <item name="timer_progress_arc_counter_clockwise_outline_width">0.75dp</item>
+        <item name="timer_progress_arc_clockwise_width">8dp</item>
+        <item name="timer_progress_arc_counter_clockwise_width">8dp</item>
+
+        <item name="timer_progress_pager_on_click_enabled">true</item>
+    </style>
+
+</resources>

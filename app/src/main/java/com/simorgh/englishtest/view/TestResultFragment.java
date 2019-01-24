@@ -145,7 +145,7 @@ public class TestResultFragment extends Fragment {
                     mCircularBar.animateProgress(0, (int) mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
 
                     if (!mViewModel.showFab()) {
-//                        fab.setVisibility(View.GONE);
+                        fab.setVisibility(View.GONE);
                     }
                 }
             });

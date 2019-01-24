@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel;
 public class TestViewModel extends ViewModel {
     private LiveData<List<Question>> questionLiveData;
     private boolean isClosed = true;
+    private boolean isPaused = false;
     private int year, major;
     private boolean isTestType;
     private TestRepository testRepository;
@@ -22,6 +23,14 @@ public class TestViewModel extends ViewModel {
         this.year = year;
         this.major = major;
         this.isTestType = isTestType;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
     }
 
     public LiveData<List<Question>> getQuestionLiveData() {
