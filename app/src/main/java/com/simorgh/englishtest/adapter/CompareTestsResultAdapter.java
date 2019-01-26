@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.model.Answer2;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;

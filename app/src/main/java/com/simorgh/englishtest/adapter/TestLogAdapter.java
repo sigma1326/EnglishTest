@@ -16,6 +16,7 @@ import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.view.TestLogFragmentDirections;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -35,9 +36,10 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
     private int major;
     private OnItemClickListener onItemClickListener;
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClicked(int year, int major, long currentDate, long prevDate);
     }
+
     public TestLogAdapter(@NonNull DiffUtil.ItemCallback<TestLog> diffCallback, final boolean isDialogMode, long milli, int year, int major, NavController navController) {
         super(diffCallback);
         this.isDialogMode = isDialogMode;
@@ -65,6 +67,7 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             v.setElevation(5);
         }
+        ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_LTR);
         return new TestLogHolder(v);
     }
 
@@ -85,10 +88,10 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
 
             testLogTitle.setText(title);
             PersianCalendar p = CalendarTool.GregorianToPersian(testLog.getCalendar());
-            String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth(), p.getPersianDay());
+            String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth() + 1, p.getPersianDay());
             testDate.setText("تاریخ آزمون: " + date);
             testHour.setText("ساعت آزمون: " + String.format("%02d:%02d", testLog.getDate().getHour(), testLog.getDate().getMinute()));
-            String percent = "درصد کسب شده: " + "% " + (int) testLog.getPercent();
+            String percent = String.format(Locale.getDefault(),"درصد کسب شده: %d %%", (int) testLog.getPercent());
             testPercent.setText(percent);
             testCorrectCount.setText(String.format("%s: %d", "تعداد گزینه صحیح", testLog.getCorrectCount()));
             testBlankCount.setText(String.format("%s: %d", "تعداد گزینه نزده", testLog.getBlankCount()));

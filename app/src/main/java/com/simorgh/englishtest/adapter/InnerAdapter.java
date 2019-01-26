@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.model.InnerItem;
 import com.simorgh.englishtest.view.HomeFragmentDirections;
 import com.simorgh.englishtest.view.MainActivity;
 

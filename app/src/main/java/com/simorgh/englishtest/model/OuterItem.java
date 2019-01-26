@@ -1,4 +1,4 @@
-package com.simorgh.englishtest.adapter;
+package com.simorgh.englishtest.model;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.adapter.InnerAdapter;
 import com.simorgh.garlandview.header.HeaderDecorator;
 import com.simorgh.garlandview.header.HeaderItem;
 import com.simorgh.garlandview.inner.InnerLayoutManager;
@@ -92,7 +93,7 @@ public class OuterItem extends HeaderItem {
     }
 
     @SuppressLint("DefaultLocale")
-    void setContent(@NonNull List<YearMajorData> innerDataList) {
+    public void setContent(@NonNull List<YearMajorData> innerDataList) {
 //        final Context context = itemView.getContext();
 //
 //        final YearMajorData header = innerDataList.subList(0, 1).get(0);
@@ -104,7 +105,7 @@ public class OuterItem extends HeaderItem {
 
     }
 
-    void clearContent() {
+    public void clearContent() {
         ((InnerAdapter) Objects.requireNonNull(mRecyclerView.getAdapter())).clearData();
     }
 

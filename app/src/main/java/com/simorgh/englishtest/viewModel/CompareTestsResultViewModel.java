@@ -7,7 +7,7 @@ import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.TestLog;
-import com.simorgh.englishtest.adapter.Answer2;
+import com.simorgh.englishtest.model.Answer2;
 
 import java.util.ArrayList;
 import java.util.Collections;

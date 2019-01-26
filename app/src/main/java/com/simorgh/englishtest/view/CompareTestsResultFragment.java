@@ -35,10 +35,6 @@ public class CompareTestsResultFragment extends Fragment {
     private TextView tvPrevTestTime;
 
 
-    public static CompareTestsResultFragment newInstance() {
-        return new CompareTestsResultFragment();
-    }
-
     @Override
     public void onDestroyView() {
         mCircularBarCurrent = null;
@@ -102,7 +98,7 @@ public class CompareTestsResultFragment extends Fragment {
                 String s = "زمان آزمون گذشته:   ";
                 s += String.format("%02d:%02d", mViewModel.getPrevTestLog().getDate().getHour(), mViewModel.getPrevTestLog().getDate().getMinute());
                 s += "    ";
-                String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth(), p.getPersianDay());
+                String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth() + 1, p.getPersianDay());
                 s += date;
                 tvPrevTestTime.setText(s);
                 if (mViewModel.getPrevAnswers() != null && rvCompareResults != null) {

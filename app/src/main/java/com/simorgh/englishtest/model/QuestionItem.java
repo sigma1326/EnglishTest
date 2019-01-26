@@ -1,4 +1,4 @@
-package com.simorgh.englishtest.adapter;
+package com.simorgh.englishtest.model;
 
 public class QuestionItem {
     private int id;

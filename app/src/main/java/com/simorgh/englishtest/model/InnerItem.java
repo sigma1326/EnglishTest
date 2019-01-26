@@ -1,4 +1,4 @@
-package com.simorgh.englishtest.adapter;
+package com.simorgh.englishtest.model;
 
 
 import android.annotation.SuppressLint;
@@ -45,7 +45,7 @@ public class InnerItem extends com.simorgh.garlandview.inner.InnerItem {
     }
 
     @SuppressLint("SetTextI18n")
-    void setContent(YearMajorData data) {
+    public void setContent(YearMajorData data) {
         mInnerData = data;
 
         mHeader.setText(String.format("سوالات زبان کنکور گروه %s ", YearMajorData.getMajorType(data.getMajor())));

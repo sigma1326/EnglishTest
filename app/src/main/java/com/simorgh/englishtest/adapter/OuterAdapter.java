@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.model.OuterItem;
 import com.simorgh.garlandview.TailAdapter;
 
 import java.util.List;
