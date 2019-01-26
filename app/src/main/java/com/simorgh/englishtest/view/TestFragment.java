@@ -18,9 +18,9 @@ import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.Reading;
 import com.simorgh.database.model.YearMajorData;
-import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.QuestionAdapter;
+import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.TestViewModel;
 import com.simorgh.fluidslider.FluidSlider;
 
@@ -142,12 +142,15 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
         }
 
+        tvReadingContent.setTextSize(mViewModel.getTestRepository().getUser().getFontSize());
+
         rvQuestions.setNestedScrollingEnabled(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, true);
         rvQuestions.setLayoutManager(linearLayoutManager);
         rvQuestions.setNestedScrollingEnabled(false);
         rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack()
-                , this, this, isTestType, () -> !mViewModel.isPaused()));
+                , this, this, isTestType, () -> !mViewModel.isPaused()
+                , mViewModel.getTestRepository().getUser().getFontSize()));
         rvQuestions.setHasFixedSize(true);
 
         //disable scrolling in recyclerView

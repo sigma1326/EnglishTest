@@ -39,6 +39,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     private boolean showAnswer = false;
     private boolean state = false;
     private AnswerControllerListener answerControllerListener;
+    private int fontSize = 14;
 
 
     public interface AnswerControllerListener {
@@ -54,12 +55,14 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     }
 
     public QuestionAdapter(@NonNull DiffUtil.ItemCallback<Question> diffCallback, OnReadingShownListener onReadingShownListener
-            , OnAnswerListener onAnswerListener, boolean isTestType, @NonNull AnswerControllerListener answerControllerListener) {
+            , OnAnswerListener onAnswerListener, boolean isTestType
+            , @NonNull AnswerControllerListener answerControllerListener, final int fontSize) {
         super(diffCallback);
         this.onReadingShownListener = onReadingShownListener;
         this.onAnswerListener = onAnswerListener;
         this.isTestType = isTestType;
         this.answerControllerListener = answerControllerListener;
+        this.fontSize = fontSize;
     }
 
     protected QuestionAdapter(@NonNull AsyncDifferConfig<Question> config) {
@@ -118,6 +121,13 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
             tv_answer2.setText(questionItem.getAnswer2());
             tv_answer3.setText(questionItem.getAnswer3());
             tv_answer4.setText(questionItem.getAnswer4());
+
+            tv_question.setTextSize(fontSize);
+            tv_questionNum.setTextSize(fontSize);
+            tv_answer1.setTextSize(fontSize);
+            tv_answer2.setTextSize(fontSize);
+            tv_answer3.setTextSize(fontSize);
+            tv_answer4.setTextSize(fontSize);
 
             setTypeFace(tv_question, tv_questionNum, tv_answer1, tv_answer2, tv_answer3
                     , tv_answer4, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num);

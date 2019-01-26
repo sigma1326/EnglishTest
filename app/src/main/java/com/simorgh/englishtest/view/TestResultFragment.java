@@ -9,9 +9,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.simorgh.circularbarpercentview.CircularBar;
-import com.simorgh.englishtest.DialogMaker;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.AnswerAdapter;
+import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.TestResultViewModel;
 
 import java.util.Objects;

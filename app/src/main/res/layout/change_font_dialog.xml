@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_gravity="center"
+    android:layout_height="0dp"
+    android:background="@drawable/white_corners"
+    android:padding="20dp"
+    app:layout_constraintHeight_percent="0.6"
+    app:layout_constraintWidth_percent="0.8">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tv_font14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:text="14"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_font16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tv_font16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:text="16"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_font18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_font14"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tv_font18"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:text="18"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_font20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_font16"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tv_font20"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:text="20"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_font22"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_font18"
+        tools:fontFamily="@font/iransans_medium" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tv_font22"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:text="22"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_font20"
+        tools:fontFamily="@font/iransans_medium" />
+</androidx.constraintlayout.widget.ConstraintLayout>

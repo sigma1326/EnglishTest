@@ -1,13 +1,17 @@
-package com.simorgh.englishtest;
+package com.simorgh.englishtest.util;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.TestLog;
+import com.simorgh.database.model.User;
+import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.TestLogAdapter;
 import com.simorgh.englishtest.view.TestResultFragmentDirections;
 
@@ -111,5 +115,69 @@ public class DialogMaker {
         });
 
 
+    }
+
+    public static void createFontChangeDialog(@NonNull final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.change_font_dialog, null);
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+        Button tv14 = view.findViewById(R.id.tv_font14);
+        Button tv16 = view.findViewById(R.id.tv_font16);
+        Button tv18 = view.findViewById(R.id.tv_font18);
+        Button tv20 = view.findViewById(R.id.tv_font20);
+        Button tv22 = view.findViewById(R.id.tv_font22);
+
+        TestRepository testRepository = new TestRepository((Application) context.getApplicationContext());
+
+        tv14.setOnClickListener(v -> {
+            new Thread(() -> {
+                User user = testRepository.getUser();
+                user.setFontSize(14);
+                testRepository.updateUser(user);
+            }).run();
+            alertDialog.dismiss();
+        });
+
+        tv16.setOnClickListener(v -> {
+            new Thread(() -> {
+                User user = testRepository.getUser();
+                user.setFontSize(16);
+                testRepository.updateUser(user);
+            }).run();
+            alertDialog.dismiss();
+        });
+
+        tv18.setOnClickListener(v -> {
+            new Thread(() -> {
+                User user = testRepository.getUser();
+                user.setFontSize(18);
+                testRepository.updateUser(user);
+            }).run();
+            alertDialog.dismiss();
+        });
+
+        tv20.setOnClickListener(v -> {
+            new Thread(() -> {
+                User user = testRepository.getUser();
+                user.setFontSize(20);
+                testRepository.updateUser(user);
+            }).run();
+            alertDialog.dismiss();
+        });
+
+        tv22.setOnClickListener(v -> {
+            new Thread(() -> {
+                User user = testRepository.getUser();
+                user.setFontSize(22);
+                testRepository.updateUser(user);
+            }).run();
+            alertDialog.dismiss();
+        });
     }
 }

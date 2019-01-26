@@ -11,6 +11,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.simorgh.circulartimer.CircularTimer;
 import com.simorgh.database.model.User;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.MainViewModel;
 
 import java.util.Objects;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SwitchCompat showTimer;
     private MainViewModel mainViewModel;
     private TextView fontSize;
+    private TextView fontSizeLabel;
     private CircularTimer circularTimer;
 
 
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         title = findViewById(R.id.tv_app_title);
         showTimer = findViewById(R.id.switch_show_timer);
         fontSize = findViewById(R.id.tv_font_size);
+        fontSizeLabel = findViewById(R.id.tv_font_size_label);
         circularTimer = findViewById(R.id.circularTimer);
 
         showTimer.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -92,6 +95,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.homeFragment) {
                 navController.navigate(R.id.action_homeFragment_to_testLogFragment);
             }
+        });
+
+        fontSize.setOnClickListener(v -> {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            DialogMaker.createFontChangeDialog(this);
+        });
+
+        fontSizeLabel.setOnClickListener(v -> {
+            fontSize.performClick();
         });
 
 
@@ -144,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navController = null;
         showTimer = null;
         fontSize = null;
+        fontSizeLabel = null;
         circularTimer = null;
 
         super.onDestroy();
