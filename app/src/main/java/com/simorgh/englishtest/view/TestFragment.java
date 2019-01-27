@@ -276,6 +276,9 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
                     } else {
                         mViewModel.toggleClosed(false);
                     }
+                    fluidSlider.setEnabled(!mViewModel.isClosed());
+                    btnLeft.setEnabled(!mViewModel.isClosed());
+                    btnRight.setEnabled(!mViewModel.isClosed());
                     if (mViewModel.isClosed()) {
                         fab.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_cross));
                     } else {

@@ -100,7 +100,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
             }
             if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.homeFragment) {
-                navController.navigate(R.id.action_homeFragment_to_testLogFragment);
+                try {
+                    navController.navigate(R.id.action_homeFragment_to_testLogFragment);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -124,10 +128,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     break;
                 case R.id.testFragment:
+                        DialogMaker.createTestExitDialog(this, v1 -> {
+                            try {
+                                navController.navigateUp();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }, v1 -> {
+                        });
+                        break;
                 case R.id.testResultFragment:
                 case R.id.testLogFragment:
                 case R.id.compareTestsResultFragment:
-                    navController.navigateUp();
+                    try {
+                        navController.navigateUp();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         });

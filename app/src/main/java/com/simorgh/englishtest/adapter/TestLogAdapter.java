@@ -101,10 +101,14 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
                     navController = Navigation.findNavController((Activity) v.getContext(), R.id.main_nav_host_fragment);
                 }
                 if (!isDialogMode) {
-                    navController.navigate(TestLogFragmentDirections.actionTestLogFragmentToTestResultFragment()
-                            .setDate(testLog.getDate().getMilli())
-                            .setMajor(testLog.getMajor())
-                            .setYear(testLog.getYear()));
+                    try {
+                        navController.navigate(TestLogFragmentDirections.actionTestLogFragmentToTestResultFragment()
+                                .setDate(testLog.getDate().getMilli())
+                                .setMajor(testLog.getMajor())
+                                .setYear(testLog.getYear()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     Log.d("debug13", "onBindViewHolder: " + Objects.requireNonNull(navController.getCurrentDestination()).getLabel());
                     if (onItemClickListener != null) {

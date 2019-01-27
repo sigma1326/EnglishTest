@@ -72,20 +72,27 @@ public class TestResultFragment extends Fragment {
         fab = view.findViewById(R.id.fab_test_result);
 
         returnHome.setOnClickListener(v -> {
-            Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment).navigateUp();
+            try {
+                Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment).navigateUp();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         retakeTest.setOnClickListener(v -> {
-            Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment)
-                    .navigate(TestResultFragmentDirections.actionTestResultFragmentToTestFragment()
-                            .setYear(mViewModel.getYear())
-                            .setMajor(mViewModel.getMajor())
-                            .setIsTestType(mViewModel.isTestType()));
+            try {
+                Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment)
+                        .navigate(TestResultFragmentDirections.actionTestResultFragmentToTestFragment()
+                                .setYear(mViewModel.getYear())
+                                .setMajor(mViewModel.getMajor())
+                                .setIsTestType(mViewModel.isTestType()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         });
 
         compareTests.setOnClickListener(v -> {
-//            Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment).navigate(TestResultFragmentDirections.actionTestResultFragmentToCompareTestsResultFragment());
             DialogMaker.createCompareTestsDialog(Objects.requireNonNull(getContext()), mViewModel.getDate().getMilli(), mViewModel.getYear(), mViewModel.getMajor(),Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
         });
 

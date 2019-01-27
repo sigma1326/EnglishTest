@@ -43,18 +43,26 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
                     , mData.get(position).getQuestionCount()
                     , YearMajorData.getMajorTime(mData.get(position).getMajor())
                     , v1 -> {
-                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
-                                .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
-                                        .setYear(mData.get(position).getYear())
-                                        .setMajor(mData.get(position).getMajor())
-                                        .setIsTestType(true));
+                        try {
+                            Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
+                                    .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
+                                            .setYear(mData.get(position).getYear())
+                                            .setMajor(mData.get(position).getMajor())
+                                            .setIsTestType(true));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     , v1 -> {
-                        Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
-                                .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
-                                        .setYear(mData.get(position).getYear())
-                                        .setMajor(mData.get(position).getMajor())
-                                        .setIsTestType(false));
+                        try {
+                            Navigation.findNavController((MainActivity) v1.getContext(), R.id.main_nav_host_fragment)
+                                    .navigate(HomeFragmentDirections.actionHomeFragmentToTestFragment()
+                                            .setYear(mData.get(position).getYear())
+                                            .setMajor(mData.get(position).getMajor())
+                                            .setIsTestType(false));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                     }
             );

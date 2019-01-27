@@ -74,6 +74,30 @@ public class DialogMaker {
         });
     }
 
+    public static void createTestExitDialog(@NonNull final Context context
+            , final View.OnClickListener onExitListener, final View.OnClickListener onContinueListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.test_exit_dialog, null);
+        builder.setView(view);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+        view.findViewById(R.id.view_exit).setOnClickListener(v -> {
+            alertDialog.dismiss();
+            onExitListener.onClick(v);
+        });
+
+        view.findViewById(R.id.view_continue).setOnClickListener(v -> {
+            alertDialog.dismiss();
+            onContinueListener.onClick(v);
+        });
+    }
+
+
+
     public static void createCompareTestsDialog(@NonNull final Context context, final long milli, final int year, final int major, NavController navController) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
