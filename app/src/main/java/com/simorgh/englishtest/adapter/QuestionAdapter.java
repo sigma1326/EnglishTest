@@ -187,11 +187,11 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
 
     private void initClickListeners(@NonNull ViewHolder holder, TextView tv_answer1, TextView tv_answer2, TextView tv_answer3, TextView tv_answer4, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
         holder.itemView.findViewById(R.id.layout_answer1).setOnClickListener(v -> {
-            clickAnswer1(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer1Num.performClick();
         });
 
         tv_answer1.setOnClickListener(v -> {
-            clickAnswer1(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer1Num.performClick();
         });
 
         tv_answer1Num.setOnClickListener(v -> {
@@ -200,11 +200,11 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
 
 
         holder.itemView.findViewById(R.id.layout_answer2).setOnClickListener(v -> {
-            clickAnswer2(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer2Num.performClick();
         });
 
         tv_answer2.setOnClickListener(v -> {
-            clickAnswer2(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer2Num.performClick();
         });
 
         tv_answer2Num.setOnClickListener(v -> {
@@ -213,11 +213,11 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
 
 
         holder.itemView.findViewById(R.id.layout_answer3).setOnClickListener(v -> {
-            clickAnswer3(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer3Num.performClick();
         });
 
         tv_answer3.setOnClickListener(v -> {
-            clickAnswer3(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer3Num.performClick();
         });
 
         tv_answer3Num.setOnClickListener(v -> {
@@ -225,11 +225,11 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         });
 
         holder.itemView.findViewById(R.id.layout_answer4).setOnClickListener(v -> {
-            clickAnswer4(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer4Num.performClick();
         });
 
         tv_answer4.setOnClickListener(v -> {
-            clickAnswer4(holder, holder.position, tv_answer1Num, tv_answer2Num, tv_answer3Num, tv_answer4Num, v);
+            tv_answer4Num.performClick();
         });
 
         tv_answer4Num.setOnClickListener(v -> {

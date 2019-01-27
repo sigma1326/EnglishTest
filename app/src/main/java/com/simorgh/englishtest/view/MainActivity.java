@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView title;
     private DrawerLayout drawer;
     private SwitchCompat showTimer;
+    private TextView showTimerLabel;
     private MainViewModel mainViewModel;
     private TextView fontSize;
     private TextView fontSizeLabel;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         imgBack = findViewById(R.id.img_back);
         title = findViewById(R.id.tv_app_title);
         showTimer = findViewById(R.id.switch_show_timer);
+        showTimerLabel = findViewById(R.id.tv_show_timer);
         fontSize = findViewById(R.id.tv_font_size);
         fontSizeLabel = findViewById(R.id.tv_font_size_label);
         circularTimer = findViewById(R.id.circularTimer);
@@ -69,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+
+
+        showTimerLabel.setOnClickListener(v -> {
+            showTimer.performClick();
         });
 
         drawer = findViewById(R.id.drawer_layout);
@@ -160,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fontSize = null;
         fontSizeLabel = null;
         circularTimer = null;
+        showTimerLabel = null;
 
         super.onDestroy();
     }

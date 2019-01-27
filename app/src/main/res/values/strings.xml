@@ -41,4 +41,5 @@
     <string name="current_test">آزمون فعلی:</string>
     <string name="prev_test1">آزمون قبلی</string>
     <string name="current_test1">آزمون فعلی</string>
+    <string name="select_font_size">انتخاب اندازه متن</string>
 </resources>

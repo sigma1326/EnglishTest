@@ -3,12 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="0dp"
-    android:layout_gravity="center"
     android:layout_height="0dp"
+    android:layout_gravity="center"
     android:background="@drawable/white_corners"
-    android:padding="20dp"
     app:layout_constraintHeight_percent="0.6"
     app:layout_constraintWidth_percent="0.8">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/view_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#0ba2e3"
+        android:text="@string/select_font_size"
+        android:clickable="false"
+        android:focusable="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_font14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/tv_font14"
@@ -18,13 +34,13 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center"
         android:paddingTop="4dp"
-        app:layout_constraintVertical_chainStyle="packed"
         android:text="14"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/tv_font16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_header"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:fontFamily="@font/iransans_medium" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -52,7 +68,7 @@
         android:gravity="center"
         android:paddingTop="4dp"
         android:text="18"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/tv_font20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +84,7 @@
         android:gravity="center"
         android:paddingTop="4dp"
         android:text="20"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/tv_font22"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +100,7 @@
         android:gravity="center"
         android:paddingTop="4dp"
         android:text="22"
-        android:textSize="16sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
