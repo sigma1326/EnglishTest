@@ -95,9 +95,6 @@ public class TestLog {
 
     public float getPercent() {
         int correct = getCorrectCount();
-        if (correct <= 0) {
-            return 0f;
-        }
         return ((correct * 3f - wrongCount) / (questionCount * 3f)) * 100;
     }
 

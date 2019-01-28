@@ -18,14 +18,16 @@ public class Date implements Parcelable {
     private int day;
     private int hour;
     private int minute;
+    private int seconds;
 
 
-    public Date(int year, int month, int day, int hour, int minute) {
+    public Date(int year, int month, int day, int hour, int minute, int seconds) {
         this.year = year;
         this.month = month;
         this.day = day;
         this.hour = hour;
         this.minute = minute;
+        this.seconds = seconds;
     }
 
     public Date(final long milli) {
@@ -34,6 +36,7 @@ public class Date implements Parcelable {
         day = Integer.parseInt(String.valueOf(milli).substring(6, 8));
         hour = Integer.parseInt(String.valueOf(milli).substring(8, 10));
         minute = Integer.parseInt(String.valueOf(milli).substring(10, 12));
+        seconds = Integer.parseInt(String.valueOf(milli).substring(12, 14));
     }
 
     public Date(final Calendar calendar) {
@@ -42,6 +45,7 @@ public class Date implements Parcelable {
         day = calendar.get(Calendar.DAY_OF_MONTH);
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
+        seconds = calendar.get(Calendar.SECOND);
     }
 
     public static final Creator<Date> CREATOR = new Creator<Date>() {
@@ -67,6 +71,7 @@ public class Date implements Parcelable {
         day = in.readInt();
         hour = in.readInt();
         minute = in.readInt();
+        seconds = in.readInt();
     }
 
 
@@ -101,6 +106,7 @@ public class Date implements Parcelable {
         dest.writeInt(day);
         dest.writeInt(hour);
         dest.writeInt(minute);
+        dest.writeInt(seconds);
     }
 
     public int getHour() {
@@ -126,12 +132,13 @@ public class Date implements Parcelable {
         ret = ret * 100 + day;
         ret = ret * 100 + hour;
         ret = ret * 100 + minute;
+        ret = ret * 100 + seconds;
         return ret;
     }
 
     @SuppressLint("DefaultLocale")
     @NotNull
     public String toString() {
-        return String.format("date = {%04d/%02d/%02d - %02d:%02d}", year, month, day, hour, minute);
+        return String.format("date = {%04d/%02d/%02d - %02d:%02d:%02d}", year, month, day, hour, minute, seconds);
     }
 }

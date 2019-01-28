@@ -13,7 +13,7 @@ public class TypeConverters {
             return null;
         } else {
             if (String.valueOf(value).length() < 8) {
-                return new Date(1970, 0, 1, 0, 0);
+                return new Date(1970, 0, 1, 0, 0,0);
             }
             return new Date(value);
         }
