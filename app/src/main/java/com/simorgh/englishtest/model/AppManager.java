@@ -61,6 +61,7 @@ public class AppManager extends MultiDexApplication {
 
 
         testRepository = new TestRepository(this);
+        testRepository.initDataBase(this);
 
 
         executor.execute(() -> {

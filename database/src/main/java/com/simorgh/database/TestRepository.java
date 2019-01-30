@@ -26,7 +26,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 
 @SuppressWarnings("unchecked")
 @Keep
@@ -49,31 +48,29 @@ public final class TestRepository {
     @SuppressLint("CheckResult")
     public TestRepository(@NonNull final Application application) {
         dataBase = TestDataBase.getDatabase(application);
-        initDataBase(application);
     }
+
+
 
     /**
      * import the pre-populated {@link ImportDataBase} located in assets/databases/test.db
      * and use it for filling {@link TestDataBase}
      */
     @SuppressLint("CheckResult")
-    private void initDataBase(@NonNull Application application) {
-        dataBase.userDAO().getUser()
-                .subscribeOn(Schedulers.single())
-                .observeOn(Schedulers.io())
-                .subscribe((user, throwable) -> {
-                    if (user == null) {
-                        //init user if not exists
-                        dataBase.userDAO().insert(new User());
+    public void initDataBase(@NonNull Application application) {
+        executor.execute(() -> {
+            if (dataBase.userDAO().getUserOld() == null) {
 
-                        throwable.printStackTrace();
+                ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").build();
+                updateQuestions(importDataBase.questionDAO().getQuestions());
+                updateReadings(importDataBase.readingDAO().getReadings());
+                importDataBase.close();
 
-                        ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").build();
-                        updateQuestions(importDataBase.questionDAO().getQuestions());
-                        updateReadings(importDataBase.readingDAO().getReadings());
-                        importDataBase.close();
-                    }
-                });
+
+                //init user if not exists
+                dataBase.userDAO().insert(new User());
+            }
+        });
     }
 
 

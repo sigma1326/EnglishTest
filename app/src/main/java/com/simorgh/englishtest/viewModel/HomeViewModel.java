@@ -18,6 +18,9 @@ public class HomeViewModel extends AndroidViewModel {
     public HomeViewModel(@NonNull final Application application) {
         super(application);
         testRepository = new TestRepository(application);
+    }
+
+    public void init() {
         lists = testRepository.getYearMajorData();
     }
 
