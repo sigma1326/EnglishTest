@@ -121,7 +121,7 @@ public class DialogMaker {
                 rvLogs.setHasFixedSize(true);
 
                 AlertDialog alertDialog = builder.create();
-                alertDialog.setCancelable(false);
+                alertDialog.setCancelable(true);
                 alertDialog.show();
 
                 ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(testLogs);
@@ -154,7 +154,7 @@ public class DialogMaker {
         builder.setView(view);
 
         AlertDialog alertDialog = builder.create();
-        alertDialog.setCancelable(false);
+        alertDialog.setCancelable(true);
         alertDialog.show();
 
 

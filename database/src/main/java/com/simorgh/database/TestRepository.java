@@ -2,7 +2,6 @@ package com.simorgh.database;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.os.AsyncTask;
 
 import com.huma.room_for_asset.RoomAsset;
 import com.simorgh.database.model.Answer;
@@ -15,7 +14,6 @@ import com.simorgh.database.model.YearMajorData;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +49,6 @@ public final class TestRepository {
     }
 
 
-
     /**
      * import the pre-populated {@link ImportDataBase} located in assets/databases/test.db
      * and use it for filling {@link TestDataBase}
@@ -59,17 +56,14 @@ public final class TestRepository {
     @SuppressLint("CheckResult")
     public void initDataBase(@NonNull Application application) {
         executor.execute(() -> {
-            if (dataBase.userDAO().getUserOld() == null) {
-
-                ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").build();
-                updateQuestions(importDataBase.questionDAO().getQuestions());
-                updateReadings(importDataBase.readingDAO().getReadings());
-                importDataBase.close();
+            ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").build();
+            dataBase.questionDAO().insert((importDataBase.questionDAO().getQuestions()));
+            dataBase.readingDAO().insert((importDataBase.readingDAO().getReadings()));
+            importDataBase.close();
 
 
-                //init user if not exists
-                dataBase.userDAO().insert(new User());
-            }
+            //init user if not exists
+            dataBase.userDAO().insert(new User());
         });
     }
 
@@ -104,30 +98,24 @@ public final class TestRepository {
 
     @SuppressLint({"DefaultLocale", "StaticFieldLeak"})
     public List<List<YearMajorData>> getYearMajorData() {
-        try {
-            return new AsyncTask<Void, Void, List<List<YearMajorData>>>() {
-                @Override
-                protected List<List<YearMajorData>> doInBackground(Void... voids) {
-                    List<List<YearMajorData>> lists = new ArrayList<>();
-                    final List<Integer> years = getQuestionYears();
-                    String query;
-                    for (int i = 0; i < years.size(); i++) {
-                        List<YearMajorData> yearMajorDataList;
-                        query = String.format("select count(*) as questionCount ,year_question as year,major" +
-                                " from questions where year=%d group by year,major order by year,major", years.get(i));
-                        yearMajorDataList = dataBase.questionDAO().getYearMajorData(new SimpleSQLiteQuery(query));
-                        lists.add(yearMajorDataList);
-                    }
-                    return lists;
-                }
-            }.execute().get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        List<List<YearMajorData>> lists = new ArrayList<>();
+        final List<Integer> years = getQuestionYears();
+        for (int i = 0; i < years.size(); i++) {
+            List<YearMajorData> yearMajorDataList;
+            yearMajorDataList = getYearMajorData(years.get(i));
+            lists.add(yearMajorDataList);
         }
-//        return lists;
-        return null;
+        return lists;
+    }
+
+    @SuppressLint("DefaultLocale")
+    private List<YearMajorData> getYearMajorData(final int year) {
+        String query;
+        List<YearMajorData> yearMajorDataList;
+        query = String.format("select count(*) as questionCount ,year_question as year,major" +
+                " from questions where year=%d group by year,major order by year,major", year);
+        yearMajorDataList = dataBase.questionDAO().getYearMajorData(new SimpleSQLiteQuery(query));
+        return yearMajorDataList;
     }
 
     public LiveData<List<Answer>> getAnswersLiveData(final int year, final int major, final Date date) {
