@@ -13,6 +13,8 @@ import com.simorgh.circularbarpercentview.CircularBar;
 import com.simorgh.database.Date;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.CompareTestsResultAdapter;
+import com.simorgh.englishtest.model.AppManager;
+import com.simorgh.englishtest.util.AndroidUtils;
 import com.simorgh.englishtest.viewModel.CompareTestsResultViewModel;
 
 import java.util.Objects;
@@ -92,21 +94,25 @@ public class CompareTestsResultFragment extends Fragment {
 
             mViewModel = ViewModelProviders.of(this).get(CompareTestsResultViewModel.class);
             try {
-                mViewModel.init(Objects.requireNonNull(getActivity()).getApplication(), year, major, prevYear, prevMajor, new Date(dateMilli), new Date(prevDateMilli));
 
-                PersianCalendar p = CalendarTool.GregorianToPersian(mViewModel.getPrevTestLog().getCalendar());
-                String s = "زمان آزمون گذشته:   ";
-                s += String.format("%02d:%02d", mViewModel.getPrevTestLog().getDate().getHour(), mViewModel.getPrevTestLog().getDate().getMinute());
-                s += "    ";
-                String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth() + 1, p.getPersianDay());
-                s += date;
-                tvPrevTestTime.setText(s);
-                if (mViewModel.getPrevAnswers() != null && rvCompareResults != null) {
-                    ((CompareTestsResultAdapter) Objects.requireNonNull(rvCompareResults.getAdapter())).submitList(mViewModel.getAnswers());
+                AppManager.getExecutor().execute(() -> {
+                    mViewModel.init(year, major, prevYear, prevMajor, new Date(dateMilli), new Date(prevDateMilli));
+                    PersianCalendar p = CalendarTool.GregorianToPersian(mViewModel.getPrevTestLog().getCalendar());
+                    AndroidUtils.runOnUIThread(() -> {
+                        String s = "زمان آزمون گذشته:   ";
+                        s += String.format("%02d:%02d", mViewModel.getPrevTestLog().getDate().getHour(), mViewModel.getPrevTestLog().getDate().getMinute());
+                        s += "    ";
+                        String date = String.format("%d/%d/%d", p.getPersianYear(), p.getPersianMonth() + 1, p.getPersianDay());
+                        s += date;
+                        tvPrevTestTime.setText(s);
+                        if (mViewModel.getPrevAnswers() != null && rvCompareResults != null) {
+                            ((CompareTestsResultAdapter) Objects.requireNonNull(rvCompareResults.getAdapter())).submitList(mViewModel.getAnswers());
 
-                    mCircularBarCurrent.animateProgress(0, (int) mViewModel.getCurrentTestLog().getPercent(), BAR_ANIMATION_TIME);
-                    mCircularBarPrevious.animateProgress(0, (int) mViewModel.getPrevTestLog().getPercent(), BAR_ANIMATION_TIME);
-                }
+                            mCircularBarCurrent.animateProgress(0, (int) mViewModel.getCurrentTestLog().getPercent(), BAR_ANIMATION_TIME);
+                            mCircularBarPrevious.animateProgress(0, (int) mViewModel.getPrevTestLog().getPercent(), BAR_ANIMATION_TIME);
+                        }
+                    });
+                });
 
             } catch (Exception e) {
                 e.printStackTrace();

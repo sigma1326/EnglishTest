@@ -3,7 +3,6 @@ package com.simorgh.englishtest.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.view.TestLogFragmentDirections;
 
 import java.util.Locale;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
@@ -110,7 +108,6 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
                         e.printStackTrace();
                     }
                 } else {
-                    Log.d("debug13", "onBindViewHolder: " + Objects.requireNonNull(navController.getCurrentDestination()).getLabel());
                     if (onItemClickListener != null) {
                         onItemClickListener.onItemClicked(year, major, milli, testLog.getDate().getMilli());
                     }

@@ -8,6 +8,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.Single;
 
 @Dao
 @Keep
@@ -16,7 +17,10 @@ public interface UserDAO {
     void insert(User user);
 
     @Query("select * from users  where id=1")
-    User getUser();
+    Single<User> getUser();
+
+    @Query("select * from users  where id=1")
+    User getUserOld();
 
     @Query("select * from users  where id=1")
     LiveData<User> getUserLiveData();

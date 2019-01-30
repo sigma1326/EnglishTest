@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.simorgh.database.Date;
@@ -186,6 +187,13 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     }
 
     private void initClickListeners(@NonNull ViewHolder holder, TextView tv_answer1, TextView tv_answer2, TextView tv_answer3, TextView tv_answer4, TextView tv_answer1Num, TextView tv_answer2Num, TextView tv_answer3Num, TextView tv_answer4Num) {
+        ((RelativeLayout) holder.itemView.findViewById(R.id.layout_answer1)).requestDisallowInterceptTouchEvent(false);
+        ((RelativeLayout) holder.itemView.findViewById(R.id.layout_answer2)).requestDisallowInterceptTouchEvent(false);
+        ((RelativeLayout) holder.itemView.findViewById(R.id.layout_answer3)).requestDisallowInterceptTouchEvent(false);
+        ((RelativeLayout) holder.itemView.findViewById(R.id.layout_answer4)).requestDisallowInterceptTouchEvent(false);
+
+
+
         holder.itemView.findViewById(R.id.layout_answer1).setOnClickListener(v -> {
             tv_answer1Num.performClick();
         });

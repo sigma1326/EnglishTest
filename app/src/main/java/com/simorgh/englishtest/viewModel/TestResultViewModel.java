@@ -1,12 +1,11 @@
 package com.simorgh.englishtest.viewModel;
 
-import android.app.Application;
-
 import com.simorgh.database.Date;
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.TestLog;
+import com.simorgh.englishtest.model.AppManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,8 +27,8 @@ public class TestResultViewModel extends ViewModel {
     private TestRepository testRepository;
 
 
-    public void init(final Application application, final int year, final int major, final long dateMilli, final boolean showFab, final boolean isTestType) {
-        testRepository = new TestRepository(application);
+    public void init(final int year, final int major, final long dateMilli, final boolean showFab, final boolean isTestType) {
+        testRepository = AppManager.getTestRepository();
         this.year = year;
         this.major = major;
         this.date = new Date(dateMilli);

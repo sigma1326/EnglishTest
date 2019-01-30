@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.simorgh.circulartimer.CircularTimer;
-import com.simorgh.database.model.User;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.MainViewModel;
@@ -29,6 +28,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
         , NavController.OnDestinationChangedListener, TestFragment.OnAppTitleChangedListener, TestFragment.TimerListener {
@@ -64,13 +65,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         circularTimer = findViewById(R.id.circularTimer);
 
         showTimer.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            try {
-                User user = mainViewModel.getTestRepository().getUser();
-                user.setShowTimer(isChecked);
-                mainViewModel.getTestRepository().updateUser(user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            mainViewModel.getTestRepository().getUserSingle()
+                    .subscribeOn(Schedulers.single())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(Objects::nonNull)
+                    .subscribe(user -> {
+                        user.setShowTimer(isChecked);
+                        mainViewModel.getTestRepository().updateUser(user);
+                    });
         });
 
 
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             }
-            DialogMaker.createFontChangeDialog(this);
+            DialogMaker.createFontChangeDialog(this, mainViewModel.getTestRepository());
         });
 
         fontSizeLabel.setOnClickListener(v -> {
@@ -128,15 +130,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     break;
                 case R.id.testFragment:
-                        DialogMaker.createTestExitDialog(this, v1 -> {
-                            try {
-                                navController.navigateUp();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }, v1 -> {
-                        });
-                        break;
+                    DialogMaker.createTestExitDialog(this, v1 -> {
+                        try {
+                            navController.navigateUp();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }, v1 -> {
+                    });
+                    break;
                 case R.id.testResultFragment:
                 case R.id.testLogFragment:
                 case R.id.compareTestsResultFragment:
@@ -260,34 +262,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void initTimer(long time, TestFragment.FinishedListener listener) {
         if (circularTimer != null) {
-            if (mainViewModel.getTestRepository().getUser().isShowTimer()) {
-                circularTimer.setVisibility(View.VISIBLE);
-                circularTimer.setSeconds(time / 1000);
-                circularTimer.setProgress(100);
-                mainViewModel.setTotalTime(time);
-                mainViewModel.reset();
-                mainViewModel.setTimerListener(new MainViewModel.TimerListener() {
-                    @Override
-                    public void onFinished() {
-                        listener.finished();
-                    }
-
-                    @Override
-                    public void onTick(long time, long total) {
-                        try {
-                            circularTimer.setProgress((int) (time / total));
-                            float a = (time / (float) total) * 100;
-                            circularTimer.setCurrentTime(time);
-                            circularTimer.animateProgress((int) a, (int) a, 100);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+            mainViewModel.getTestRepository().getUserSingle()
+                    .subscribeOn(Schedulers.single())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(Objects::nonNull)
+                    .subscribe(user -> {
+                        if (user.isShowTimer()) {
+                            circularTimer.setVisibility(View.VISIBLE);
+                            circularTimer.setSeconds(time / 1000);
+                            circularTimer.setProgress(100);
+                            mainViewModel.setTotalTime(time);
+                            mainViewModel.reset();
+                            mainViewModel.resume();
+                        } else {
+                            circularTimer.setVisibility(View.INVISIBLE);
                         }
-                    }
-                });
-            } else {
-                circularTimer.setVisibility(View.INVISIBLE);
-            }
+                    });
         }
+        mainViewModel.setTimerListener(new MainViewModel.TimerListener() {
+            @Override
+            public void onFinished() {
+                listener.finished();
+            }
+
+            @Override
+            public void onTick(long time, long total) {
+                if (total == 0) {
+                    return;
+                }
+                try {
+                    circularTimer.setProgress((int) (time / total));
+                    float a = (time / (float) total) * 100;
+                    circularTimer.setCurrentTime(time);
+                    circularTimer.animateProgress((int) a, (int) a, 100);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

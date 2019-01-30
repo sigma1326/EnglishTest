@@ -1,5 +1,6 @@
 package com.simorgh.englishtest.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.TestLogAdapter;
+import com.simorgh.englishtest.model.AppManager;
 import com.simorgh.englishtest.viewModel.TestLogViewModel;
 
 import java.util.Objects;
@@ -18,6 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class TestLogFragment extends Fragment {
 
@@ -51,14 +56,20 @@ public class TestLogFragment extends Fragment {
         super.onDestroyView();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(TestLogViewModel.class);
-        mViewModel.init(Objects.requireNonNull(getActivity()).getApplication());
-        if (rvLogs != null) {
-            ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(mViewModel.getTestLogs());
-        }
+        mViewModel.init();
+        Single.fromCallable(() -> AppManager.getTestRepository().getTestLogs())
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(testLogs -> testLogs != null && !testLogs.isEmpty() && rvLogs != null)
+                .subscribe(testLogs -> {
+                    ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(testLogs);
+                });
+
     }
 
 }

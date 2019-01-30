@@ -10,6 +10,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.Single;
 
 @Dao
 @Keep
@@ -21,7 +22,7 @@ public interface ReadingDAO {
     void insert(List<Reading> reading);
 
     @Query("select * from readings where id=:readingID")
-    Reading getReading(final int readingID);
+    Single<Reading> getReading(final int readingID);
 
     @Query("select * from readings where id=:readingID")
     LiveData<Reading> getReadingLive(final int readingID);

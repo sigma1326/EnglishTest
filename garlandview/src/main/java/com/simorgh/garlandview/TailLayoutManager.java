@@ -7,7 +7,6 @@ import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -195,7 +194,7 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
             scrollOffset = 0;
         } else {
             final View anchorView = findViewByPosition(anchorPos);
-            scrollOffset = mItemStart - getDecoratedLeft(anchorView);
+            scrollOffset = mItemStart - getDecoratedLeft(Objects.requireNonNull(anchorView));
         }
 
         detachAndScrapAttachedViews(recycler);
@@ -324,7 +323,7 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
 
         for (int i = 0, cnt = getChildCount(); i < cnt; i++) {
             final View child = getChildAt(i);
-            final int childCenter = getDecoratedLeft(child) + getDecoratedMeasuredWidth(child) / 2;
+            final int childCenter = getDecoratedLeft(Objects.requireNonNull(child)) + getDecoratedMeasuredWidth(child) / 2;
             int absDistance = Math.abs(childCenter - center);
 
             if (absDistance < absClosest) {
@@ -367,7 +366,7 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
 
         for (int i = 0, cnt = getChildCount(); i < cnt; i++) {
             View view = getChildAt(i);
-            mViewCache.put(getPosition(view), view);
+            mViewCache.put(getPosition(Objects.requireNonNull(view)), view);
         }
 
         for (int i = 0, cnt = mViewCache.size(); i < cnt; i++) {
@@ -402,7 +401,6 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
         View view = mViewCache.get(pos);
         if (view != null) {
             attachView(view);
-            Log.d("debug", "fillLeft: " + view.getLeft() + ":" + view.getRight() + "::" + anchorViewLeft + "::" + pos);
             mViewCache.remove(pos);
         } else {
             view = recycler.getViewForPosition(pos);
@@ -410,11 +408,11 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
             measureChildWithMargins(view, mItemStart * 2, 0);
             final int viewRight = anchorViewLeft - mItemGap;
             final int viewLeft = viewRight - viewWidth;
-            Log.d("debug", "fillLeft: " + viewLeft + ":" + viewRight + "::" + anchorViewLeft + "::" + pos);
             layoutDecorated(view, viewLeft, 0, viewRight, getDecoratedMeasuredHeight(view));
         }
     }
 
+    @Deprecated
     private void fillRight1(int anchorPos, RecyclerView.Recycler recycler, RecyclerView.State state) {
         if (anchorPos <= 0) {
             return;
@@ -436,7 +434,6 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
         View view = mViewCache.get(pos);
         if (view != null) {
             attachView(view);
-            Log.d("debug", "fillRight1: " + view.getLeft() + ":" + view.getRight() + "::" + anchorViewRight + "::" + pos);
             mViewCache.remove(pos);
         } else {
             view = recycler.getViewForPosition(pos);
@@ -444,11 +441,11 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
             measureChildWithMargins(view, mItemStart * 2, 0);
             final int viewRight = anchorViewRight + viewWidth + mItemGap;
             final int viewLeft = viewRight - viewWidth;
-            Log.d("debug", "fillRight1: " + viewLeft + ":" + viewRight + "::" + anchorViewRight + "::" + pos);
             layoutDecorated(view, viewLeft, 0, viewRight, getDecoratedMeasuredHeight(view));
         }
     }
 
+    @Deprecated
     private void fillLeft1(int anchorPos, RecyclerView.Recycler recycler, RecyclerView.State state) {
         final int itemCount = getItemCount();
         final int width = getWidth();
@@ -469,7 +466,6 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
                 measureChildWithMargins(view, mItemStart * 2, 0);
                 layoutDecorated(view, viewRight - viewWidth, 0, viewRight, getDecoratedMeasuredHeight(view));
             }
-            Log.d("debug", "fillLeft1: " + (viewRight - viewWidth) + ":" + viewRight + "::" + width + "::" + pos);
             viewRight = getDecoratedLeft(view) - mItemGap;
             fillLeft = viewRight > 0;
             pos++;
@@ -496,7 +492,6 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
                 measureChildWithMargins(view, mItemStart * 2, 0);
                 layoutDecorated(view, viewLeft, 0, viewLeft + viewWidth, getDecoratedMeasuredHeight(view));
             }
-            Log.d("debug", "fillRight: " + viewLeft + ":" + (viewLeft + viewWidth) + "::" + width + "::" + pos);
             viewLeft = getDecoratedRight(view) + mItemGap;
             fillRight = viewLeft < width;
             pos++;

@@ -13,13 +13,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.simorgh.database.Date;
-import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
-import com.simorgh.database.model.Reading;
 import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.QuestionAdapter;
+import com.simorgh.englishtest.model.AppManager;
 import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.TestViewModel;
 import com.simorgh.fluidslider.FluidSlider;
@@ -41,6 +40,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.inflationx.calligraphy3.CalligraphyUtils;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class TestFragment extends Fragment implements QuestionAdapter.OnReadingShownListener, QuestionAdapter.OnAnswerListener {
 
@@ -55,7 +56,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     private HtmlTextView tvReadingContent;
     private Typeface typeface;
     private MotionLayout motionLayout;
-    private TestRepository testRepository;
     private OnAppTitleChangedListener onAppTitleChangedListener;
     private int lastViewPosition = 0;
     private FluidSlider fluidSlider;
@@ -67,9 +67,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (testRepository == null) {
-            testRepository = new TestRepository(Objects.requireNonNull(getActivity()).getApplication());
-        }
 
         if (getArguments() != null) {
             int year, major;
@@ -78,17 +75,19 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             major = TestFragmentArgs.fromBundle(getArguments()).getMajor();
             isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
             mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-            mViewModel.init(new TestRepository(Objects.requireNonNull(getActivity()).getApplication()), year, major, isTestType);
+            mViewModel.init(AppManager.getTestRepository(), year, major, isTestType);
             if (onAppTitleChangedListener != null && mViewModel != null) {
                 onAppTitleChangedListener.onAppTitleChanged(mViewModel.getFragmentTitle());
             }
-            mViewModel.getQuestionLiveData().observe(this, questions -> {
-                if (questions != null && rvQuestions != null && rvQuestions.getAdapter() != null) {
-                    ((QuestionAdapter) rvQuestions.getAdapter()).submitList(questions);
-                    fluidSlider.setCurrentPosition(0);
-                    fluidSlider.setMinMax(new Pair<>(1, questions.size()));
-                }
-            });
+            if (mViewModel.getQuestionLiveData() != null) {
+                mViewModel.getQuestionLiveData().observe(this, questions -> {
+                    if (questions != null && rvQuestions != null && rvQuestions.getAdapter() != null) {
+                        ((QuestionAdapter) rvQuestions.getAdapter()).submitList(questions);
+                        fluidSlider.setCurrentPosition(0);
+                        fluidSlider.setMinMax(new Pair<>(1, questions.size()));
+                    }
+                });
+            }
         }
     }
 
@@ -105,7 +104,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "CheckResult"})
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -114,7 +113,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         if (timerListener != null && mViewModel.isTestType()) {
             timerListener.initTimer(YearMajorData.getMajorTime(mViewModel.getMajor()) * 60 * 1000, this::showTestResult);
             timerListener.reset();
-            timerListener.resume();
         }
 
         if (typeface == null) {
@@ -142,53 +140,38 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
         }
 
-        tvReadingContent.setTextSize(mViewModel.getTestRepository().getUser().getFontSize());
-
         rvQuestions.setNestedScrollingEnabled(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, true);
         rvQuestions.setLayoutManager(linearLayoutManager);
         rvQuestions.setNestedScrollingEnabled(false);
-        rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack()
-                , this, this, isTestType, () -> !mViewModel.isPaused()
-                , mViewModel.getTestRepository().getUser().getFontSize()));
+
+        boolean finalIsTestType = isTestType;
+        AppManager.getTestRepository().getUserSingle()
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(user -> user != null)
+                .subscribe(user -> {
+                    rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack()
+                            , this, this, finalIsTestType, () -> !mViewModel.isPaused()
+                            , user.getFontSize()));
+                    tvReadingContent.setTextSize(user.getFontSize());
+
+                });
+
         rvQuestions.setHasFixedSize(true);
 
         //disable scrolling in recyclerView
         rvQuestions.setOnTouchListener((v, event) -> true);
 
-//        rvQuestions.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                mViewModel.setCanTouch(newState != RecyclerView.SCROLL_STATE_SETTLING);
-//            }
-//
-//        });
-//        rvQuestions.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-//            @Override
-//            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//                if (e.getAction() == MotionEvent.ACTION_DOWN && rv.getScrollState() == RecyclerView.SCROLL_STATE_SETTLING) {
-//                    Log.d("debug13", "onInterceptTouchEvent: click performed");
-//                    if (mViewModel.isCanTouch()) {
-//                        rv.stopScroll();
-//                        Objects.requireNonNull(rv.findChildViewUnder(e.getX(), e.getY())).performClick();
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
-//
-//            @Override
-//            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//                Log.d("debug13", "onTouchEvent: ");
-//
-//            }
-//
-//            @Override
-//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//            }
-//        });
+        rvQuestions.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                //While the ViewPager is scrolling, disable the
+//                boolean isScrolling = newState != ViewPager.SCROLL_STATE_IDLE;
+//                rvQuestions.requestDisallowInterceptTouchEvent(isScrolling);
+            }
+
+        });
 
         //add snap helper to rv
 //        new LinearSnapHelper().attachToRecyclerView(rvQuestions);
@@ -397,17 +380,24 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         super.onDetach();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onReadingShown(final Question question) {
         if (question.getReadingID() != -1) {
-            Reading reading = testRepository.getReading(question.getReadingID());
-            tvReadingContent.setHtml(reading.getPassage());
-            if (motionLayout.getCurrentState() != R.id.show_reading_hide_snackbar && motionLayout.getCurrentState() != R.id.show_reading_show_snackbar) {
-                motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
-                motionLayout.transitionToEnd();
-            }
+            AppManager.getTestRepository().getReading(question.getReadingID())
+                    .subscribeOn(Schedulers.single())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(reading -> reading != null)
+                    .subscribe(reading -> {
+                        tvReadingContent.setHtml(reading.getPassage());
+                        if (motionLayout.getCurrentState() != R.id.show_reading_hide_snackbar && motionLayout.getCurrentState() != R.id.show_reading_show_snackbar) {
+                            motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
+                            motionLayout.transitionToEnd();
+                        }
+                    });
         } else {
-            if (motionLayout.getCurrentState() != R.id.hide_reading_hide_snackbar && motionLayout.getCurrentState() != R.id.hide_reading_show_snackbar) {
+            if (motionLayout.getCurrentState() != R.id.hide_reading_hide_snackbar
+                    && motionLayout.getCurrentState() != R.id.hide_reading_show_snackbar) {
                 motionLayout.setTransition(motionLayout.getCurrentState(), R.id.hide_reading_hide_snackbar);
                 motionLayout.transitionToEnd();
             }

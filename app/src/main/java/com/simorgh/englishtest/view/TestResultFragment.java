@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.simorgh.circularbarpercentview.CircularBar;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.AnswerAdapter;
+import com.simorgh.englishtest.model.AppManager;
+import com.simorgh.englishtest.util.AndroidUtils;
 import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.TestResultViewModel;
 
@@ -93,7 +95,7 @@ public class TestResultFragment extends Fragment {
         });
 
         compareTests.setOnClickListener(v -> {
-            DialogMaker.createCompareTestsDialog(Objects.requireNonNull(getContext()), mViewModel.getDate().getMilli(), mViewModel.getYear(), mViewModel.getMajor(),Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
+            DialogMaker.createCompareTestsDialog(Objects.requireNonNull(getContext()), mViewModel.getDate().getMilli(), mViewModel.getYear(), mViewModel.getMajor(), Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
         });
 
         ((MotionLayout) view).setTransitionListener(new MotionLayout.TransitionListener() {
@@ -141,20 +143,24 @@ public class TestResultFragment extends Fragment {
             showFab = TestResultFragmentArgs.fromBundle(getArguments()).getShowFab();
             isTestType = TestResultFragmentArgs.fromBundle(getArguments()).getIsTestType();
             mViewModel = ViewModelProviders.of(this).get(TestResultViewModel.class);
-            mViewModel.init(Objects.requireNonNull(getActivity()).getApplication(), year, major, dateMilli, showFab, isTestType);
-            mViewModel.getAnswers().observe(this, answers -> {
-                if (answers != null && rvResult != null) {
-                    correctCount.setText(String.format("%s %d", getString(R.string.correct_count), mViewModel.getCorrectCount()));
-                    allCount.setText(String.format("%s %d", getString(R.string.question_count), mViewModel.getAllCount()));
-                    blankCount.setText(String.format("%s %d", getString(R.string.blank_count), mViewModel.getBlankCount()));
-                    ((AnswerAdapter) Objects.requireNonNull(rvResult.getAdapter())).submitList(answers);
+            AppManager.getExecutor().execute(() -> {
+                mViewModel.init(year, major, dateMilli, showFab, isTestType);
+                AndroidUtils.runOnUIThread(() -> {
+                    mViewModel.getAnswers().observe(this, answers -> {
+                        if (answers != null && rvResult != null) {
+                            correctCount.setText(String.format("%s %d", getString(R.string.correct_count), mViewModel.getCorrectCount()));
+                            allCount.setText(String.format("%s %d", getString(R.string.question_count), mViewModel.getAllCount()));
+                            blankCount.setText(String.format("%s %d", getString(R.string.blank_count), mViewModel.getBlankCount()));
+                            ((AnswerAdapter) Objects.requireNonNull(rvResult.getAdapter())).submitList(answers);
 
-                    mCircularBar.animateProgress(0, (int) mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
+                            mCircularBar.animateProgress(0, (int) mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
 
-                    if (!mViewModel.showFab()) {
-                        fab.setVisibility(View.GONE);
-                    }
-                }
+                            if (!mViewModel.showFab()) {
+                                fab.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                });
             });
         }
     }

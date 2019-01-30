@@ -1,13 +1,12 @@
 package com.simorgh.englishtest.viewModel;
 
-import android.app.Application;
-
 import com.simorgh.database.Date;
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.TestLog;
 import com.simorgh.englishtest.model.Answer2;
+import com.simorgh.englishtest.model.AppManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,8 +27,8 @@ public class CompareTestsResultViewModel extends ViewModel {
     private TestLog prevTestLog;
     private TestRepository testRepository;
 
-    public void init(@NonNull final Application application, final int currentYear, final int currentMajor, final int prevYear, final int prevMajor, @NonNull final Date currentDate, @NonNull final Date prevDate) {
-        testRepository = new TestRepository(application);
+    public void init(final int currentYear, final int currentMajor, final int prevYear, final int prevMajor, @NonNull final Date currentDate, @NonNull final Date prevDate) {
+        testRepository = AppManager.getTestRepository();
         this.currentYear = currentYear;
         this.currentMajor = currentMajor;
         this.prevYear = prevYear;

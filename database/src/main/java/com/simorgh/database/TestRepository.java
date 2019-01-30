@@ -2,6 +2,7 @@ package com.simorgh.database;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.os.AsyncTask;
 
 import com.huma.room_for_asset.RoomAsset;
 import com.simorgh.database.model.Answer;
@@ -10,50 +11,74 @@ import com.simorgh.database.model.Reading;
 import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.User;
 import com.simorgh.database.model.YearMajorData;
-import com.simorgh.database.task.insertAnswerAsyncTask;
-import com.simorgh.database.task.insertQuestionAsyncTask;
-import com.simorgh.database.task.insertReadingAsyncTask;
-import com.simorgh.database.task.insertUserAsyncTask;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.sqlite.db.SimpleSQLiteQuery;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 @SuppressWarnings("unchecked")
 @Keep
 public final class TestRepository {
     private TestDataBase dataBase;
+    private final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
+    private ThreadPoolExecutor executor = new ThreadPoolExecutor(
+            NUMBER_OF_CORES * 2,
+            NUMBER_OF_CORES * 2,
+            60L,
+            TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>()
+    );
 
-    public TestRepository(@NonNull Application application) {
+    public ThreadPoolExecutor getExecutor() {
+        return executor;
+    }
+
+
+    @SuppressLint("CheckResult")
+    public TestRepository(@NonNull final Application application) {
         dataBase = TestDataBase.getDatabase(application);
-
-        if (initTestDataBase(application)) {
-            //init user if not exists
-            updateUser(new User());
-        }
+        initDataBase(application);
     }
 
     /**
      * import the pre-populated {@link ImportDataBase} located in assets/databases/test.db
      * and use it for filling {@link TestDataBase}
-     *
-     * @return returns whether it imported any values to {@link TestDataBase} or not
      */
-    private boolean initTestDataBase(@NonNull Application application) {
-        if (dataBase.userDAO().getUser() == null) {
-            ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").allowMainThreadQueries().build();
-            updateQuestions(importDataBase.questionDAO().getQuestions());
-            updateReadings(importDataBase.readingDAO().getReadings());
-            importDataBase.close();
-            return true;
-        }
-        return false;
+    @SuppressLint("CheckResult")
+    private void initDataBase(@NonNull Application application) {
+        dataBase.userDAO().getUser()
+                .subscribeOn(Schedulers.single())
+                .observeOn(Schedulers.io())
+                .subscribe((user, throwable) -> {
+                    if (user == null) {
+                        //init user if not exists
+                        dataBase.userDAO().insert(new User());
+
+                        throwable.printStackTrace();
+
+                        ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").build();
+                        updateQuestions(importDataBase.questionDAO().getQuestions());
+                        updateReadings(importDataBase.readingDAO().getReadings());
+                        importDataBase.close();
+                    }
+                });
+    }
+
+
+    public Single<User> getUserSingle() {
+        return dataBase.userDAO().getUser();
     }
 
     public LiveData<List<Question>> getQuestionsLiveData(final int year, final int major) {
@@ -68,31 +93,44 @@ public final class TestRepository {
         return dataBase.questionDAO().getQuestion(questionID);
     }
 
-    public Reading getReading(final int readingID) {
+    public Single<Reading> getReading(final int readingID) {
         return dataBase.readingDAO().getReading(readingID);
     }
 
     public User getUser() {
-        return dataBase.userDAO().getUser();
+        return dataBase.userDAO().getUserOld();
     }
 
     public LiveData<User> getUserLiveData() {
         return dataBase.userDAO().getUserLiveData();
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint({"DefaultLocale", "StaticFieldLeak"})
     public List<List<YearMajorData>> getYearMajorData() {
-        List<List<YearMajorData>> lists = new ArrayList<>();
-        final List<Integer> years = getQuestionYears();
-        String query;
-        for (int i = 0; i < years.size(); i++) {
-            List<YearMajorData> yearMajorDataList;
-            query = String.format("select count(*) as questionCount ,year_question as year,major" +
-                    " from questions where year=%d group by year,major order by year,major", years.get(i));
-            yearMajorDataList = dataBase.questionDAO().getYearMajorData(new SimpleSQLiteQuery(query));
-            lists.add(yearMajorDataList);
+        try {
+            return new AsyncTask<Void, Void, List<List<YearMajorData>>>() {
+                @Override
+                protected List<List<YearMajorData>> doInBackground(Void... voids) {
+                    List<List<YearMajorData>> lists = new ArrayList<>();
+                    final List<Integer> years = getQuestionYears();
+                    String query;
+                    for (int i = 0; i < years.size(); i++) {
+                        List<YearMajorData> yearMajorDataList;
+                        query = String.format("select count(*) as questionCount ,year_question as year,major" +
+                                " from questions where year=%d group by year,major order by year,major", years.get(i));
+                        yearMajorDataList = dataBase.questionDAO().getYearMajorData(new SimpleSQLiteQuery(query));
+                        lists.add(yearMajorDataList);
+                    }
+                    return lists;
+                }
+            }.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return lists;
+//        return lists;
+        return null;
     }
 
     public LiveData<List<Answer>> getAnswersLiveData(final int year, final int major, final Date date) {
@@ -207,19 +245,19 @@ public final class TestRepository {
 
 
     public void updateUser(@Nullable User user) {
-        new insertUserAsyncTask(dataBase.userDAO()).execute(user);
+        executor.execute(() -> dataBase.userDAO().insert(user));
     }
 
     public void updateQuestions(@NonNull final List<Question> questions) {
-        new insertQuestionAsyncTask(dataBase.questionDAO()).execute(questions);
+        executor.execute(() -> dataBase.questionDAO().insert(questions));
     }
 
     public void updateReadings(@NonNull final List<Reading> readings) {
-        new insertReadingAsyncTask(dataBase.readingDAO()).execute(readings);
+        executor.execute(() -> dataBase.readingDAO().insert(readings));
     }
 
     public void updateAnswers(@NonNull final List<Answer> answers) {
-        new insertAnswerAsyncTask(dataBase.answerDAO()).execute(answers);
+        executor.execute(() -> dataBase.answerDAO().insert(answers));
     }
 
 

@@ -47,12 +47,13 @@ public class HomeFragment extends Fragment {
         ((TailLayoutManager) Objects.requireNonNull(rv.getLayoutManager())).setPageTransformer(new HeaderTransformer());
         new TailSnapHelper().attachToRecyclerView(rv);
 
-        Runnable runnable = () -> {
+        try {
             if (mViewModel != null) {
                 rv.setAdapter(new OuterAdapter(mViewModel.getYearMajorData()));
             }
-        };
-        runnable.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

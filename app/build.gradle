@@ -9,12 +9,21 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -44,28 +53,36 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha09'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha09'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha11'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha11'
     implementation 'androidx.core:core:1.0.1'
     //Calligraphy
     implementation 'io.github.inflationx:calligraphy3:3.0.0'
     implementation 'io.github.inflationx:viewpump:1.0.0'
     //RX
-    implementation 'io.reactivex:rxjava:1.3.0'
-    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+
+
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
+
     // Room
     // RxJava support for Room
-    implementation 'androidx.room:room-rxjava2:2.1.0-alpha03'
+    implementation 'androidx.room:room-rxjava2:2.1.0-alpha04'
     // ReactiveStreams support for LiveData
     implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+
+
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+
+
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.andkulikov:transitionseverywhere:1.8.1'
 
@@ -84,4 +101,15 @@ dependencies {
     implementation project(':circularbarpercentview')
     implementation project(':calendarutil')
     implementation project(':circulartimer')
+
+
+
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+
+    //    implementation 'com.google.dagger:dagger-android:2.21'
+    //    implementation 'com.google.dagger:dagger-android-support:2.21' // if you use the support libraries
+    //    annotationProcessor 'com.google.dagger:dagger-android-processor:2.21'
+    //    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
 }

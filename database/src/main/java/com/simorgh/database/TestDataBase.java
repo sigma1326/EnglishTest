@@ -24,13 +24,13 @@ import androidx.room.TypeConverters;
 public abstract class TestDataBase extends RoomDatabase {
     public static final String DB_NAME = "english-test-db";
 
-    abstract QuestionDAO questionDAO();
+    public abstract QuestionDAO questionDAO();
 
-    abstract ReadingDAO readingDAO();
+    public abstract ReadingDAO readingDAO();
 
-    abstract UserDAO userDAO();
+    public abstract UserDAO userDAO();
 
-    abstract AnswerDAO answerDAO();
+    public abstract AnswerDAO answerDAO();
 
     private static volatile TestDataBase INSTANCE;
 
@@ -39,7 +39,7 @@ public abstract class TestDataBase extends RoomDatabase {
             synchronized (TestDataBase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TestDataBase.class, DB_NAME).allowMainThreadQueries().build();
+                            TestDataBase.class, DB_NAME).build();
                 }
             }
         }

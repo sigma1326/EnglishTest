@@ -1,7 +1,5 @@
 package com.simorgh.englishtest.util;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +11,7 @@ import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.User;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.TestLogAdapter;
+import com.simorgh.englishtest.model.AppManager;
 import com.simorgh.englishtest.view.TestResultFragmentDirections;
 
 import java.util.List;
@@ -38,6 +37,7 @@ public class DialogMaker {
         ((TextView) view.findViewById(R.id.tv_question_count)).setText(count);
         ((TextView) view.findViewById(R.id.tv_time)).setText(t);
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCancelable(true);
         alertDialog.show();
 
 
@@ -60,6 +60,7 @@ public class DialogMaker {
         builder.setView(view);
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCancelable(false);
         alertDialog.show();
 
 
@@ -82,6 +83,7 @@ public class DialogMaker {
         builder.setView(view);
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCancelable(false);
         alertDialog.show();
 
 
@@ -97,57 +99,62 @@ public class DialogMaker {
     }
 
 
-
     public static void createCompareTestsDialog(@NonNull final Context context, final long milli, final int year, final int major, NavController navController) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.compare_tests_dialog, null);
         builder.setView(view);
 
-        TestRepository testRepository = new TestRepository(((Activity) context).getApplication());
-        List<TestLog> testLogs = testRepository.getTestLogs(year, major);
+        AppManager.getExecutor().execute(() -> {
 
-        RecyclerView rvLogs;
-        rvLogs = view.findViewById(R.id.rv_test_log);
-        rvLogs.setNestedScrollingEnabled(false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-        rvLogs.setLayoutManager(linearLayoutManager);
-        rvLogs.setNestedScrollingEnabled(false);
-        TestLogAdapter adapter = new TestLogAdapter(new TestLogAdapter.ItemDiffCallBack(), true, milli, year, major, navController);
-        rvLogs.setAdapter(adapter);
-        rvLogs.setHasFixedSize(true);
+            List<TestLog> testLogs = AppManager.getTestRepository().getTestLogs(year, major);
 
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+            AndroidUtils.runOnUIThread(() -> {
+                RecyclerView rvLogs;
+                rvLogs = view.findViewById(R.id.rv_test_log);
+                rvLogs.setNestedScrollingEnabled(false);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+                rvLogs.setLayoutManager(linearLayoutManager);
+                rvLogs.setNestedScrollingEnabled(false);
+                TestLogAdapter adapter = new TestLogAdapter(new TestLogAdapter.ItemDiffCallBack(), true, milli, year, major, navController);
+                rvLogs.setAdapter(adapter);
+                rvLogs.setHasFixedSize(true);
 
-        ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(testLogs);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.setCancelable(false);
+                alertDialog.show();
+
+                ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(testLogs);
 
 
-        adapter.setOnItemClickListener((year1, major1, currentDate, prevDate) -> {
-            try {
-                navController.navigate(TestResultFragmentDirections.actionTestResultFragmentToCompareTestsResultFragment()
-                        .setCurrentDate(milli)
-                        .setCurrentMajor(major)
-                        .setCurrentYear(year)
-                        .setPrevDate(prevDate)
-                        .setPrevMajor(major1)
-                        .setPrevYear(year1));
-                alertDialog.dismiss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                adapter.setOnItemClickListener((year1, major1, currentDate, prevDate) -> {
+                    try {
+                        navController.navigate(TestResultFragmentDirections.actionTestResultFragmentToCompareTestsResultFragment()
+                                .setCurrentDate(milli)
+                                .setCurrentMajor(major)
+                                .setCurrentYear(year)
+                                .setPrevDate(prevDate)
+                                .setPrevMajor(major1)
+                                .setPrevYear(year1));
+                        alertDialog.dismiss();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            });
         });
 
 
     }
 
-    public static void createFontChangeDialog(@NonNull final Context context) {
+    public static void createFontChangeDialog(@NonNull final Context context, @NonNull final TestRepository testRepository) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.change_font_dialog, null);
         builder.setView(view);
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCancelable(false);
         alertDialog.show();
 
 
@@ -157,50 +164,48 @@ public class DialogMaker {
         Button tv20 = view.findViewById(R.id.tv_font20);
         Button tv22 = view.findViewById(R.id.tv_font22);
 
-        TestRepository testRepository = new TestRepository((Application) context.getApplicationContext());
-
         tv14.setOnClickListener(v -> {
-            new Thread(() -> {
+            AppManager.getExecutor().execute(() -> {
                 User user = testRepository.getUser();
                 user.setFontSize(14);
                 testRepository.updateUser(user);
-            }).run();
+            });
             alertDialog.dismiss();
         });
 
         tv16.setOnClickListener(v -> {
-            new Thread(() -> {
+            AppManager.getExecutor().execute(() -> {
                 User user = testRepository.getUser();
                 user.setFontSize(16);
                 testRepository.updateUser(user);
-            }).run();
+            });
             alertDialog.dismiss();
         });
 
         tv18.setOnClickListener(v -> {
-            new Thread(() -> {
+            AppManager.getExecutor().execute(() -> {
                 User user = testRepository.getUser();
                 user.setFontSize(18);
                 testRepository.updateUser(user);
-            }).run();
+            });
             alertDialog.dismiss();
         });
 
         tv20.setOnClickListener(v -> {
-            new Thread(() -> {
+            AppManager.getExecutor().execute(() -> {
                 User user = testRepository.getUser();
                 user.setFontSize(20);
                 testRepository.updateUser(user);
-            }).run();
+            });
             alertDialog.dismiss();
         });
 
         tv22.setOnClickListener(v -> {
-            new Thread(() -> {
+            AppManager.getExecutor().execute(() -> {
                 User user = testRepository.getUser();
                 user.setFontSize(22);
                 testRepository.updateUser(user);
-            }).run();
+            });
             alertDialog.dismiss();
         });
     }

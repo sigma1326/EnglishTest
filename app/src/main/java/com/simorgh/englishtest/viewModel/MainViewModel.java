@@ -5,6 +5,7 @@ import android.app.Application;
 import com.ankushgrover.hourglass.Hourglass;
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.User;
+import com.simorgh.englishtest.model.AppManager;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -45,7 +46,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull final Application application) {
         super(application);
-        testRepository = new TestRepository(application);
+        testRepository = AppManager.getTestRepository();
         userLiveData = testRepository.getUserLiveData();
 
     }
