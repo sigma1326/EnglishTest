@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 @Keep
 public abstract class TailItem<T extends ViewGroup> extends RecyclerView.ViewHolder {
 
-    public TailItem(View itemView) {
+    protected TailItem(View itemView) {
         super(itemView);
     }
 

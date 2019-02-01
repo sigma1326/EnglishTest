@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.simorgh.database.TestRepository;
 import com.simorgh.database.model.YearMajorData;
+import com.simorgh.englishtest.model.AppManager;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class HomeViewModel extends AndroidViewModel {
 
     public HomeViewModel(@NonNull final Application application) {
         super(application);
-        testRepository = new TestRepository(application);
+        testRepository = AppManager.getTestRepository();
     }
 
     public void init() {

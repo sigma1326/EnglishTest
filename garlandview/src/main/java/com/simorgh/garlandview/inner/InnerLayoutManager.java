@@ -339,7 +339,7 @@ public class InnerLayoutManager extends RecyclerView.LayoutManager
     private void applyTransformation() {
         for (int i = 0, cnt = getChildCount(); i < cnt; i++) {
             final View view = getChildAt(i);
-            final int viewHeight = view.getMeasuredHeight();
+            final int viewHeight = Objects.requireNonNull(view).getMeasuredHeight();
 
             if (view.getBottom() > 0) {
                 final int viewBottom = view.getBottom();

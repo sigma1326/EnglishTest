@@ -22,7 +22,7 @@ public class AppManager extends MultiDexApplication {
     private static TestRepository testRepository;
 
     private static final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
-    private static ThreadPoolExecutor executor = new ThreadPoolExecutor(
+    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
             NUMBER_OF_CORES * 2,
             NUMBER_OF_CORES * 2,
             60L,

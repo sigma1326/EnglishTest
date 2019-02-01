@@ -32,7 +32,7 @@ import io.github.inflationx.calligraphy3.CalligraphyUtils;
 
 public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewHolder> {
     private Typeface typeface;
-    private List<Answer> answers = new ArrayList<>();
+    private final List<Answer> answers = new ArrayList<>();
     private Date date = null;
     private OnReadingShownListener onReadingShownListener;
     private OnAnswerListener onAnswerListener;
@@ -498,7 +498,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
         private int answer = 0;
         private int position = 0;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }

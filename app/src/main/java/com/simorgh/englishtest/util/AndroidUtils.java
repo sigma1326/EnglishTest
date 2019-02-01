@@ -22,10 +22,4 @@ public final class AndroidUtils {
     public static void cancelRunOnUIThread(@NonNull Runnable runnable) {
         AppManager.applicationHandler.removeCallbacks(runnable);
     }
-
-
-    public static void runOnBackgroundThread(@NonNull Runnable runnable) {
-        new Thread(runnable).run();
-    }
-
 }

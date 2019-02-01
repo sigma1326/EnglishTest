@@ -6,7 +6,7 @@ import com.simorgh.database.model.User;
 import androidx.annotation.Nullable;
 
 public final class insertUserAsyncTask extends android.os.AsyncTask<User, Void, Void> {
-    private UserDAO mAsyncTaskDao;
+    private final UserDAO mAsyncTaskDao;
 
     public insertUserAsyncTask(UserDAO dao) {
         mAsyncTaskDao = dao;

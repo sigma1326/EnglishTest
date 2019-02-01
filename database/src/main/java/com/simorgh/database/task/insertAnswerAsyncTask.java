@@ -7,7 +7,7 @@ import java.util.List;
 
 public final class insertAnswerAsyncTask extends android.os.AsyncTask<List<Answer>, Void, Void> {
 
-    private AnswerDAO mAsyncTaskDao;
+    private final AnswerDAO mAsyncTaskDao;
 
     public insertAnswerAsyncTask(AnswerDAO dao) {
         mAsyncTaskDao = dao;

@@ -64,12 +64,12 @@ public class TailSnapHelper extends SnapHelper {
         final boolean leftDirection = velocityX > 0;
         if (leftDirection) {
             final View leftChild = lm.getChildAt(0);
-            final int leftChildPos = lm.getPosition(leftChild);
+            final int leftChildPos = lm.getPosition(Objects.requireNonNull(leftChild));
             final int leftChildRight = lm.getDecoratedRight(leftChild);
             return Math.min(itemCount - 1, leftChildPos + (leftChildRight > 0 ? 1 : 2));
         } else {
             final View rightChild = lm.getChildAt(childCount - 1);
-            final int rightChildPos = lm.getPosition(rightChild);
+            final int rightChildPos = lm.getPosition(Objects.requireNonNull(rightChild));
             return Math.max(0, rightChildPos - 1);
         }
     }
@@ -82,7 +82,7 @@ public class TailSnapHelper extends SnapHelper {
             protected void onTargetFound(View targetView, RecyclerView.State state, Action action) {
                 int[] snapDistances = calculateDistanceToFinalSnap(Objects.requireNonNull(mRecyclerView.getLayoutManager()),
                         targetView);
-                final int dx = snapDistances[0];
+                final int dx = Objects.requireNonNull(snapDistances)[0];
                 final int dy = snapDistances[1];
                 final int time = calculateTimeForDeceleration(Math.max(Math.abs(dx), Math.abs(dy)));
                 if (time > 0) {

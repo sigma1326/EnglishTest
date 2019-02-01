@@ -13,9 +13,9 @@ public class InnerItem extends com.simorgh.garlandview.inner.InnerItem {
 
     private final View mInnerLayout;
 
-    public final TextView mHeader;
-    public final TextView tvQuestionCount;
-    public final TextView tvTime;
+    private final TextView mHeader;
+    private final TextView tvQuestionCount;
+    private final TextView tvTime;
 
     private YearMajorData mInnerData;
 

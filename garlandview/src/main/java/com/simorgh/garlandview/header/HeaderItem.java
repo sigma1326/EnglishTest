@@ -14,7 +14,7 @@ import androidx.annotation.Keep;
 @Keep
 public abstract class HeaderItem extends TailItem<InnerRecyclerView> {
 
-    public HeaderItem(View itemView) {
+    protected HeaderItem(View itemView) {
         super(itemView);
     }
 

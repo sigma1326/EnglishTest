@@ -22,7 +22,7 @@ import androidx.room.TypeConverters;
 @TypeConverters(com.simorgh.database.TypeConverters.class)
 @Database(entities = {Question.class, Reading.class, User.class, Answer.class}, version = 1, exportSchema = false)
 public abstract class TestDataBase extends RoomDatabase {
-    public static final String DB_NAME = "english-test-db";
+    private static final String DB_NAME = "english-test-db";
 
     public abstract QuestionDAO questionDAO();
 

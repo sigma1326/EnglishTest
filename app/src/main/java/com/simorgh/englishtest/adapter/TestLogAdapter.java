@@ -126,7 +126,7 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
     }
 
     public class TestLogHolder extends RecyclerView.ViewHolder {
-        public TestLogHolder(@NonNull View itemView) {
+        TestLogHolder(@NonNull View itemView) {
             super(itemView);
         }
     }

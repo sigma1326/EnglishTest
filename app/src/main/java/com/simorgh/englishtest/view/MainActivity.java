@@ -205,6 +205,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
+        try {
+            if (mainViewModel != null && mainViewModel.getUserLiveData() != null
+                    && Objects.requireNonNull(mainViewModel.getUserLiveData().getValue()).isShowTimer() && mainViewModel.getTimer() != null) {
+                mainViewModel.getTimer().resumeTimer();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            if (mainViewModel != null && mainViewModel.getUserLiveData() != null
+                    && Objects.requireNonNull(mainViewModel.getUserLiveData().getValue()).isShowTimer() && mainViewModel.getTimer() != null) {
+                mainViewModel.getTimer().pauseTimer();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

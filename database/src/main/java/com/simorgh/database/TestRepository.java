@@ -28,7 +28,7 @@ import io.reactivex.Single;
 @SuppressWarnings("unchecked")
 @Keep
 public final class TestRepository {
-    private TestDataBase dataBase;
+    private final TestDataBase dataBase;
     private final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
     private ThreadPoolExecutor executor = new ThreadPoolExecutor(
             NUMBER_OF_CORES * 2,
@@ -126,7 +126,7 @@ public final class TestRepository {
         return dataBase.answerDAO().getAnswers(major, year, date);
     }
 
-    public List<Answer> getAnswers(final Date date) {
+    private List<Answer> getAnswers(final Date date) {
         return dataBase.answerDAO().getAnswers(date);
     }
 

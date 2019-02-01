@@ -7,7 +7,7 @@ import java.util.List;
 
 public final class insertReadingAsyncTask extends android.os.AsyncTask<List<Reading>, Void, Void> {
 
-    private ReadingDAO mAsyncTaskDao;
+    private final ReadingDAO mAsyncTaskDao;
 
     public insertReadingAsyncTask(ReadingDAO dao) {
         mAsyncTaskDao = dao;

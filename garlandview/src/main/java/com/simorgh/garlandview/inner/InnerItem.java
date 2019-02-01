@@ -15,7 +15,7 @@ public abstract class InnerItem extends RecyclerView.ViewHolder {
 
     private int prevHeight;
 
-    public InnerItem(View itemView) {
+    protected InnerItem(View itemView) {
         super(itemView);
     }
 

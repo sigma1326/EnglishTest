@@ -12,9 +12,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class MainViewModel extends AndroidViewModel {
-    private TestRepository testRepository;
+    private final TestRepository testRepository;
 
-    private LiveData<User> userLiveData;
+    private final LiveData<User> userLiveData;
 
     private long totalTime = 0;
     private TimerListener timerListener;

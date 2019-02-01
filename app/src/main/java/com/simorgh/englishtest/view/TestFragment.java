@@ -356,11 +356,6 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         super.onDestroyView();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public interface OnAppTitleChangedListener {
         void onAppTitleChanged(final String titleText);
     }

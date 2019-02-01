@@ -78,7 +78,7 @@ public class CalendarTool {
         return "";
     }
 
-    private volatile static Calendar calendar = Calendar.getInstance();
+    private final static Calendar calendar = Calendar.getInstance();
 
     public static Calendar PersianToGregorian(PersianCalendar p) {
         try {
@@ -137,7 +137,7 @@ public class CalendarTool {
         return calendar;
     }
 
-    static volatile UmmalquraCalendar hijri = new UmmalquraCalendar();
+    static final UmmalquraCalendar hijri = new UmmalquraCalendar();
 
     public static UmmalquraCalendar GregorianToHijri(Calendar calendar) {
         hijri.clear();
@@ -299,7 +299,7 @@ public class CalendarTool {
         return s.toString();
     }
 
-    static volatile PersianCalendar p = new PersianCalendar();
+    static final PersianCalendar p = new PersianCalendar();
 
     public static int getDaysInMonth(int month, int year, int calendarType) {
         switch (calendarType) {
@@ -377,7 +377,7 @@ public class CalendarTool {
     }
 
     private static Calendar in = Calendar.getInstance();
-    private static Calendar start = Calendar.getInstance();
+    private static final Calendar start = Calendar.getInstance();
 
     public static long getDaysFromDiff(Calendar input, Calendar startDate) {
         double diffDays;

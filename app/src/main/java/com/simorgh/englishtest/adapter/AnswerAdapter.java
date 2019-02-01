@@ -55,7 +55,7 @@ public class AnswerAdapter extends ListAdapter<Answer, AnswerAdapter.AnswerHolde
     }
 
     public class AnswerHolder extends RecyclerView.ViewHolder {
-        public AnswerHolder(@NonNull View itemView) {
+        AnswerHolder(@NonNull View itemView) {
             super(itemView);
         }
     }

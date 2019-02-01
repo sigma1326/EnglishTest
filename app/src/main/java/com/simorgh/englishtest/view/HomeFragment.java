@@ -62,11 +62,6 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onDestroyView() {
         rv = null;
         super.onDestroyView();

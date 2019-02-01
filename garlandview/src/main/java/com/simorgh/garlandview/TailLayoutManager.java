@@ -509,6 +509,7 @@ public class TailLayoutManager extends RecyclerView.LayoutManager
             final int viewLeft = getDecoratedLeft(Objects.requireNonNull(view));
             final float position = ((float) (viewLeft - mItemStart)) / viewWidth;
 
+            //noinspection unchecked
             mPageTransformer.transformPage((TailItem) mRecyclerView.getChildViewHolder(view), position);
         }
     }
