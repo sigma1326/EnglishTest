@@ -523,9 +523,9 @@ public class CircularTimer extends View implements Animator.AnimatorListener {
         mCircleFillPaint.setStyle(Paint.Style.FILL);
 
 
-        initPercentPaint();
-
         initAndSetTypeFace();
+
+        initPercentPaint();
 
         //Defaults
         mReachedArcPaint = mClockwiseReachedArcPaint;
@@ -1013,6 +1013,7 @@ public class CircularTimer extends View implements Animator.AnimatorListener {
         timePaint.setAntiAlias(true);
         timePaint.setStyle(Paint.Style.FILL);
         timePaint.setTextSize(dp2px(12));
+        timePaint.setTypeface(typeface);
     }
 
     /**

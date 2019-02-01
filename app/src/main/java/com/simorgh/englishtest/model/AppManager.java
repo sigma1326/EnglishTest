@@ -79,4 +79,9 @@ public class AppManager extends MultiDexApplication {
 
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        executor.shutdown();
+    }
 }
