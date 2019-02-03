@@ -27,6 +27,7 @@ package com.simorgh.circularbarpercentview;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -310,7 +311,10 @@ public class CircularBar extends View implements Animator.AnimatorListener {
             }
         }
 
-        String p = String.valueOf((int) progress);
+        @SuppressLint("DefaultLocale") String p = String.format("%02.2f", progress > 0 ? (progress + 0.001) : (progress - 0.001));
+        if (p.equals("-0.00")) {
+            p = "0.00";
+        }
         canvas.drawText("% " + p, getWidth() / 2f + 0.04f * percentPaint.getFontMetrics().descent
                 , getHeight() / 2f + percentPaint.getFontMetrics().descent / 2, percentPaint);
 //        if (mStartLineEnabled) {
@@ -557,7 +561,7 @@ public class CircularBar extends View implements Animator.AnimatorListener {
      * @param end      The value to set it to, between 0-100
      * @param duration The the time to run the animation over
      */
-    public void animateProgress(int start, int end, int duration) {
+    public void animateProgress(int start, float end, int duration) {
         List<Boolean> list = new ArrayList<>();
         list.add(true);
         mCirclePieceFillList = list;

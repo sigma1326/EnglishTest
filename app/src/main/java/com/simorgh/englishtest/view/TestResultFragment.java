@@ -153,7 +153,7 @@ public class TestResultFragment extends Fragment {
                             blankCount.setText(String.format("%s %d", getString(R.string.blank_count), mViewModel.getBlankCount()));
                             ((AnswerAdapter) Objects.requireNonNull(rvResult.getAdapter())).submitList(answers);
 
-                            mCircularBar.animateProgress(0, (int) mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
+                            mCircularBar.animateProgress(0,  mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
 
                             if (!mViewModel.showFab()) {
                                 fab.setVisibility(View.GONE);

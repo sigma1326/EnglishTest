@@ -11,7 +11,7 @@ public class DateTest {
 
     @Before
     public void setUp() {
-        date = new Date(2019, 0, 6, 5, 6);
+        date = new Date(2019, 0, 6, 5, 6,0);
     }
 
     @After
