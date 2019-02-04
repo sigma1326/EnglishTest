@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView fontSize;
     private TextView fontSizeLabel;
     private CircularTimer circularTimer;
+    private ImageView testLogIcon;
+    private ImageView fontSizeIcon;
+    private ImageView showTimerIcon;
 
 
     @Override
@@ -61,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         showTimer = findViewById(R.id.switch_show_timer);
         showTimerLabel = findViewById(R.id.tv_show_timer);
         fontSize = findViewById(R.id.tv_font_size);
+        testLogIcon = findViewById(R.id.img_test_log);
+        fontSizeIcon = findViewById(R.id.img_font_size);
+        showTimerIcon = findViewById(R.id.img_timer);
         fontSizeLabel = findViewById(R.id.tv_font_size_label);
         circularTimer = findViewById(R.id.circularTimer);
 
@@ -78,6 +85,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         showTimerLabel.setOnClickListener(v -> {
             showTimer.performClick();
+        });
+
+        showTimerIcon.setOnClickListener(v -> {
+            if (showTimer != null) {
+                showTimer.performClick();
+            }
         });
 
         drawer = findViewById(R.id.drawer_layout);
@@ -107,6 +120,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        testLogIcon.setOnClickListener(v -> {
+            if (tvTestLogs != null) {
+                tvTestLogs.performClick();
+            }
+        });
+
+        fontSizeIcon.setOnClickListener(v -> {
+            if (fontSize != null) {
+                fontSize.performClick();
             }
         });
 
@@ -197,7 +222,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fontSize = null;
         fontSizeLabel = null;
         circularTimer = null;
+        testLogIcon = null;
         showTimerLabel = null;
+        showTimerIcon = null;
+        fontSizeIcon = null;
 
         super.onDestroy();
     }

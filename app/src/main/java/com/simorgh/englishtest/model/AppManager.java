@@ -6,6 +6,7 @@ import android.os.StrictMode;
 
 import com.facebook.stetho.Stetho;
 import com.simorgh.database.TestRepository;
+import com.simorgh.englishtest.BuildConfig;
 import com.simorgh.englishtest.R;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -66,7 +67,9 @@ public class AppManager extends MultiDexApplication {
 
         executor.execute(() -> {
 
-            Stetho.initializeWithDefaults(this);
+            if (BuildConfig.DEBUG) {
+                Stetho.initializeWithDefaults(this);
+            }
 
             ViewPump.init(ViewPump.builder()
                     .addInterceptor(new CalligraphyInterceptor(

@@ -31,7 +31,7 @@
     <string name="correct_answer">جواب صحیح</string>
     <string name="your_answer">پاسخ شما</string>
     <string name="question_ended">سوالات شما به پایان رسید</string>
-    <string name="return_and_continue_test">بازگشت و ادامه آزمون</string>
+    <string name="return_and_continue_test">بازگشت و ادامه</string>
     <string name="show_result">مشاهده کارنامه</string>
     <string name="compare_with_prev_tests">مقایسه با آزمون‌های قبلی</string>
     <string name="return_home">بازگشت به صفحه اصلی</string>
@@ -42,7 +42,7 @@
     <string name="prev_test1">آزمون قبلی</string>
     <string name="current_test1">آزمون فعلی</string>
     <string name="select_font_size">انتخاب اندازه متن</string>
-    <string name="exit_test_dialog_title">برای خروج از آزمون اطمینان دارید؟</string>
+    <string name="exit_test_dialog_title">برای خروج اطمینان دارید؟</string>
     <string name="exit_test_confirm">بله خارج می‌شوم</string>
     <string name="cancel_exit_test_dialog">خیر، ادامه میدم</string>
 </resources>

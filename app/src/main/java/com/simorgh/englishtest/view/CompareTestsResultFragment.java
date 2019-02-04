@@ -103,8 +103,8 @@ public class CompareTestsResultFragment extends Fragment {
                         if (mViewModel.getPrevAnswers() != null && rvCompareResults != null) {
                             ((CompareTestsResultAdapter) Objects.requireNonNull(rvCompareResults.getAdapter())).submitList(mViewModel.getAnswers());
 
-                            mCircularBarCurrent.animateProgress(0, (int) mViewModel.getCurrentTestLog().getPercent(), BAR_ANIMATION_TIME);
-                            mCircularBarPrevious.animateProgress(0, (int) mViewModel.getPrevTestLog().getPercent(), BAR_ANIMATION_TIME);
+                            mCircularBarCurrent.animateProgress(0, mViewModel.getCurrentTestLog().getPercent(), BAR_ANIMATION_TIME);
+                            mCircularBarPrevious.animateProgress(0, mViewModel.getPrevTestLog().getPercent(), BAR_ANIMATION_TIME);
                         }
                     });
                 });
