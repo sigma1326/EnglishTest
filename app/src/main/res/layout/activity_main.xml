@@ -18,10 +18,11 @@
             android:layout_height="55dp"
             android:background="?attr/colorPrimary"
             android:theme="@style/AppTheme.AppBarOverlay"
-            tools:layoutDirection="rtl">
+            tools:layoutDirection="ltr">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layoutDirection="ltr"
                 android:layout_height="match_parent">
 
                 <ImageButton
@@ -32,15 +33,15 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:padding="5dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
+                    android:padding="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_menu_" />
@@ -53,13 +54,13 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
+                    android:layout_marginEnd="12dp"
                     tools:text="صفحه اصلی"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/img_back"
+                    app:layout_constraintEnd_toStartOf="@+id/img_back"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:fontFamily="@font/iransans_medium" />
 
@@ -68,11 +69,12 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginEnd="16dp"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     android:layout_marginRight="16dp"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
