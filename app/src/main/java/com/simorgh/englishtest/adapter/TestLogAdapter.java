@@ -59,7 +59,7 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
         if (!isDialogMode) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_test_log, parent, false);
         } else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_test_log__compare, parent, false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_test_log_compare, parent, false);
         }
         ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_LTR);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

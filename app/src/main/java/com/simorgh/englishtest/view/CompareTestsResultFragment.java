@@ -50,7 +50,7 @@ public class CompareTestsResultFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.compare_tests_result_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_compare_tests_result, container, false);
     }
 
     @SuppressLint("DefaultLocale")

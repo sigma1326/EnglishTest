@@ -32,7 +32,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     @NonNull
     @Override
     public OuterItem onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.outer_item, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_outer, parent, false);
         return new OuterItem(view, mPool);
     }
 
@@ -57,7 +57,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     @Override
     public int getItemViewType(int position) {
-        return R.layout.outer_item;
+        return R.layout.item_outer;
     }
 
 }

@@ -41,7 +41,7 @@
         android:id="@+id/testFragment"
         android:name="com.simorgh.englishtest.view.TestFragment"
         android:label="test_fragment"
-        tools:layout="@layout/test_fragment">
+        tools:layout="@layout/fragment_test">
         <argument
             android:name="year"
             android:defaultValue="0"
@@ -81,7 +81,7 @@
         android:id="@+id/testResultFragment"
         android:name="com.simorgh.englishtest.view.TestResultFragment"
         android:label="test_result_fragment"
-        tools:layout="@layout/test_result_fragment">
+        tools:layout="@layout/fragment_test_result">
         <argument
             android:name="year"
             android:defaultValue="0"
@@ -160,7 +160,7 @@
         android:id="@+id/compareTestsResultFragment"
         android:name="com.simorgh.englishtest.view.CompareTestsResultFragment"
         android:label="compare_tests_result_fragment"
-        tools:layout="@layout/compare_tests_result_fragment">
+        tools:layout="@layout/fragment_compare_tests_result">
         <argument
             android:name="currentYear"
             android:defaultValue="0"

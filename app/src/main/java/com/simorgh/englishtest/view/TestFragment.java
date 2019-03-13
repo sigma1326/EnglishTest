@@ -95,7 +95,7 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getArguments() != null) {
             if (TestFragmentArgs.fromBundle(getArguments()).getIsTestType()) {
-                return inflater.inflate(R.layout.test_fragment, container, false);
+                return inflater.inflate(R.layout.fragment_test, container, false);
             } else {
                 return inflater.inflate(R.layout.fragment_practice, container, false);
             }
