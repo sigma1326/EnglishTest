@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.SplashActivity"
             android:screenOrientation="unspecified"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -24,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.MainActivity"
+            android:screenOrientation="unspecified"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
