@@ -24,18 +24,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    Animation()
-    Test()
     Default()
+    Test()
+    RxJava()
+
+    implementation project(':logger')
 }
 
 private void Default() {
     dependencies.implementation "androidx.appcompat:appcompat:$rootProject.appCompactVersion"
+    dependencies.implementation "com.google.android.material:material:$rootProject.materialVersion"
 }
 
 private void Test() {
@@ -44,8 +46,8 @@ private void Test() {
     dependencies.androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.expressoVersion"
 }
 
-private void Animation() {
-    //Animations and progress value easing
-    dependencies.implementation 'com.daimajia.easing:library:2.1@aar'
-    dependencies.implementation 'androidx.legacy:legacy-support-core-ui:1.0.0@aar'
+private void RxJava() {
+    //RX
+    dependencies.implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    dependencies.implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
 }

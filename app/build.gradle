@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
         applicationId "com.simorgh.englishtest"
-        minSdkVersion 15
-        targetSdkVersion 28
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -42,70 +42,131 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha02'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
-    implementation 'com.google.android.material:material:1.1.0-alpha04'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc02'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-rc02'
-    implementation 'androidx.core:core:1.0.1'
+    Default()
+    Gson()
+    Room()
+    FlexBox()
+    HourGlass()
+    Default()
+    importModules()
+    butterKnife()
+    HtmlTextView()
+    TransitionEveryWhere()
+    Calligraphy()
+    gravitySnapHelper()
+    FlexBox()
+    RxJava()
+    Test()
+    Dagger()
+    implementation project(':threadutils')
+}
+
+private void FlexBox() {
+    dependencies.implementation "com.google.android:flexbox:$rootProject.flexBoxVersion"
+}
+
+private void gravitySnapHelper() {
+    dependencies.implementation "com.github.rubensousa:gravitysnaphelper:$rootProject.gravitySnapHelperVersion"
+}
+
+private void HourGlass() {
+    dependencies.implementation "com.ankushgrover:Hourglass:$rootProject.hourGlassVersion"
+}
+
+private void importModules() {
+    dependencies.implementation project(':database')
+    dependencies.implementation project(':garlandview')
+    dependencies.implementation project(':fluidslider')
+    dependencies.implementation project(':circularbarpercentview')
+    dependencies.implementation project(':calendarutil')
+    dependencies.implementation project(':circulartimer')
+}
+
+private void SweetAlertDialogPersian() {
+    dependencies.implementation "com.github.sigma1326:SweetAlertDialogPersian:$rootProject.sweetAlertDialogPersianVersion"
+}
+
+private void butterKnife() {
+    dependencies.implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    dependencies.annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+}
+
+private void HtmlTextView() {
+    dependencies.implementation "org.sufficientlysecure:html-textview:$rootProject.htmlTextViewVersion"
+}
+
+private void TransitionEveryWhere() {
+    dependencies.implementation "com.andkulikov:transitionseverywhere:$rootProject.transitionEveryWhereVersion"
+}
+
+private void LeakCanary() {
+    dependencies.debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
+    dependencies.releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    // Optional, if you use support library fragments"
+    dependencies.debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakCanaryVersion"
+    dependencies.androidTestImplementation "androidx.test:rules:$rootProject.testRulesVersion"
+}
+
+private void Calligraphy() {
     //Calligraphy
-    implementation 'io.github.inflationx:calligraphy3:3.0.0'
-    implementation 'io.github.inflationx:viewpump:1.0.0'
+    dependencies.implementation "io.github.inflationx:calligraphy3:$rootProject.calligraphyVersion"
+    dependencies.implementation "io.github.inflationx:viewpump:$rootProject.viewPumpVersion"
+}
+
+private void Stetho() {
+    dependencies.implementation "com.facebook.stetho:stetho:$rootProject.stethoVersion"
+}
+
+private void Gson() {
+    dependencies.implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+}
+
+private void RxJava() {
     //RX
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    dependencies.implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    dependencies.implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+}
 
-    // Gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+private void Default() {
+    dependencies.implementation "androidx.multidex:multidex:$rootProject.multiDexVersion"
+    dependencies.implementation "androidx.cardview:cardview:$rootProject.cardViewVersion"
+    dependencies.implementation "androidx.appcompat:appcompat:$rootProject.appCompactVersion"
+    dependencies.implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
+    dependencies.implementation "androidx.legacy:legacy-support-v4:$rootProject.legacySupportVersion"
+    dependencies.implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleExtensionsVersion"
+    dependencies.implementation "com.google.android.material:material:$rootProject.materialVersion"
+    dependencies.implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
+    dependencies.implementation "android.arch.navigation:navigation-fragment:$rootProject.navigationVersion"
+    dependencies.implementation "android.arch.navigation:navigation-ui:$rootProject.navigationVersion"
+    dependencies.implementation "androidx.core:core:$rootProject.coreVersion"
+    dependencies.implementation "org.jetbrains:annotations-java5:$rootProject.annotationsJavaVersion"
+}
 
+private void Test() {
+    dependencies.testImplementation "junit:junit:$rootProject.jUnitVersion"
+    dependencies.androidTestImplementation "androidx.test:runner:$rootProject.runnerVersion"
+    dependencies.androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.expressoVersion"
+}
+
+private void Dagger() {
+    //dagger
+    dependencies.implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    dependencies.implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+    dependencies.annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    dependencies.annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+}
+
+private void Room() {
     // Room
     // RxJava support for Room
-    implementation 'androidx.room:room-rxjava2:2.1.0-alpha04'
+    dependencies.implementation "androidx.room:room-rxjava2:$rootProject.roomVersion"
     // ReactiveStreams support for LiveData
-    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
-    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
-
+    dependencies.implementation "androidx.lifecycle:lifecycle-reactivestreams:$rootProject.reactiveStreamsVersion"
+    dependencies.implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    dependencies.annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    dependencies.androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
-
-
-    implementation 'com.facebook.stetho:stetho:1.5.0'
-    implementation 'com.andkulikov:transitionseverywhere:1.8.1'
-
-    implementation 'com.google.android:flexbox:1.1.0'
-
-    implementation 'com.github.rubensousa:gravitysnaphelper:2.0'
-
-    implementation 'org.sufficientlysecure:html-textview:3.6'
-
-
-    implementation 'com.ankushgrover:Hourglass:2.0.0'
-
-    implementation project(':database')
-    implementation project(':garlandview')
-    implementation project(':fluidslider')
-    implementation project(':circularbarpercentview')
-    implementation project(':calendarutil')
-    implementation project(':circulartimer')
-
-
-
-
-    implementation 'androidx.multidex:multidex:2.0.1'
-
-    //    implementation 'com.google.dagger:dagger-android:2.21'
-    //    implementation 'com.google.dagger:dagger-android-support:2.21' // if you use the support libraries
-    //    annotationProcessor 'com.google.dagger:dagger-android-processor:2.21'
-    //    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+    dependencies.implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
+    dependencies.annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
 }
+
