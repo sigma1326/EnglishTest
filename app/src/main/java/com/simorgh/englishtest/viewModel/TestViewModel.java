@@ -1,6 +1,6 @@
 package com.simorgh.englishtest.viewModel;
 
-import com.simorgh.database.TestRepository;
+import com.simorgh.database.Repository;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.YearMajorData;
 
@@ -15,11 +15,11 @@ public class TestViewModel extends ViewModel {
     private boolean isPaused = false;
     private int year, major;
     private boolean isTestType;
-    private TestRepository testRepository;
+    private Repository repository;
 
-    public void init(final TestRepository testRepository, final int year, final int major, final boolean isTestType) {
-        this.testRepository = testRepository;
-        questionLiveData = testRepository.getQuestionsLiveData(year, major);
+    public void init(final Repository repository, final int year, final int major, final boolean isTestType) {
+        this.repository = repository;
+        questionLiveData = repository.getQuestionsLiveData(year, major);
         this.year = year;
         this.major = major;
         this.isTestType = isTestType;
@@ -45,8 +45,8 @@ public class TestViewModel extends ViewModel {
         return isTestType;
     }
 
-    public TestRepository getTestRepository() {
-        return testRepository;
+    public Repository getRepository() {
+        return repository;
     }
 
     public void setClosed(boolean closed) {

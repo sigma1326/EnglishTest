@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.OuterAdapter;
 import com.simorgh.englishtest.model.AppManager;
@@ -20,10 +21,9 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
 
     private HomeViewModel mViewModel;
     private TailRecyclerView rv;
@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         rv = view.findViewById(R.id.rv_main);
 
 

@@ -16,6 +16,7 @@ import com.simorgh.database.Date;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.YearMajorData;
+import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.QuestionAdapter;
 import com.simorgh.englishtest.model.AppManager;
@@ -34,7 +35,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,7 +43,7 @@ import io.github.inflationx.calligraphy3.CalligraphyUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class TestFragment extends Fragment implements QuestionAdapter.OnReadingShownListener, QuestionAdapter.OnAnswerListener {
+public class TestFragment extends BaseFragment implements QuestionAdapter.OnReadingShownListener, QuestionAdapter.OnAnswerListener {
 
     private TestViewModel mViewModel;
     private RecyclerView rvQuestions;
@@ -75,7 +75,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             major = TestFragmentArgs.fromBundle(getArguments()).getMajor();
             isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
             mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-            mViewModel.init(AppManager.getTestRepository(), year, major, isTestType);
+            mViewModel.init(AppManager.getRepository(), year, major, isTestType);
             if (onAppTitleChangedListener != null && mViewModel != null) {
                 onAppTitleChangedListener.onAppTitleChanged(mViewModel.getFragmentTitle());
             }
@@ -97,7 +97,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
             if (TestFragmentArgs.fromBundle(getArguments()).getIsTestType()) {
                 return inflater.inflate(R.layout.test_fragment, container, false);
             } else {
-                return inflater.inflate(R.layout.practice_fragment, container, false);
+                return inflater.inflate(R.layout.fragment_practice, container, false);
             }
         }
         return null;
@@ -146,7 +146,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         rvQuestions.setNestedScrollingEnabled(false);
 
         boolean finalIsTestType = isTestType;
-        AppManager.getTestRepository().getUserSingle()
+        AppManager.getRepository().getUserSingle()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(user -> user != null)
@@ -314,12 +314,12 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
         Date date = ((QuestionAdapter) Objects.requireNonNull(rvQuestions.getAdapter())).getDate();
         if (date != null && mViewModel != null) {
             if (!answers.isEmpty()) {
-                mViewModel.getTestRepository().updateAnswers(answers);
+                mViewModel.getRepository().updateAnswers(answers);
 
                 try {
                     Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment)
                             .navigate(TestFragmentDirections.actionTestFragmentToTestResultFragment()
-                                    .setDate(date.getMilli())
+                                    .setDate(date.getDateLong())
                                     .setYear(mViewModel.getYear())
                                     .setMajor(mViewModel.getMajor())
                                     .setIsTestType(mViewModel.isTestType()));
@@ -379,7 +379,7 @@ public class TestFragment extends Fragment implements QuestionAdapter.OnReadingS
     @Override
     public void onReadingShown(final Question question) {
         if (question.getReadingID() != -1) {
-            AppManager.getTestRepository().getReading(question.getReadingID())
+            AppManager.getRepository().getReading(question.getReadingID())
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
                     .filter(reading -> reading != null)

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.simorgh.database.TestRepository;
+import com.simorgh.database.Repository;
 import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.User;
 import com.simorgh.englishtest.R;
@@ -28,7 +28,7 @@ public class DialogMaker {
             , final View.OnClickListener onTestClickListener, final View.OnClickListener onPracticeClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.test_or_practice_dialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_test_or_practice, null);
         builder.setView(view);
 
         String count = String.format("تعداد سوالات: %s", String.valueOf(questionCount));
@@ -56,7 +56,7 @@ public class DialogMaker {
             , final View.OnClickListener onReturnAndContinueListener, final View.OnClickListener onShowResultListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.test_ended_dialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_test_ended, null);
         builder.setView(view);
 
         AlertDialog alertDialog = builder.create();
@@ -79,7 +79,7 @@ public class DialogMaker {
             , final View.OnClickListener onExitListener, final View.OnClickListener onContinueListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.test_exit_dialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_test_exit, null);
         builder.setView(view);
 
         AlertDialog alertDialog = builder.create();
@@ -102,12 +102,12 @@ public class DialogMaker {
     public static void createCompareTestsDialog(@NonNull final Context context, final long milli, final int year, final int major, NavController navController) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.compare_tests_dialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_compare_tests, null);
         builder.setView(view);
 
         AppManager.getExecutor().execute(() -> {
 
-            List<TestLog> testLogs = AppManager.getTestRepository().getTestLogs(year, major);
+            List<TestLog> testLogs = AppManager.getRepository().getTestLogs(year, major);
 
             AndroidUtils.runOnUIThread(() -> {
                 RecyclerView rvLogs;
@@ -147,10 +147,10 @@ public class DialogMaker {
 
     }
 
-    public static void createFontChangeDialog(@NonNull final Context context, @NonNull final TestRepository testRepository) {
+    public static void createFontChangeDialog(@NonNull final Context context, @NonNull final Repository repository) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.change_font_dialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_change_font, null);
         builder.setView(view);
 
         AlertDialog alertDialog = builder.create();
@@ -166,45 +166,45 @@ public class DialogMaker {
 
         tv14.setOnClickListener(v -> {
             AppManager.getExecutor().execute(() -> {
-                User user = testRepository.getUser();
+                User user = repository.getUser();
                 user.setFontSize(14);
-                testRepository.updateUser(user);
+                repository.updateUser(user);
             });
             alertDialog.dismiss();
         });
 
         tv16.setOnClickListener(v -> {
             AppManager.getExecutor().execute(() -> {
-                User user = testRepository.getUser();
+                User user = repository.getUser();
                 user.setFontSize(16);
-                testRepository.updateUser(user);
+                repository.updateUser(user);
             });
             alertDialog.dismiss();
         });
 
         tv18.setOnClickListener(v -> {
             AppManager.getExecutor().execute(() -> {
-                User user = testRepository.getUser();
+                User user = repository.getUser();
                 user.setFontSize(18);
-                testRepository.updateUser(user);
+                repository.updateUser(user);
             });
             alertDialog.dismiss();
         });
 
         tv20.setOnClickListener(v -> {
             AppManager.getExecutor().execute(() -> {
-                User user = testRepository.getUser();
+                User user = repository.getUser();
                 user.setFontSize(20);
-                testRepository.updateUser(user);
+                repository.updateUser(user);
             });
             alertDialog.dismiss();
         });
 
         tv22.setOnClickListener(v -> {
             AppManager.getExecutor().execute(() -> {
-                User user = testRepository.getUser();
+                User user = repository.getUser();
                 user.setFontSize(22);
-                testRepository.updateUser(user);
+                repository.updateUser(user);
             });
             alertDialog.dismiss();
         });

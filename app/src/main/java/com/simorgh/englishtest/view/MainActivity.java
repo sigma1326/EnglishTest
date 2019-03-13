@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.simorgh.circulartimer.CircularTimer;
+import com.simorgh.englishtest.BaseActivity;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.MainViewModel;
@@ -19,7 +20,6 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -32,7 +32,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
         , NavController.OnDestinationChangedListener, TestFragment.OnAppTitleChangedListener, TestFragment.TimerListener {
 
     private NavController navController;
@@ -72,13 +72,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         circularTimer = findViewById(R.id.circularTimer);
 
         showTimer.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mainViewModel.getTestRepository().getUserSingle()
+            mainViewModel.getRepository().getUserSingle()
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
                     .filter(Objects::nonNull)
                     .subscribe(user -> {
                         user.setShowTimer(isChecked);
-                        mainViewModel.getTestRepository().updateUser(user);
+                        mainViewModel.getRepository().updateUser(user);
                     });
         });
 
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             }
-            DialogMaker.createFontChangeDialog(this, mainViewModel.getTestRepository());
+            DialogMaker.createFontChangeDialog(this, mainViewModel.getRepository());
         });
 
         fontSizeLabel.setOnClickListener(v -> {
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void initTimer(long time, TestFragment.FinishedListener listener) {
         if (circularTimer != null) {
-            mainViewModel.getTestRepository().getUserSingle()
+            mainViewModel.getRepository().getUserSingle()
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
                     .filter(Objects::nonNull)

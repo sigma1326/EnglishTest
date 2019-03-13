@@ -38,5 +38,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        tools:listitem="@layout/test_log_item_compare" />
+        tools:listitem="@layout/item_test_log__compare" />
 </androidx.constraintlayout.widget.ConstraintLayout>

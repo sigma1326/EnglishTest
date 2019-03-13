@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.simorgh.circularbarpercentview.CircularBar;
+import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.AnswerAdapter;
 import com.simorgh.englishtest.model.AppManager;
@@ -23,13 +24,12 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TestResultFragment extends Fragment {
+public class TestResultFragment extends BaseFragment {
 
     private TestResultViewModel mViewModel;
     private TextView correctCount;
@@ -95,7 +95,7 @@ public class TestResultFragment extends Fragment {
         });
 
         compareTests.setOnClickListener(v -> {
-            DialogMaker.createCompareTestsDialog(Objects.requireNonNull(getContext()), mViewModel.getDate().getMilli(), mViewModel.getYear(), mViewModel.getMajor(), Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
+            DialogMaker.createCompareTestsDialog(Objects.requireNonNull(getContext()), mViewModel.getDate().getDateLong(), mViewModel.getYear(), mViewModel.getMajor(), Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
         });
 
         ((MotionLayout) view).setTransitionListener(new MotionLayout.TransitionListener() {

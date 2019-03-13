@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.simorgh.englishtest.view.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment">
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_testFragment"
             app:destination="@id/testFragment"
@@ -142,7 +142,7 @@
         android:id="@+id/testLogFragment"
         android:name="com.simorgh.englishtest.view.TestLogFragment"
         android:label="test_log_fragment"
-        tools:layout="@layout/test_log_fragment">
+        tools:layout="@layout/fragment_test_log">
         <action
             android:id="@+id/action_testLogFragment_to_testResultFragment"
             app:destination="@id/testResultFragment"

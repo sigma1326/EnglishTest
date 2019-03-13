@@ -27,7 +27,7 @@ import io.reactivex.Single;
 
 @SuppressWarnings("unchecked")
 @Keep
-public final class TestRepository {
+public final class Repository {
     private final TestDataBase dataBase;
     private final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
     private ThreadPoolExecutor executor = new ThreadPoolExecutor(
@@ -44,8 +44,8 @@ public final class TestRepository {
 
 
     @SuppressLint("CheckResult")
-    public TestRepository(@NonNull final Application application) {
-        dataBase = TestDataBase.getDatabase(application);
+    public Repository(@NonNull final Application application, @NonNull final TestDataBase dataBase) {
+        this.dataBase = dataBase;
     }
 
 
@@ -56,9 +56,9 @@ public final class TestRepository {
     @SuppressLint("CheckResult")
     public void initDataBase(@NonNull Application application) {
         executor.execute(() -> {
-            ImportDataBase importDataBase = RoomAsset.databaseBuilder(application, ImportDataBase.class, "test.db").build();
-            dataBase.questionDAO().insert((importDataBase.questionDAO().getQuestions()));
-            dataBase.readingDAO().insert((importDataBase.readingDAO().getReadings()));
+            TestDataBase importDataBase = RoomAsset.databaseBuilder(application, TestDataBase.class, "english-test-db").build();
+//            dataBase.questionDAO().insert((importDataBase.questionDAO().getQuestions()));
+//            dataBase.readingDAO().insert((importDataBase.readingDAO().getReadings()));
             importDataBase.close();
 
 

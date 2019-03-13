@@ -110,6 +110,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
 
-        <include layout="@layout/nav_header_main" />
+        <include layout="@layout/layout_nav_header_main" />
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

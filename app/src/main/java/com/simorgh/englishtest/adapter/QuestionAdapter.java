@@ -73,7 +73,7 @@ public class QuestionAdapter extends ListAdapter<Question, QuestionAdapter.ViewH
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.question_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question, parent, false);
         if (typeface == null) {
             typeface = Typeface.createFromAsset(parent.getContext().getAssets(), "fonts/tnr.ttf");
         }

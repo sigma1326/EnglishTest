@@ -21,6 +21,6 @@ public class TypeConverters {
 
     @TypeConverter
     public static long toMillis(@NonNull Date date) {
-        return date.getMilli();
+        return date.getDateLong();
     }
 }

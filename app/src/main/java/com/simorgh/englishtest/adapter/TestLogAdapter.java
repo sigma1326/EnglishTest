@@ -57,9 +57,9 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
         View v;
 
         if (!isDialogMode) {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_log_item, parent, false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_test_log, parent, false);
         } else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_log_item_compare, parent, false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_test_log__compare, parent, false);
         }
         ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_LTR);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -101,7 +101,7 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
                 if (!isDialogMode) {
                     try {
                         navController.navigate(TestLogFragmentDirections.actionTestLogFragmentToTestResultFragment()
-                                .setDate(testLog.getDate().getMilli())
+                                .setDate(testLog.getDate().getDateLong())
                                 .setMajor(testLog.getMajor())
                                 .setYear(testLog.getYear()));
                     } catch (Exception e) {
@@ -109,7 +109,7 @@ public class TestLogAdapter extends ListAdapter<TestLog, TestLogAdapter.TestLogH
                     }
                 } else {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClicked(year, major, milli, testLog.getDate().getMilli());
+                        onItemClickListener.onItemClicked(year, major, milli, testLog.getDate().getDateLong());
                     }
                 }
             });

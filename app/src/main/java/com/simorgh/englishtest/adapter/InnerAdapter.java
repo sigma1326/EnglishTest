@@ -26,7 +26,7 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
     @NonNull
     @Override
     public InnerItem onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.inner_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inner, parent, false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             v.setElevation(5);
         }
@@ -81,7 +81,7 @@ public class InnerAdapter extends com.simorgh.garlandview.inner.InnerAdapter<Inn
 
     @Override
     public int getItemViewType(int position) {
-        return R.layout.inner_item;
+        return R.layout.item_inner;
     }
 
     public void addData(@NonNull List<YearMajorData> innerDataList) {

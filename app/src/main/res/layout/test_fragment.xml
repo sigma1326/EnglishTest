@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_reading_title"
         tools:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/question_item" />
+        tools:listitem="@layout/item_question" />
 
     <ImageButton
         android:id="@+id/fab_test"

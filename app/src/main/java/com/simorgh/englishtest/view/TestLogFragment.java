@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.TestLogAdapter;
 import com.simorgh.englishtest.model.AppManager;
@@ -16,7 +17,6 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,14 +24,14 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class TestLogFragment extends Fragment {
+public class TestLogFragment extends BaseFragment {
 
     private TestLogViewModel mViewModel;
     private RecyclerView rvLogs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.test_log_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_test_log, container, false);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TestLogFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(TestLogViewModel.class);
         mViewModel.init();
-        Single.fromCallable(() -> AppManager.getTestRepository().getTestLogs())
+        Single.fromCallable(() -> AppManager.getRepository().getTestLogs())
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(testLogs -> testLogs != null && !testLogs.isEmpty() && rvLogs != null)

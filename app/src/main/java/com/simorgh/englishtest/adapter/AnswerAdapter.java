@@ -28,7 +28,7 @@ public class AnswerAdapter extends ListAdapter<Answer, AnswerAdapter.AnswerHolde
     @NonNull
     @Override
     public AnswerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_result, parent, false);
         ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_LTR);
         return new AnswerHolder(v);
     }

@@ -34,7 +34,7 @@ public abstract class TestDataBase extends RoomDatabase {
 
     private static volatile TestDataBase INSTANCE;
 
-    static TestDataBase getDatabase(@NonNull final Context context) {
+    public static TestDataBase getDatabase(@NonNull final Context context) {
         if (INSTANCE == null) {
             synchronized (TestDataBase.class) {
                 if (INSTANCE == null) {

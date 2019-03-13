@@ -12,7 +12,7 @@ public class TestLogViewModel extends ViewModel {
 
     public void init() {
         AppManager.getExecutor().execute(() -> {
-            testLogs = AppManager.getTestRepository().getTestLogs();
+            testLogs = AppManager.getRepository().getTestLogs();
         });
     }
 

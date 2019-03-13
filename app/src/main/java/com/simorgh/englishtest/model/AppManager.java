@@ -4,8 +4,12 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.StrictMode;
 
-import com.simorgh.database.TestRepository;
+import com.simorgh.database.Repository;
+import com.simorgh.database.TestDataBase;
 import com.simorgh.englishtest.R;
+import com.simorgh.englishtest.di.component.DaggerApplicationComponent;
+import com.simorgh.englishtest.di.module.ApplicationModule;
+import com.simorgh.englishtest.di.module.DataBaseModule;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -18,7 +22,9 @@ import io.github.inflationx.viewpump.ViewPump;
 
 public class AppManager extends MultiDexApplication {
     public static volatile Handler applicationHandler;
-    private static TestRepository testRepository;
+    private static Repository repository;
+    private static DaggerApplicationComponent daggerApplicationComponent;
+
 
     private static final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
@@ -33,8 +39,8 @@ public class AppManager extends MultiDexApplication {
         return executor;
     }
 
-    public static TestRepository getTestRepository() {
-        return testRepository;
+    public static Repository getRepository() {
+        return repository;
     }
 
     @SuppressLint("CheckResult")
@@ -59,8 +65,14 @@ public class AppManager extends MultiDexApplication {
         applicationHandler = new Handler(getApplicationContext().getMainLooper());
 
 
-        testRepository = new TestRepository(this);
-        testRepository.initDataBase(this);
+        repository = new Repository(this, TestDataBase.getDatabase(this));
+        repository.initDataBase(this);
+
+        daggerApplicationComponent = (DaggerApplicationComponent) DaggerApplicationComponent
+                .builder()
+                .applicationModule(new ApplicationModule(this))
+                .dataBaseModule(new DataBaseModule())
+                .build();
 
 
         executor.execute(() -> {
@@ -78,6 +90,9 @@ public class AppManager extends MultiDexApplication {
                     .build());
         });
 
+    }
+    public static DaggerApplicationComponent getDaggerApplicationComponent() {
+        return daggerApplicationComponent;
     }
 
     @Override

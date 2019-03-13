@@ -3,7 +3,7 @@ package com.simorgh.englishtest.viewModel;
 import android.app.Application;
 
 import com.ankushgrover.hourglass.Hourglass;
-import com.simorgh.database.TestRepository;
+import com.simorgh.database.Repository;
 import com.simorgh.database.model.User;
 import com.simorgh.englishtest.model.AppManager;
 
@@ -12,7 +12,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class MainViewModel extends AndroidViewModel {
-    private final TestRepository testRepository;
+    private final Repository repository;
 
     private final LiveData<User> userLiveData;
 
@@ -46,8 +46,8 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull final Application application) {
         super(application);
-        testRepository = AppManager.getTestRepository();
-        userLiveData = testRepository.getUserLiveData();
+        repository = AppManager.getRepository();
+        userLiveData = repository.getUserLiveData();
 
     }
 
@@ -55,8 +55,8 @@ public class MainViewModel extends AndroidViewModel {
         return userLiveData;
     }
 
-    public TestRepository getTestRepository() {
-        return testRepository;
+    public Repository getRepository() {
+        return repository;
     }
 
     public void resume() {

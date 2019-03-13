@@ -132,7 +132,7 @@
         app:layout_constraintStart_toStartOf="@+id/view_divider"
         app:layout_constraintTop_toBottomOf="@+id/view_divider"
         tools:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/result_item" />
+        tools:listitem="@layout/item_result" />
 
     <View
         android:id="@+id/view_divider"

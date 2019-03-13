@@ -1,7 +1,7 @@
 package com.simorgh.englishtest.viewModel;
 
 import com.simorgh.database.Date;
-import com.simorgh.database.TestRepository;
+import com.simorgh.database.Repository;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
 import com.simorgh.database.model.TestLog;
@@ -25,21 +25,21 @@ public class CompareTestsResultViewModel extends ViewModel {
     private List<Question> questions;
     private TestLog currentTestLog;
     private TestLog prevTestLog;
-    private TestRepository testRepository;
+    private Repository repository;
 
     public void init(final int currentYear, final int currentMajor, final int prevYear, final int prevMajor, @NonNull final Date currentDate, @NonNull final Date prevDate) {
-        testRepository = AppManager.getTestRepository();
+        repository = AppManager.getRepository();
         this.currentYear = currentYear;
         this.currentMajor = currentMajor;
         this.prevYear = prevYear;
         this.prevMajor = prevMajor;
         this.currentDate = currentDate;
         this.prevDate = prevDate;
-        currentAnswers = testRepository.getAnswers(currentYear, currentMajor, currentDate);
-        prevAnswers = testRepository.getAnswers(prevYear, prevMajor, prevDate);
-        questions = testRepository.getQuestions(currentYear, currentMajor);
-        prevTestLog = testRepository.getTestLog(prevDate);
-        currentTestLog = testRepository.getTestLog(currentDate);
+        currentAnswers = repository.getAnswers(currentYear, currentMajor, currentDate);
+        prevAnswers = repository.getAnswers(prevYear, prevMajor, prevDate);
+        questions = repository.getQuestions(currentYear, currentMajor);
+        prevTestLog = repository.getTestLog(prevDate);
+        currentTestLog = repository.getTestLog(currentDate);
     }
 
     public List<Answer> getPrevAnswers() {

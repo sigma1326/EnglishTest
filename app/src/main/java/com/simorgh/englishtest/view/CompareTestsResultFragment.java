@@ -11,6 +11,7 @@ import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.circularbarpercentview.CircularBar;
 import com.simorgh.database.Date;
+import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.CompareTestsResultAdapter;
 import com.simorgh.englishtest.model.AppManager;
@@ -22,12 +23,11 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CompareTestsResultFragment extends Fragment {
+public class CompareTestsResultFragment extends BaseFragment {
 
     private CompareTestsResultViewModel mViewModel;
     private static final int BAR_ANIMATION_TIME = 1000;
