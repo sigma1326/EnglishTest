@@ -5,16 +5,15 @@ import android.app.Application;
 import com.ankushgrover.hourglass.Hourglass;
 import com.simorgh.database.Repository;
 import com.simorgh.database.model.User;
-import com.simorgh.englishtest.model.AppManager;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class MainViewModel extends AndroidViewModel {
-    private final Repository repository;
+    private Repository repository;
 
-    private final LiveData<User> userLiveData;
+    private LiveData<User> userLiveData;
 
     private long totalTime = 0;
     private TimerListener timerListener;
@@ -46,9 +45,13 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull final Application application) {
         super(application);
-        repository = AppManager.getRepository();
-        userLiveData = repository.getUserLiveData();
 
+
+    }
+
+    public void init(Repository repository) {
+        this.repository = repository;
+        userLiveData = repository.getUserLiveData();
     }
 
     public LiveData<User> getUserLiveData() {

@@ -7,14 +7,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.simorgh.database.Repository;
-import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.User;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.TestLogAdapter;
-import com.simorgh.englishtest.model.AppManager;
 import com.simorgh.englishtest.view.TestResultFragmentDirections;
+import com.simorgh.threadutils.ThreadUtils;
 
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -22,8 +20,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.disposables.Disposable;
 
 public class DialogMaker {
+    private static Disposable disposable = null;
+
     public static void createDialog(@NonNull final Context context, @NonNull final String title, final int questionCount, final int time
             , final View.OnClickListener onTestClickListener, final View.OnClickListener onPracticeClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -99,51 +100,51 @@ public class DialogMaker {
     }
 
 
-    public static void createCompareTestsDialog(@NonNull final Context context, final long milli, final int year, final int major, NavController navController) {
+    public static void createCompareTestsDialog(Repository repository, @NonNull final Context context, final long milli, final int year, final int major, NavController navController) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_compare_tests, null);
         builder.setView(view);
 
-        AppManager.getExecutor().execute(() -> {
+        disposable = repository.getTestLogs(year, major)
+                .compose(ThreadUtils.apply())
+                .subscribe(testLogs -> {
+                    RecyclerView rvLogs;
+                    rvLogs = view.findViewById(R.id.rv_test_log);
+                    rvLogs.setNestedScrollingEnabled(false);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+                    rvLogs.setLayoutManager(linearLayoutManager);
+                    rvLogs.setNestedScrollingEnabled(false);
+                    TestLogAdapter adapter = new TestLogAdapter(new TestLogAdapter.ItemDiffCallBack(), true, milli, year, major, navController);
+                    rvLogs.setAdapter(adapter);
+                    rvLogs.setHasFixedSize(true);
 
-            List<TestLog> testLogs = AppManager.getRepository().getTestLogs(year, major);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setCancelable(true);
+                    alertDialog.show();
 
-            AndroidUtils.runOnUIThread(() -> {
-                RecyclerView rvLogs;
-                rvLogs = view.findViewById(R.id.rv_test_log);
-                rvLogs.setNestedScrollingEnabled(false);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-                rvLogs.setLayoutManager(linearLayoutManager);
-                rvLogs.setNestedScrollingEnabled(false);
-                TestLogAdapter adapter = new TestLogAdapter(new TestLogAdapter.ItemDiffCallBack(), true, milli, year, major, navController);
-                rvLogs.setAdapter(adapter);
-                rvLogs.setHasFixedSize(true);
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.setCancelable(true);
-                alertDialog.show();
-
-                ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(testLogs);
+                    ((TestLogAdapter) Objects.requireNonNull(rvLogs.getAdapter())).submitList(testLogs);
 
 
-                adapter.setOnItemClickListener((year1, major1, currentDate, prevDate) -> {
-                    try {
-                        navController.navigate(TestResultFragmentDirections.actionTestResultFragmentToCompareTestsResultFragment()
-                                .setCurrentDate(milli)
-                                .setCurrentMajor(major)
-                                .setCurrentYear(year)
-                                .setPrevDate(prevDate)
-                                .setPrevMajor(major1)
-                                .setPrevYear(year1));
-                        alertDialog.dismiss();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    adapter.setOnItemClickListener((year1, major1, currentDate, prevDate) -> {
+                        try {
+                            navController.navigate(TestResultFragmentDirections.actionTestResultFragmentToCompareTestsResultFragment()
+                                    .setCurrentDate(milli)
+                                    .setCurrentMajor(major)
+                                    .setCurrentYear(year)
+                                    .setPrevDate(prevDate)
+                                    .setPrevMajor(major1)
+                                    .setPrevYear(year1));
+
+                            if (!disposable.isDisposed()) {
+                                disposable.dispose();
+                            }
+                            alertDialog.dismiss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
                 });
-            });
-        });
-
 
     }
 
@@ -165,47 +166,62 @@ public class DialogMaker {
         Button tv22 = view.findViewById(R.id.tv_font22);
 
         tv14.setOnClickListener(v -> {
-            AppManager.getExecutor().execute(() -> {
-                User user = repository.getUser();
-                user.setFontSize(14);
-                repository.updateUser(user);
-            });
+            ThreadUtils
+                    .getCompletable(() -> {
+                        User user = repository.getUser();
+                        user.setFontSize(14);
+                        repository.updateUser(user);
+                    })
+                    .compose(ThreadUtils.applyCompletable())
+                    .subscribeWith(ThreadUtils.completableObserver);
             alertDialog.dismiss();
         });
 
         tv16.setOnClickListener(v -> {
-            AppManager.getExecutor().execute(() -> {
-                User user = repository.getUser();
-                user.setFontSize(16);
-                repository.updateUser(user);
-            });
+            ThreadUtils
+                    .getCompletable(() -> {
+                        User user = repository.getUser();
+                        user.setFontSize(16);
+                        repository.updateUser(user);
+                    })
+                    .compose(ThreadUtils.applyCompletable())
+                    .subscribeWith(ThreadUtils.completableObserver);
             alertDialog.dismiss();
         });
 
         tv18.setOnClickListener(v -> {
-            AppManager.getExecutor().execute(() -> {
-                User user = repository.getUser();
-                user.setFontSize(18);
-                repository.updateUser(user);
-            });
+            ThreadUtils
+                    .getCompletable(() -> {
+                        User user = repository.getUser();
+                        user.setFontSize(18);
+                        repository.updateUser(user);
+                    })
+                    .compose(ThreadUtils.applyCompletable())
+                    .subscribeWith(ThreadUtils.completableObserver);
             alertDialog.dismiss();
         });
 
         tv20.setOnClickListener(v -> {
-            AppManager.getExecutor().execute(() -> {
-                User user = repository.getUser();
-                user.setFontSize(20);
-                repository.updateUser(user);
-            });
+            ThreadUtils
+                    .getCompletable(() -> {
+                        User user = repository.getUser();
+                        user.setFontSize(20);
+                        repository.updateUser(user);
+                    })
+                    .compose(ThreadUtils.applyCompletable())
+                    .subscribeWith(ThreadUtils.completableObserver);
             alertDialog.dismiss();
         });
 
         tv22.setOnClickListener(v -> {
-            AppManager.getExecutor().execute(() -> {
-                User user = repository.getUser();
-                user.setFontSize(22);
-                repository.updateUser(user);
-            });
+            ThreadUtils
+                    .getCompletable(() -> {
+                        User user = repository.getUser();
+                        user.setFontSize(22);
+                        repository.updateUser(user);
+                    })
+                    .compose(ThreadUtils.applyCompletable())
+                    .subscribeWith(ThreadUtils.completableObserver);
             alertDialog.dismiss();
         });
     }

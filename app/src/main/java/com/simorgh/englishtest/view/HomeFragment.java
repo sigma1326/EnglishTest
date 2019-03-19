@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.OuterAdapter;
-import com.simorgh.englishtest.model.AppManager;
-import com.simorgh.englishtest.util.AndroidUtils;
 import com.simorgh.englishtest.viewModel.HomeViewModel;
 import com.simorgh.garlandview.TailLayoutManager;
 import com.simorgh.garlandview.TailRecyclerView;
@@ -53,14 +51,15 @@ public class HomeFragment extends BaseFragment {
 
         try {
             if (mViewModel != null) {
-                AppManager.getExecutor().execute(() -> {
-                    mViewModel.init();
-                    AndroidUtils.runOnUIThread(() -> rv.setAdapter(new OuterAdapter(mViewModel.getYearMajorData())));
-                });
+                mViewModel.init(repository);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        mViewModel.getYearMajorData().observe(this, lists -> {
+            rv.setAdapter(new OuterAdapter(lists));
+        });
     }
 
     @Override

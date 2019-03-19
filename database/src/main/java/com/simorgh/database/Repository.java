@@ -10,37 +10,25 @@ import com.simorgh.database.model.Reading;
 import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.User;
 import com.simorgh.database.model.YearMajorData;
+import com.simorgh.threadutils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.sqlite.db.SimpleSQLiteQuery;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ResultOfMethodCallIgnored"})
+@SuppressLint("CheckResult")
 @Keep
 public final class Repository {
     private final TestDataBase dataBase;
-    private final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
-    private ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            NUMBER_OF_CORES * 2,
-            NUMBER_OF_CORES * 2,
-            60L,
-            TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>()
-    );
-
-    public ThreadPoolExecutor getExecutor() {
-        return executor;
-    }
 
 
     @SuppressLint("CheckResult")
@@ -55,16 +43,18 @@ public final class Repository {
      */
     @SuppressLint("CheckResult")
     public void initDataBase(@NonNull Application application) {
-        executor.execute(() -> {
-            TestDataBase importDataBase = RoomAsset.databaseBuilder(application, TestDataBase.class, "english-test-db").build();
-//            dataBase.questionDAO().insert((importDataBase.questionDAO().getQuestions()));
-//            dataBase.readingDAO().insert((importDataBase.readingDAO().getReadings()));
-            importDataBase.close();
+        ThreadUtils
+                .getCompletable(() -> {
+                    TestDataBase importDataBase = RoomAsset
+                            .databaseBuilder(application, TestDataBase.class, "english-test-db")
+                            .build();
+                    importDataBase.close();
 
-
-            //init user if not exists
-            dataBase.userDAO().insert(new User());
-        });
+                    //init user if not exists
+                    dataBase.userDAO().insert(new User());
+                })
+                .compose(ThreadUtils.applyIOCompletable())
+                .subscribeWith(ThreadUtils.completableObserver);
     }
 
 
@@ -97,15 +87,18 @@ public final class Repository {
     }
 
     @SuppressLint({"DefaultLocale", "StaticFieldLeak"})
-    public List<List<YearMajorData>> getYearMajorData() {
-        List<List<YearMajorData>> lists = new ArrayList<>();
-        final List<Integer> years = getQuestionYears();
-        for (int i = 0; i < years.size(); i++) {
-            List<YearMajorData> yearMajorDataList;
-            yearMajorDataList = getYearMajorData(years.get(i));
-            lists.add(yearMajorDataList);
-        }
-        return lists;
+    public Observable<List<List<YearMajorData>>> getYearMajorData() {
+        return getQuestionYears().compose(ThreadUtils.applyIO())
+                .map(years -> {
+                    List<List<YearMajorData>> lists = new ArrayList<>();
+                    for (int i = 0; i < years.size(); i++) {
+                        List<YearMajorData> yearMajorDataList;
+                        yearMajorDataList = getYearMajorData(years.get(i));
+                        lists.add(yearMajorDataList);
+                    }
+                    return lists;
+                });
+
     }
 
     @SuppressLint("DefaultLocale")
@@ -130,15 +123,19 @@ public final class Repository {
         return dataBase.answerDAO().getAnswers(date);
     }
 
-    public List<Integer> getQuestionYears() {
+    private Observable<List<Answer>> getAnswers1(final Date date) {
+        return dataBase.answerDAO().getAnswers1(date);
+    }
+
+    public Observable<List<Integer>> getQuestionYears() {
         return dataBase.questionDAO().getYears(new SimpleSQLiteQuery("select distinct year_question from questions order by year_question desc"));
     }
 
-    public List<Long> getAnswerDates() {
+    public Observable<List<Long>> getAnswerDates() {
         return dataBase.answerDAO().getAnswerDates(new SimpleSQLiteQuery("select distinct date from answers order by date desc"));
     }
 
-    public List<Long> getAnswerDates(int year, int major) {
+    public Observable<List<Long>> getAnswerDates(int year, int major) {
         return dataBase.answerDAO().getAnswerDates(year, major);
     }
 
@@ -147,102 +144,115 @@ public final class Repository {
     }
 
 
-    public TestLog getTestLog(@NonNull final Date date) {
-        List<Answer> answerList;
-        answerList = getAnswers(date);
-        TestLog testLog = null;
-        int wrongCount = 0;
-        int count = 0;
-        for (Answer answer : answerList) {
-            if (testLog == null) {
-                Question q = getQuestion(answer.getQuestionId());
-                count = getQuestionCount(q.getYearQuestion(), q.getMajor());
-                testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
-            }
-            if (!answer.isCorrect()) {
-                wrongCount++;
-            }
-        }
-        if (testLog != null) {
-            testLog.setWrongCount(wrongCount);
-            testLog.setBlankCount(count - answerList.size());
-        }
-        return testLog;
+    public Observable<TestLog> getTestLog(@NonNull final Date date) {
+        return getAnswers1(date)
+                .compose(ThreadUtils.applyIO())
+                .map(answers -> {
+                    TestLog testLog = null;
+                    int wrongCount = 0;
+                    int count = 0;
+                    for (Answer answer : answers) {
+                        if (testLog == null) {
+                            Question q = getQuestion(answer.getQuestionId());
+                            count = getQuestionCount(q.getYearQuestion(), q.getMajor());
+                            testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
+                        }
+                        if (!answer.isCorrect()) {
+                            wrongCount++;
+                        }
+                    }
+                    if (testLog != null) {
+                        testLog.setWrongCount(wrongCount);
+                        testLog.setBlankCount(count - answers.size());
+                    }
+                    return testLog;
+                });
     }
 
-    public List<TestLog> getTestLogs() {
-        List<TestLog> testLogs = new LinkedList<>();
-        List<Long> dates = getAnswerDates();
-        List<Answer> answerList;
-        for (Long date : dates) {
-            answerList = getAnswers(new Date(date));
-            TestLog testLog = null;
-            int wrongCount = 0;
-            int count = 0;
-            for (Answer answer : answerList) {
-                if (testLog == null) {
-                    Question q = getQuestion(answer.getQuestionId());
-                    count = getQuestionCount(q.getYearQuestion(), q.getMajor());
-                    testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
-                }
-                if (!answer.isCorrect()) {
-                    wrongCount++;
-                }
-            }
-            if (testLog != null) {
-                testLog.setWrongCount(wrongCount);
-                testLog.setBlankCount(count - answerList.size());
-            }
-            testLogs.add(testLog);
-        }
-
-        return testLogs;
+    public Observable<List<TestLog>> getTestLogs() {
+        return getAnswerDates().compose(ThreadUtils.applyIO())
+                .map(dates -> {
+                    List<TestLog> testLogs = new LinkedList<>();
+                    List<Answer> answerList;
+                    for (Long date : dates) {
+                        answerList = getAnswers(new Date(date));
+                        TestLog testLog = null;
+                        int wrongCount = 0;
+                        int count = 0;
+                        for (Answer answer : answerList) {
+                            if (testLog == null) {
+                                Question q = getQuestion(answer.getQuestionId());
+                                count = getQuestionCount(q.getYearQuestion(), q.getMajor());
+                                testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
+                            }
+                            if (!answer.isCorrect()) {
+                                wrongCount++;
+                            }
+                        }
+                        if (testLog != null) {
+                            testLog.setWrongCount(wrongCount);
+                            testLog.setBlankCount(count - answerList.size());
+                        }
+                        testLogs.add(testLog);
+                    }
+                    return testLogs;
+                });
     }
 
-    public List<TestLog> getTestLogs(int year, int major) {
-        List<TestLog> testLogs = new LinkedList<>();
-        List<Long> dates = getAnswerDates(year, major);
-        List<Answer> answerList;
-        for (Long date : dates) {
-            answerList = getAnswers(new Date(date));
-            TestLog testLog = null;
-            int wrongCount = 0;
-            int count = 0;
-            for (Answer answer : answerList) {
-                if (testLog == null) {
-                    Question q = getQuestion(answer.getQuestionId());
-                    count = getQuestionCount(q.getYearQuestion(), q.getMajor());
-                    testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
-                }
-                if (!answer.isCorrect()) {
-                    wrongCount++;
-                }
-            }
-            if (testLog != null) {
-                testLog.setWrongCount(wrongCount);
-                testLog.setBlankCount(count - answerList.size());
-            }
-            testLogs.add(testLog);
-        }
-
-        return testLogs;
+    public Observable<List<TestLog>> getTestLogs(int year, int major) {
+        return Observable.defer(() -> getAnswerDates(year, major).compose(ThreadUtils.applyIO()))
+                .compose(ThreadUtils.applyIO())
+                .map(dates -> {
+                    List<TestLog> testLogs = new LinkedList<>();
+                    List<Answer> answerList;
+                    for (Long date : dates) {
+                        answerList = getAnswers(new Date(date));
+                        TestLog testLog = null;
+                        int wrongCount = 0;
+                        int count = 0;
+                        for (Answer answer : answerList) {
+                            if (testLog == null) {
+                                Question q = getQuestion(answer.getQuestionId());
+                                count = getQuestionCount(q.getYearQuestion(), q.getMajor());
+                                testLog = new TestLog(q.getYearQuestion(), q.getMajor(), date, count, 0, 0);
+                            }
+                            if (!answer.isCorrect()) {
+                                wrongCount++;
+                            }
+                        }
+                        if (testLog != null) {
+                            testLog.setWrongCount(wrongCount);
+                            testLog.setBlankCount(count - answerList.size());
+                        }
+                        testLogs.add(testLog);
+                    }
+                    return testLogs;
+                });
     }
 
 
     public void updateUser(@Nullable User user) {
-        executor.execute(() -> dataBase.userDAO().insert(user));
+        ThreadUtils.getCompletable(() -> dataBase.userDAO().insert(user))
+                .compose(ThreadUtils.applyIOCompletable())
+                .subscribeWith(ThreadUtils.completableObserver);
     }
 
     public void updateQuestions(@NonNull final List<Question> questions) {
-        executor.execute(() -> dataBase.questionDAO().insert(questions));
+        ThreadUtils.getCompletable(() -> dataBase.questionDAO().insert(questions))
+                .compose(ThreadUtils.applyIOCompletable())
+                .subscribeWith(ThreadUtils.completableObserver);
     }
 
     public void updateReadings(@NonNull final List<Reading> readings) {
-        executor.execute(() -> dataBase.readingDAO().insert(readings));
+        ThreadUtils.getCompletable(() -> dataBase.readingDAO().insert(readings))
+                .compose(ThreadUtils.applyIOCompletable())
+                .subscribeWith(ThreadUtils.completableObserver);
     }
 
     public void updateAnswers(@NonNull final List<Answer> answers) {
-        executor.execute(() -> dataBase.answerDAO().insert(answers));
+        ThreadUtils.getCompletable(() -> dataBase.answerDAO().insert(answers))
+                .compose(ThreadUtils.applyIOCompletable())
+                .subscribeWith(ThreadUtils.completableObserver);
     }
 
 

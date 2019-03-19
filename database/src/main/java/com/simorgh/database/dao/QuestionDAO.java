@@ -13,6 +13,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.RawQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
+import io.reactivex.Observable;
 
 @Dao
 @Keep
@@ -42,7 +43,7 @@ public interface QuestionDAO {
     List<YearMajorData> getYearMajorData(SupportSQLiteQuery rawQuery);
 
     @RawQuery(observedEntities = Question.class)
-    List<Integer> getYears(SupportSQLiteQuery rawQuery);
+    Observable<List<Integer>> getYears(SupportSQLiteQuery rawQuery);
 
     @Query("select * from questions where major=:major and year_question =:year order by question_number")
     LiveData<List<Question>> getQuestionsLiveData(final int year, final int major);

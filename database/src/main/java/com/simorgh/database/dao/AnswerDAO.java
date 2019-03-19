@@ -13,6 +13,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.RawQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
+import io.reactivex.Observable;
 
 @Dao
 @Keep
@@ -43,11 +44,14 @@ public interface AnswerDAO {
     @Query("select * from answers where date =:testDate order by fakeID")
     List<Answer> getAnswers(final Date testDate);
 
+    @Query("select * from answers where date =:testDate order by fakeID")
+    Observable<List<Answer>> getAnswers1(final Date testDate);
+
 
     @RawQuery(observedEntities = Answer.class)
-    List<Long> getAnswerDates(SupportSQLiteQuery rawQuery);
+    Observable<List<Long>> getAnswerDates(SupportSQLiteQuery rawQuery);
 
     @Query("select distinct date from answers where question_id in (select id from questions where year_question=:year and  major=:major) order by date desc")
-    List<Long> getAnswerDates(int year, int major);
+    Observable<List<Long>> getAnswerDates(int year, int major);
 
 }

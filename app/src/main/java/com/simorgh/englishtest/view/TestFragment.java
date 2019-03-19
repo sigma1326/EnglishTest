@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -19,10 +20,10 @@ import com.simorgh.database.model.YearMajorData;
 import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.QuestionAdapter;
-import com.simorgh.englishtest.model.AppManager;
 import com.simorgh.englishtest.util.DialogMaker;
 import com.simorgh.englishtest.viewModel.TestViewModel;
 import com.simorgh.fluidslider.FluidSlider;
+import com.simorgh.threadutils.ThreadUtils;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -39,6 +40,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import butterknife.BindView;
 import io.github.inflationx.calligraphy3.CalligraphyUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -46,21 +49,48 @@ import io.reactivex.schedulers.Schedulers;
 public class TestFragment extends BaseFragment implements QuestionAdapter.OnReadingShownListener, QuestionAdapter.OnAnswerListener {
 
     private TestViewModel mViewModel;
-    private RecyclerView rvQuestions;
-    private ImageButton fab;
-    private ImageButton pauseTestButton;
-    private ImageButton stopTestButton;
-    private ImageButton btnRight;
-    private ImageButton btnLeft;
-    private TextView tvReadingTitle;
-    private HtmlTextView tvReadingContent;
+
+    @BindView(R.id.rv_questions)
+    RecyclerView rvQuestions;
+
+    @BindView(R.id.fab_test)
+    ImageButton fab;
+
+    @BindView(R.id.img_pause)
+    @Nullable
+    ImageButton pauseTestButton;
+
+    @BindView(R.id.img_stop)
+    @Nullable
+    ImageButton stopTestButton;
+
+    @BindView(R.id.tv_pause)
+    @Nullable
+    TextView pauseText;
+
+
+    @BindView(R.id.btnRight)
+    ImageButton btnRight;
+
+    @BindView(R.id.btnLeft)
+    ImageButton btnLeft;
+
+    @BindView(R.id.tv_reading_title)
+    TextView tvReadingTitle;
+
+    @BindView(R.id.tv_reading_content)
+    HtmlTextView tvReadingContent;
+
+    @BindView(R.id.fluidSlider)
+    FluidSlider fluidSlider;
+
+
     private Typeface typeface;
     private MotionLayout motionLayout;
     private OnAppTitleChangedListener onAppTitleChangedListener;
     private int lastViewPosition = 0;
-    private FluidSlider fluidSlider;
+
     private TimerListener timerListener;
-    private TextView pauseText;
 
 
     @Override
@@ -75,7 +105,7 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
             major = TestFragmentArgs.fromBundle(getArguments()).getMajor();
             isTestType = TestFragmentArgs.fromBundle(getArguments()).getIsTestType();
             mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
-            mViewModel.init(AppManager.getRepository(), year, major, isTestType);
+            mViewModel.init(repository, year, major, isTestType);
             if (onAppTitleChangedListener != null && mViewModel != null) {
                 onAppTitleChangedListener.onAppTitleChanged(mViewModel.getFragmentTitle());
             }
@@ -119,16 +149,9 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
             typeface = Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/tnr.ttf");
         }
 
-        rvQuestions = view.findViewById(R.id.rv_questions);
-        fab = view.findViewById(R.id.fab_test);
 
         motionLayout = (MotionLayout) view;
-        tvReadingTitle = view.findViewById(R.id.tv_reading_title);
-        tvReadingContent = view.findViewById(R.id.tv_reading_content);
 
-        btnRight = view.findViewById(R.id.btnRight);
-        btnLeft = view.findViewById(R.id.btnLeft);
-        fluidSlider = view.findViewById(R.id.fluidSlider);
         fluidSlider.setCurrentPosition(0);
         fluidSlider.setMinMax(new Pair<>(1, 25));
 
@@ -146,9 +169,9 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
         rvQuestions.setNestedScrollingEnabled(false);
 
         boolean finalIsTestType = isTestType;
-        AppManager.getRepository().getUserSingle()
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
+
+        compositeDisposable.add(repository.getUserSingle()
+                .compose(ThreadUtils.applySingle())
                 .filter(user -> user != null)
                 .subscribe(user -> {
                     rvQuestions.setAdapter(new QuestionAdapter(new QuestionAdapter.ItemDiffCallBack()
@@ -156,7 +179,8 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
                             , user.getFontSize()));
                     tvReadingContent.setTextSize(user.getFontSize());
 
-                });
+                }));
+
 
         rvQuestions.setHasFixedSize(true);
 
@@ -167,14 +191,28 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 //While the ViewPager is scrolling, disable the
-//                boolean isScrolling = newState != ViewPager.SCROLL_STATE_IDLE;
-//                rvQuestions.requestDisallowInterceptTouchEvent(isScrolling);
+                boolean isScrolling = newState != ViewPager.SCROLL_STATE_IDLE;
             }
 
         });
 
-        //add snap helper to rv
-//        new LinearSnapHelper().attachToRecyclerView(rvQuestions);
+        rvQuestions.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                int newState = rv.getScrollState();
+                boolean isScrolling = newState != ViewPager.SCROLL_STATE_IDLE;
+                return isScrolling;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
 
         initFAB();
@@ -218,9 +256,6 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
         });
 
         if (mViewModel != null && mViewModel.isTestType()) {
-            pauseTestButton = view.findViewById(R.id.img_pause);
-            stopTestButton = view.findViewById(R.id.img_stop);
-            pauseText = view.findViewById(R.id.tv_pause);
 
             pauseTestButton.setOnClickListener(v -> {
                 if (!mViewModel.isPaused()) {
@@ -238,9 +273,7 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
                 }
             });
 
-            stopTestButton.setOnClickListener(v -> {
-                showTestResult();
-            });
+            stopTestButton.setOnClickListener(v -> showTestResult());
 
             motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
                 @Override
@@ -375,11 +408,10 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
         super.onDetach();
     }
 
-    @SuppressLint("CheckResult")
     @Override
     public void onReadingShown(final Question question) {
         if (question.getReadingID() != -1) {
-            AppManager.getRepository().getReading(question.getReadingID())
+            compositeDisposable.add(repository.getReading(question.getReadingID())
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
                     .filter(reading -> reading != null)
@@ -389,7 +421,7 @@ public class TestFragment extends BaseFragment implements QuestionAdapter.OnRead
                             motionLayout.setTransition(motionLayout.getCurrentState(), R.id.show_reading_hide_snackbar);
                             motionLayout.transitionToEnd();
                         }
-                    });
+                    }));
         } else {
             if (motionLayout.getCurrentState() != R.id.hide_reading_hide_snackbar
                     && motionLayout.getCurrentState() != R.id.hide_reading_show_snackbar) {

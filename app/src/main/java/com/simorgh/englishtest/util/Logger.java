@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.simorgh.englishtest.BuildConfig;
 
+import androidx.annotation.NonNull;
+
 public class Logger {
     private static final String LOGTAG = "english-test";
 
@@ -41,5 +43,15 @@ public class Logger {
     public static void v(String format, Object... args) {
         if (!BuildConfig.DEBUG) return;
         Log.v(LOGTAG, getLogString(format, args));
+    }
+
+    public static void printStackTrace(@NonNull Exception e) {
+        if (!BuildConfig.DEBUG) return;
+        e.printStackTrace();
+    }
+
+    public static void printStackTrace(@NonNull Throwable throwable) {
+        if (!BuildConfig.DEBUG) return;
+        throwable.printStackTrace();
     }
 }

@@ -32,6 +32,9 @@ dependencies {
     Test()
     RxJava()
 
+
+    implementation "org.jetbrains:annotations-java5:$rootProject.annotationsJavaVersion"
+
     implementation project(':logger')
 }
 

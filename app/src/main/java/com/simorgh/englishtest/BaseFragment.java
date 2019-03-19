@@ -15,12 +15,15 @@ import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class BaseFragment extends Fragment {
     private Unbinder unbinder;
 
     @Inject
     protected Repository repository;
+    protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -37,9 +40,13 @@ public class BaseFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.clear();
+        }
         super.onDestroyView();
-        unbinder.unbind();
-        unbinder = null;
     }
 
     @Override

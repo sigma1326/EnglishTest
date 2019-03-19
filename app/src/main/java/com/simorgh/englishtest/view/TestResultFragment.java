@@ -12,9 +12,8 @@ import com.simorgh.circularbarpercentview.CircularBar;
 import com.simorgh.englishtest.BaseFragment;
 import com.simorgh.englishtest.R;
 import com.simorgh.englishtest.adapter.AnswerAdapter;
-import com.simorgh.englishtest.model.AppManager;
-import com.simorgh.englishtest.util.AndroidUtils;
 import com.simorgh.englishtest.util.DialogMaker;
+import com.simorgh.englishtest.util.Logger;
 import com.simorgh.englishtest.viewModel.TestResultViewModel;
 
 import java.util.Objects;
@@ -28,20 +27,39 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 
 public class TestResultFragment extends BaseFragment {
-
-    private TestResultViewModel mViewModel;
-    private TextView correctCount;
-    private TextView allCount;
-    private TextView blankCount;
-    private RecyclerView rvResult;
-    private ImageButton fab;
-    private ImageButton returnHome;
-    private ImageButton retakeTest;
-    private ImageButton compareTests;
     private static final int BAR_ANIMATION_TIME = 1000;
-    private CircularBar mCircularBar;
+    private TestResultViewModel mViewModel;
+
+
+    @BindView(R.id.tv_correct_count)
+    TextView correctCount;
+
+    @BindView(R.id.tv_all_count)
+    TextView allCount;
+
+    @BindView(R.id.tv_blank_count)
+    TextView blankCount;
+
+    @BindView(R.id.rv_result)
+    RecyclerView rvResult;
+
+    @BindView(R.id.fab_test_result)
+    ImageButton fab;
+
+    @BindView(R.id.img_home)
+    ImageButton returnHome;
+
+    @BindView(R.id.img_retake_test)
+    ImageButton retakeTest;
+
+    @BindView(R.id.img_compare)
+    ImageButton compareTests;
+
+    @BindView(R.id.circularBar)
+    CircularBar mCircularBar;
 
 
     @Override
@@ -54,11 +72,7 @@ public class TestResultFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         ViewCompat.setLayoutDirection(view, ViewCompat.LAYOUT_DIRECTION_LTR);
 
-        correctCount = view.findViewById(R.id.tv_correct_count);
-        allCount = view.findViewById(R.id.tv_all_count);
-        blankCount = view.findViewById(R.id.tv_blank_count);
 
-        rvResult = view.findViewById(R.id.rv_result);
         rvResult.setNestedScrollingEnabled(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvResult.setLayoutManager(linearLayoutManager);
@@ -67,11 +81,6 @@ public class TestResultFragment extends BaseFragment {
         rvResult.setHasFixedSize(true);
 
 
-        returnHome = view.findViewById(R.id.img_home);
-        retakeTest = view.findViewById(R.id.img_retake_test);
-        compareTests = view.findViewById(R.id.img_compare);
-
-        fab = view.findViewById(R.id.fab_test_result);
 
         returnHome.setOnClickListener(v -> {
             try {
@@ -95,7 +104,12 @@ public class TestResultFragment extends BaseFragment {
         });
 
         compareTests.setOnClickListener(v -> {
-            DialogMaker.createCompareTestsDialog(Objects.requireNonNull(getContext()), mViewModel.getDate().getDateLong(), mViewModel.getYear(), mViewModel.getMajor(), Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
+            DialogMaker.createCompareTestsDialog(repository
+                    , Objects.requireNonNull(getContext())
+                    , mViewModel.getDate().getDateLong()
+                    , mViewModel.getYear()
+                    , mViewModel.getMajor()
+                    , Navigation.findNavController((MainActivity) v.getContext(), R.id.main_nav_host_fragment));
         });
 
         ((MotionLayout) view).setTransitionListener(new MotionLayout.TransitionListener() {
@@ -124,8 +138,6 @@ public class TestResultFragment extends BaseFragment {
             }
         });
 
-
-        mCircularBar = view.findViewById(R.id.circularBar);
     }
 
     @SuppressLint("DefaultLocale")
@@ -143,24 +155,30 @@ public class TestResultFragment extends BaseFragment {
             showFab = TestResultFragmentArgs.fromBundle(getArguments()).getShowFab();
             isTestType = TestResultFragmentArgs.fromBundle(getArguments()).getIsTestType();
             mViewModel = ViewModelProviders.of(this).get(TestResultViewModel.class);
-            AppManager.getExecutor().execute(() -> {
-                mViewModel.init(year, major, dateMilli, showFab, isTestType);
-                AndroidUtils.runOnUIThread(() -> {
-                    mViewModel.getAnswers().observe(this, answers -> {
-                        if (answers != null && rvResult != null) {
-                            correctCount.setText(String.format("%s %d", getString(R.string.correct_count), mViewModel.getCorrectCount()));
-                            allCount.setText(String.format("%s %d", getString(R.string.question_count), mViewModel.getAllCount()));
-                            blankCount.setText(String.format("%s %d", getString(R.string.blank_count), mViewModel.getBlankCount()));
-                            ((AnswerAdapter) Objects.requireNonNull(rvResult.getAdapter())).submitList(answers);
+            mViewModel.init(repository, year, major, dateMilli, showFab, isTestType);
+            mViewModel.getAnswers().observe(this, answers -> {
+                if (answers != null && rvResult != null) {
+                    correctCount.setText(String.format("%s %d", getString(R.string.correct_count), mViewModel.getCorrectCount()));
+                    allCount.setText(String.format("%s %d", getString(R.string.question_count), mViewModel.getAllCount()));
+                    blankCount.setText(String.format("%s %d", getString(R.string.blank_count), mViewModel.getBlankCount()));
+                    ((AnswerAdapter) Objects.requireNonNull(rvResult.getAdapter())).submitList(answers);
 
-                            mCircularBar.animateProgress(0,  mViewModel.getTestLog().getPercent(), BAR_ANIMATION_TIME);
 
-                            if (!mViewModel.showFab()) {
-                                fab.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                });
+                    if (!mViewModel.showFab()) {
+                        fab.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            mViewModel.getTestLog().observe(this, testLog -> {
+                float percent;
+                try {
+                    percent = testLog.getPercent();
+                } catch (Exception e) {
+                    percent = 0f;
+                    Logger.printStackTrace(e);
+                }
+                mCircularBar.animateProgress(0, percent, BAR_ANIMATION_TIME);
             });
         }
     }

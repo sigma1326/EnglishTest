@@ -28,6 +28,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -36,46 +39,65 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         , NavController.OnDestinationChangedListener, TestFragment.OnAppTitleChangedListener, TestFragment.TimerListener {
 
     private NavController navController;
-    private TextView tvTestLogs;
-    private ImageButton imgBack;
-    private TextView title;
-    private DrawerLayout drawer;
-    private SwitchCompat showTimer;
-    private TextView showTimerLabel;
     private MainViewModel mainViewModel;
-    private TextView fontSize;
-    private TextView fontSizeLabel;
-    private CircularTimer circularTimer;
-    private ImageView testLogIcon;
-    private ImageView fontSizeIcon;
-    private ImageView showTimerIcon;
+    Unbinder unbinder;
+
+
+    @BindView(R.id.tv_test_log)
+    TextView tvTestLogs;
+
+    @BindView(R.id.img_back)
+    ImageButton imgBack;
+
+    @BindView(R.id.tv_app_title)
+    TextView title;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+
+    @BindView(R.id.switch_show_timer)
+    SwitchCompat showTimer;
+
+    @BindView(R.id.tv_show_timer)
+    TextView showTimerLabel;
+
+    @BindView(R.id.tv_font_size)
+    TextView fontSize;
+
+    @BindView(R.id.tv_font_size_label)
+    TextView fontSizeLabel;
+
+    @BindView(R.id.circularTimer)
+    CircularTimer circularTimer;
+
+    @BindView(R.id.img_test_log)
+    ImageView testLogIcon;
+
+    @BindView(R.id.img_font_size)
+    ImageView fontSizeIcon;
+
+    @BindView(R.id.img_timer)
+    ImageView showTimerIcon;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        unbinder = ButterKnife.bind(this);
+
         // this is a generic way of getting your root view element
         View rootView = findViewById(android.R.id.content);
         rootView.setBackgroundDrawable(getResources().getDrawable(R.drawable.background));
 
-
-        imgBack = findViewById(R.id.img_back);
-        title = findViewById(R.id.tv_app_title);
-        showTimer = findViewById(R.id.switch_show_timer);
-        showTimerLabel = findViewById(R.id.tv_show_timer);
-        fontSize = findViewById(R.id.tv_font_size);
-        testLogIcon = findViewById(R.id.img_test_log);
-        fontSizeIcon = findViewById(R.id.img_font_size);
-        showTimerIcon = findViewById(R.id.img_timer);
-        fontSizeLabel = findViewById(R.id.tv_font_size_label);
-        circularTimer = findViewById(R.id.circularTimer);
+        repository.initDataBase(getApplication());
 
         showTimer.setOnCheckedChangeListener((buttonView, isChecked) -> {
             mainViewModel.getRepository().getUserSingle()
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .filter(Objects::nonNull)
+                    .filter(user -> user != null)
                     .subscribe(user -> {
                         user.setShowTimer(isChecked);
                         mainViewModel.getRepository().updateUser(user);
@@ -178,6 +200,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel.init(repository);
 
         mainViewModel.getUserLiveData().observe(this, user -> {
             if (user != null && showTimer != null) {
@@ -226,6 +249,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         showTimerLabel = null;
         showTimerIcon = null;
         fontSizeIcon = null;
+
+        unbinder.unbind();
 
         super.onDestroy();
     }
