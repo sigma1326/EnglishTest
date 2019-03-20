@@ -37,10 +37,6 @@ public final class Repository {
     }
 
 
-    /**
-     * import the pre-populated {@link ImportDataBase} located in assets/databases/test.db
-     * and use it for filling {@link TestDataBase}
-     */
     @SuppressLint("CheckResult")
     public void initDataBase(@NonNull Application application) {
         ThreadUtils
@@ -48,6 +44,10 @@ public final class Repository {
                     TestDataBase importDataBase = RoomAsset
                             .databaseBuilder(application, TestDataBase.class, "english-test-db")
                             .build();
+
+                    dataBase.readingDAO().insert(importDataBase.readingDAO().getReadings());
+                    dataBase.questionDAO().insert(importDataBase.questionDAO().getQuestions());
+
                     importDataBase.close();
 
                     //init user if not exists

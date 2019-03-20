@@ -20,9 +20,9 @@ import androidx.room.TypeConverters;
 
 @Keep
 @TypeConverters(com.simorgh.database.TypeConverters.class)
-@Database(entities = {Question.class, Reading.class, User.class, Answer.class}, version = 1, exportSchema = false)
+@Database(entities = {Question.class, Reading.class, User.class, Answer.class}, version = 2, exportSchema = false)
 public abstract class TestDataBase extends RoomDatabase {
-    private static final String DB_NAME = "english-test-db";
+    private static final String DB_NAME = "english-test-db-app";
 
     public abstract QuestionDAO questionDAO();
 
