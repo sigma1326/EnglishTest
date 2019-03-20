@@ -94,11 +94,6 @@ public class OuterItem extends HeaderItem {
 
     @SuppressLint("DefaultLocale")
     public void setContent(@NonNull List<YearMajorData> innerDataList) {
-//        final Context context = itemView.getContext();
-//
-//        final YearMajorData header = innerDataList.subList(0, 1).get(0);
-//        final List<YearMajorData> tail = innerDataList.subList(1, innerDataList.size());
-
         headerTitle.setText(String.format("سوالات ادبیات کنکورهای سال %d", innerDataList.get(0).getYear()));
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         ((InnerAdapter) Objects.requireNonNull(mRecyclerView.getAdapter())).addData(innerDataList);
