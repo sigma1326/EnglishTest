@@ -44,8 +44,7 @@ public final class Repository {
                             .databaseBuilder(application, TestDataBase.class, "literature-test")
                             .build();
 
-                    List<Question> aa = importDataBase.questionDAO().getQuestions();
-
+                    dataBase.questionDAO().insert(importDataBase.questionDAO().getQuestions());
 
                     importDataBase.close();
 
