@@ -4,7 +4,7 @@ apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
-        applicationId "com.simorgh.englishtest"
+        applicationId "com.simorgh.literaturetest"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
@@ -58,6 +58,7 @@ dependencies {
     RxJava()
     Test()
     Dagger()
+    Stetho()
     implementation project(':threadutils')
 }
 

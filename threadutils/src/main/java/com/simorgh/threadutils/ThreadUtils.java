@@ -32,7 +32,7 @@ public final class ThreadUtils {
 
         @Override
         public void onComplete() {
-
+            int a=0;
         }
 
         @Override

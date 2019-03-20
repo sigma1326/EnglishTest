@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.simorgh.database.dao.AnswerDAO;
 import com.simorgh.database.dao.QuestionDAO;
-import com.simorgh.database.dao.ReadingDAO;
 import com.simorgh.database.dao.UserDAO;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
-import com.simorgh.database.model.Reading;
 import com.simorgh.database.model.User;
 
 import androidx.annotation.Keep;
@@ -20,13 +18,11 @@ import androidx.room.TypeConverters;
 
 @Keep
 @TypeConverters(com.simorgh.database.TypeConverters.class)
-@Database(entities = {Question.class, Reading.class, User.class, Answer.class}, version = 1, exportSchema = false)
+@Database(entities = {Question.class, User.class, Answer.class}, version = 2, exportSchema = false)
 public abstract class TestDataBase extends RoomDatabase {
-    private static final String DB_NAME = "english-test-db";
+    private static final String DB_NAME = "literature-test";
 
     public abstract QuestionDAO questionDAO();
-
-    public abstract ReadingDAO readingDAO();
 
     public abstract UserDAO userDAO();
 
@@ -39,7 +35,8 @@ public abstract class TestDataBase extends RoomDatabase {
             synchronized (TestDataBase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TestDataBase.class, DB_NAME).build();
+                            TestDataBase.class, DB_NAME)
+                            .build();
                 }
             }
         }

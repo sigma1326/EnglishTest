@@ -6,7 +6,6 @@ import android.app.Application;
 import com.huma.room_for_asset.RoomAsset;
 import com.simorgh.database.model.Answer;
 import com.simorgh.database.model.Question;
-import com.simorgh.database.model.Reading;
 import com.simorgh.database.model.TestLog;
 import com.simorgh.database.model.User;
 import com.simorgh.database.model.YearMajorData;
@@ -37,17 +36,17 @@ public final class Repository {
     }
 
 
-    /**
-     * import the pre-populated {@link ImportDataBase} located in assets/databases/test.db
-     * and use it for filling {@link TestDataBase}
-     */
     @SuppressLint("CheckResult")
     public void initDataBase(@NonNull Application application) {
         ThreadUtils
                 .getCompletable(() -> {
                     TestDataBase importDataBase = RoomAsset
-                            .databaseBuilder(application, TestDataBase.class, "english-test-db")
+                            .databaseBuilder(application, TestDataBase.class, "literature-test")
                             .build();
+
+                    List<Question> aa = importDataBase.questionDAO().getQuestions();
+
+
                     importDataBase.close();
 
                     //init user if not exists
@@ -72,10 +71,6 @@ public final class Repository {
 
     public Question getQuestion(final int questionID) {
         return dataBase.questionDAO().getQuestion(questionID);
-    }
-
-    public Single<Reading> getReading(final int readingID) {
-        return dataBase.readingDAO().getReading(readingID);
     }
 
     public User getUser() {
@@ -239,12 +234,6 @@ public final class Repository {
 
     public void updateQuestions(@NonNull final List<Question> questions) {
         ThreadUtils.getCompletable(() -> dataBase.questionDAO().insert(questions))
-                .compose(ThreadUtils.applyIOCompletable())
-                .subscribeWith(ThreadUtils.completableObserver);
-    }
-
-    public void updateReadings(@NonNull final List<Reading> readings) {
-        ThreadUtils.getCompletable(() -> dataBase.readingDAO().insert(readings))
                 .compose(ThreadUtils.applyIOCompletable())
                 .subscribeWith(ThreadUtils.completableObserver);
     }

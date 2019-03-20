@@ -41,9 +41,8 @@ public class Question {
     @ColumnInfo(name = "question_number")
     private int questionNumber;
 
-    @ColumnInfo(name = "reading_id")
-    private int readingID;
-
+    @ColumnInfo(name = "question_type")
+    private int questionType;
 
     public int getId() {
         return id;
@@ -125,11 +124,11 @@ public class Question {
         this.questionNumber = questionNumber;
     }
 
-    public int getReadingID() {
-        return readingID;
+    public int getQuestionType() {
+        return questionType;
     }
 
-    public void setReadingID(int readingID) {
-        this.readingID = readingID;
+    public void setQuestionType(int questionType) {
+        this.questionType = questionType;
     }
 }
