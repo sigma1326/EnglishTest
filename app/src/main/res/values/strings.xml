@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">کنکور ادبیات</string>
+    <string name="app_name">کنکور دین و زندگی</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,7 +13,7 @@
     <string name="font_size">اندازه قلم</string>
     <string name="show_timer_in_test">نمایش زمانسنج در آزمون</string>
     <string name="about_developer">درباره تولیدکننده</string>
-    <string name="drawer_title">سوالات ادبیات کنکور</string>
+    <string name="drawer_title">سوالات دین و زندگی کنکور</string>
     <string name="all_majors">تمامی گروه های تحصیلی</string>
     <string name="_3">3</string>
     <string name="_4">4</string>

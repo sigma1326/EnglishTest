@@ -41,7 +41,7 @@ public final class Repository {
         ThreadUtils
                 .getCompletable(() -> {
                     TestDataBase importDataBase = RoomAsset
-                            .databaseBuilder(application, TestDataBase.class, "literature-test")
+                            .databaseBuilder(application, TestDataBase.class, "theology-test")
                             .build();
 
                     List<Question> aa = importDataBase.questionDAO().getQuestions();

@@ -41,8 +41,6 @@ public class Question {
     @ColumnInfo(name = "question_number")
     private int questionNumber;
 
-    @ColumnInfo(name = "question_type")
-    private int questionType;
 
     public int getId() {
         return id;
@@ -124,11 +122,4 @@ public class Question {
         this.questionNumber = questionNumber;
     }
 
-    public int getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(int questionType) {
-        this.questionType = questionType;
-    }
 }
