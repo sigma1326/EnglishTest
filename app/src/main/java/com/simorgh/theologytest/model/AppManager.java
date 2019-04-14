@@ -3,8 +3,6 @@ package com.simorgh.theologytest.model;
 import android.annotation.SuppressLint;
 import android.os.StrictMode;
 
-import com.facebook.stetho.Stetho;
-import com.simorgh.theologytest.BuildConfig;
 import com.simorgh.theologytest.R;
 import com.simorgh.theologytest.di.component.DaggerApplicationComponent;
 import com.simorgh.theologytest.di.module.ApplicationModule;
@@ -48,9 +46,9 @@ public class AppManager extends MultiDexApplication {
 
         ThreadUtils
                 .getCompletable(() -> {
-                    if (BuildConfig.DEBUG) {
-                        Stetho.initializeWithDefaults(this);
-                    }
+//                    if (BuildConfig.DEBUG) {
+//                        Stetho.initializeWithDefaults(this);
+//                    }
 
                     ViewPump.init(ViewPump.builder()
                             .addInterceptor(new CalligraphyInterceptor(
