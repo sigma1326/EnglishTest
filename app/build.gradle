@@ -59,6 +59,7 @@ dependencies {
     Test()
     Dagger()
     implementation project(':threadutils')
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 
 private void FlexBox() {
