@@ -88,11 +88,11 @@ public class CircularTimer extends View implements Animator.AnimatorListener {
     /**
      * The defaults for width and color of the reached and outline arcs
      */
-    private final int default_clockwise_reached_color = Color.parseColor("#003366");
+    private final int default_clockwise_reached_color = Color.parseColor("#3F2B4A");
     private final int default_clockwise_outline_color = Color.parseColor("#ffffff");
-    private final int default_counter_clockwise_reached_color = Color.parseColor("#003366");
+    private final int default_counter_clockwise_reached_color = Color.parseColor("#3F2B4A");
     private final int default_counter_clockwise_outline_color = Color.parseColor("#ffffff");
-    private final int default_circle_fill_color = Color.parseColor("#003366");//fully transparent
+    private final int default_circle_fill_color = Color.parseColor("#3F2B4A");//fully transparent
     private final int default_circle_fill_mode = CircleFillMode.DEFAULT.getValue();//fully transparent
     private final float default_reached_arc_width;
     private final float default_outline_arc_width;

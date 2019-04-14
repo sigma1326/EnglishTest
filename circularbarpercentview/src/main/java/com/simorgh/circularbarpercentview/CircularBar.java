@@ -89,9 +89,9 @@ public class CircularBar extends View implements Animator.AnimatorListener {
      * The defaults for width and color of the reached and outline arcs
      */
     private final int default_clockwise_reached_color = Color.parseColor("#008000");
-    private final int default_clockwise_outline_color = Color.parseColor("#003366");
+    private final int default_clockwise_outline_color = Color.parseColor("#714487");
     private final int default_counter_clockwise_reached_color = Color.parseColor("#ff0000");
-    private final int default_counter_clockwise_outline_color = Color.parseColor("#003366");
+    private final int default_counter_clockwise_outline_color = Color.parseColor("#714487");
     private final int default_circle_fill_color = Color.parseColor("#00000000");//fully transparent
     private final int default_circle_fill_mode = CircleFillMode.DEFAULT.getValue();//fully transparent
     private final float default_reached_arc_width;

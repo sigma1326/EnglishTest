@@ -13,7 +13,7 @@
         android:id="@+id/view_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#0ba2e3"
+        android:background="@color/colorPrimary"
         android:text="@string/select_font_size"
         android:clickable="false"
         android:focusable="false"

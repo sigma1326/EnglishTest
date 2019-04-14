@@ -94,7 +94,7 @@
         android:id="@+id/layout_snackbar"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:background="#04c3fb"
+        android:background="#845E98"
         tools:visibility="invisible" />
 
     <ImageButton
