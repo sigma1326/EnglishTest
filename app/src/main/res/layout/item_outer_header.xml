@@ -44,7 +44,7 @@
         android:padding="18dp"
         android:text="@string/all_majors"
         android:textAlignment="textStart"
-        android:textColor="#003366"
+        android:textColor="@color/colorPrimary"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
