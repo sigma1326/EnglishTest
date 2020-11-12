@@ -1,4 +1,6 @@
-# English Test Application
+# Entrance Exam Application
 
-English Test Android Application
-Designed and developed in simorgh co.
+
+English / Theology / Literature entrance exam test android app
+<br>
+<br>
